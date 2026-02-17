@@ -9,7 +9,7 @@ Es un sistema que permite registrar y controlar información de casos de investi
 ## 💻 Tecnologías Utilizadas
 
 El proyecto utiliza el siguiente stack tecnológico:
-*   **Lenguaje:** Java 17
+*   **Lenguaje:** Java 21
 *   **Framework:** Java Swing
 *   **Base de Datos:** SQLite
 *   **Infraestructura:** Docker & Docker Compose
