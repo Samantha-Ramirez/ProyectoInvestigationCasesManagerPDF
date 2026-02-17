@@ -24,7 +24,30 @@ class BandejaInicioView extends InicioView {
 class CarteleraInicioView extends InicioView {
     @Override
     public void mostrar() {
-
+        new CarteleraView(1).setVisible(true);
     }
 }
 
+
+
+abstract class InicioCreator {
+    public abstract InicioView FactoryMethod();
+}
+
+
+// Creador concreto especializado en crear la vista de Investigador
+class BandejaInicioCreator extends InicioCreator {
+    @Override
+    public InicioView FactoryMethod() {
+        return new BandejaInicioView();
+    }
+}
+
+
+// Creador concreto especializado en crear la vista de Administrador
+class CarteleraInicioCreator extends InicioCreator {
+    @Override
+    public InicioView FactoryMethod() {
+        return new CarteleraInicioView();
+    }
+}

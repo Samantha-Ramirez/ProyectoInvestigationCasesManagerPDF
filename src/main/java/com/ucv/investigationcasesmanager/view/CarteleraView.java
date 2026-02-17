@@ -4,9 +4,9 @@ import com.ucv.investigationcasesmanager.dao.CasoDAO;
 import com.ucv.investigationcasesmanager.model.Caso;
 import java.util.List;
 
-public class BandejaView extends BaseView {
-    public BandejaView(int idUsuario) {
-        super("Bandeja de casos");
+public class CarteleraView extends BaseView {
+    public CarteleraView(int idUsuario) {
+        super("Cartelera de casos");
         inicializarComponentesEspecificos();
         cargarDatos(idUsuario);
         setVisible(true);
@@ -14,7 +14,7 @@ public class BandejaView extends BaseView {
 
     @Override
     protected void inicializarComponentesEspecificos() {
-        configurarTituloSuperior("Bandeja de casos", "Registrar");
+        configurarTituloSuperior("Cartelera de casos", "Registrar");
 
         String[] columnas = {"Caso", "Tiempo", "Status", "Acción"};
         configurarTabla(columnas);

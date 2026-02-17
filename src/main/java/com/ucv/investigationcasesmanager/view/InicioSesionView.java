@@ -1,6 +1,7 @@
 package com.ucv.investigationcasesmanager.view;
 
 import com.ucv.investigationcasesmanager.dao.InicioSesionDAO;
+import com.ucv.investigationcasesmanager.model.Usuario;
 import javax.swing.*;
 import java.awt.*;
 
@@ -40,13 +41,13 @@ public class InicioSesionView extends JFrame {
 
     private void inicioSesion() {
         InicioSesionDAO dao = new InicioSesionDAO();
-        String rol = dao.validarUsuario(txtCedula.getText()).getRol();
+        Usuario usuario = dao.iniciarSesion(txtCedula.getText());
 
-        if (rol != null) {
+        if (usuario != null) {
             this.dispose();
 
             InicioCreator creador;
-            if (rol.equalsIgnoreCase("Administrador")) {
+            if (usuario.getRol().equalsIgnoreCase("Administrador")) {
                 creador = new CarteleraInicioCreator();
             } else {
                 creador = new BandejaInicioCreator();
