@@ -19,8 +19,9 @@ Para mantener un código limpio y legible, aplica las siguientes reglas:
 * **Longitud de línea:** Máximo **120 caracteres**.
 * **Comentarios:** Deben escribirse en **español** y clasificarse en:
     1.  **De "Por qué":** Justificar decisiones lógicas complejas.
-    2.  **De advertencia:** Alertar sobre posibles errores (ej. `// ADVERTENCIA: Este método bloquea el EDT`).
-    3.  **Tareas pendientes:** Usar el prefijo `// TODO:` para mejoras futuras.
+    2.  **De advertencia:** Alertar sobre posibles errores (ej. `// ADVERTENCIA: `).
+    3.  **Tareas pendientes:** Sugerir mejoras futuras (ej. `// TODO: `).
+    4.  **Aplicación de patrones:** Especificar el uso de algún patrón de diseño (ej. `// PDyF: `).
 
 ---
 
