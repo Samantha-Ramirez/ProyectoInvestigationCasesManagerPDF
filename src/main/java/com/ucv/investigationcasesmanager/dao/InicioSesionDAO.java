@@ -5,7 +5,7 @@ import com.ucv.investigationcasesmanager.model.Usuario;
 public class InicioSesionDAO extends GenericDAO<String> {
 
     public Usuario validarUsuario(String cedula) {
-        String sql = "SELECT * FROM usuarios WHERE cedula = ?";
+        String sql = "SELECT * FROM usuario WHERE cedula = ?";
         Usuario usuario = new Usuario();
 
         ejecutarConsulta(sql, rs -> {

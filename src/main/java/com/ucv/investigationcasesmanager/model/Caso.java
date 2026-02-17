@@ -6,6 +6,7 @@ public class Caso {
     private int dias;
     private int mes;
     private int duracionDias;
+    private String tiempoSinAtencion;
 
     private String estatus;
     private String movilAfectado;
@@ -49,5 +50,13 @@ public class Caso {
 
     public void setFechaInicio(String fechaInicio) {
         this.fechaInicio = fechaInicio;
+    }
+
+    public String getTiempoSinAtencion() {
+        return tiempoSinAtencion;
+    }
+
+    public void setTiempoSinAtencion(String tiempo) {
+        this.tiempoSinAtencion = tiempo;
     }
 }
