@@ -9,15 +9,15 @@ import com.ucv.investigationcasesmanager.model.Usuario;
 
 // Producto abstracto
 abstract class InicioView {
-    public abstract void mostrar();
+    public abstract BaseView getInicio();
 }
 
 
 // Producto concreto para Investigador
 class BandejaInicioView extends InicioView {
     @Override
-    public void mostrar() {
-        new BandejaView(1).setVisible(true);
+    public BaseView getInicio() {
+        return new BandejaView(1);
     }
 }
 
@@ -25,8 +25,8 @@ class BandejaInicioView extends InicioView {
 // Producto concreto para Administrador
 class CarteleraInicioView extends InicioView {
     @Override
-    public void mostrar() {
-        new CarteleraView(1).setVisible(true);
+    public BaseView getInicio() {
+        return new CarteleraView(1);
     }
 }
 
@@ -35,14 +35,14 @@ class CarteleraInicioView extends InicioView {
 abstract class InicioCreator {
     public abstract InicioView FactoryMethod(Usuario user);
 
-    public static void inicioSegunRol(Usuario user) {
+    public static BaseView inicioSegunRol(Usuario user) {
         InicioCreator creador;
         if (user.getRol().equalsIgnoreCase("Administrador")) {
             creador = new CarteleraInicioCreator();
         } else {
             creador = new BandejaInicioCreator();
         }
-        creador.FactoryMethod(user).mostrar();
+        return creador.FactoryMethod(user).getInicio();
     }
 }
 

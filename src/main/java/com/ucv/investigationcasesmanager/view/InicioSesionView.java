@@ -4,53 +4,40 @@ import com.ucv.investigationcasesmanager.dao.InicioSesionDAO;
 import com.ucv.investigationcasesmanager.model.Sesion;
 import com.ucv.investigationcasesmanager.model.Usuario;
 import javax.swing.*;
-import java.awt.*;
 
 /*
  * Vista de inicio de sesión. Permite a los usuarios ingresar su cédula para acceder a la
  * aplicación.
  */
-public class InicioSesionView extends JFrame {
+public class InicioSesionView extends BaseView {
     private JTextField txtCedula;
     private JPasswordField txtPassword;
-    private JButton btnLogin;
 
+    // Configurar la vista de inicio de sesión
     public InicioSesionView() {
-        setTitle("Inicio de sesión");
-        setSize(1100, 700);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
-
-
-        JPanel header = new JPanel();
-        header.setBackground(new Color(128, 0, 128));
-        header.setPreferredSize(new Dimension(800, 80));
-        add(header, BorderLayout.NORTH);
-
-        JPanel centerPanel = new JPanel(new GridBagLayout());
-        txtCedula = new JTextField(20);
-        txtPassword = new JPasswordField(20);
-        btnLogin = new JButton("Iniciar sesión");
-        btnLogin.setBackground(new Color(230, 230, 230));
-
-        centerPanel.add(new JLabel("Cédula:"));
-        centerPanel.add(txtCedula);
-        centerPanel.add(new JLabel("Contraseña:"));
-        centerPanel.add(txtPassword);
-        centerPanel.add(btnLogin);
-        add(centerPanel, BorderLayout.CENTER);
-
-        btnLogin.addActionListener(e -> inicioSesion());
+        super("Inicio de sesión", false);
     }
 
-    private void inicioSesion() {
+    // Configurar componentes específicos de esta vista
+    @Override
+    protected void inicializarComponentesEspecificos() {
+        configurarTituloSuperior("Inicio de sesión", null, null);
+        configurarFormulario();
+        txtCedula = new JTextField("Cédula");
+        txtPassword = new JPasswordField("Contraseña", 20);
+        agregarCampoFormulario(txtCedula);
+        agregarCampoFormulario(txtPassword);
+        agregarBotonAccionPrincipal("Iniciar sesión", e -> accionIniciarSesion());
+    }
+
+    // Consultar el usuario por cédula y, si existe, iniciar sesión
+    private void accionIniciarSesion() {
         InicioSesionDAO dao = new InicioSesionDAO();
         Usuario usuario = dao.consultarUsuario(txtCedula.getText());
 
         if (usuario != null) {
-            this.dispose();
             Sesion.setUsuario(usuario);
-            InicioCreator.inicioSegunRol(usuario);
+            configurarVista(this, InicioCreator.inicioSegunRol(usuario));
         } else {
             JOptionPane.showMessageDialog(this, "Usuario no encontrado");
         }

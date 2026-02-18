@@ -9,21 +9,24 @@ import java.util.List;
  * atención.
  */
 public class CarteleraView extends BaseView {
+    // Recibir el ID del usuario para cargar solo sus casos
     public CarteleraView(int idUsuario) {
-        super("Cartelera de casos");
-        inicializarComponentesEspecificos();
+        super("Cartelera de casos", true);
         cargarDatos(idUsuario);
-        setVisible(true);
     }
 
+    // Configurar componentes específicos de esta vista
     @Override
     protected void inicializarComponentesEspecificos() {
-        configurarTituloSuperior("Cartelera de casos", "Registrar");
+        configurarTituloSuperior("Cartelera de casos", "Registrar", e -> {
+            configurarVista(this, new RegistroCasoView());
+        });
 
         String[] columnas = {"Caso", "Tiempo", "Status", "Acción"};
         configurarTabla(columnas);
     }
 
+    // Cargar los casos asignados al investigador y mostrar en la tabla
     private void cargarDatos(int idUsuario) {
         CasoDAO dao = new CasoDAO();
         List<Caso> casos = dao.consultarCasosAdministrador(idUsuario);

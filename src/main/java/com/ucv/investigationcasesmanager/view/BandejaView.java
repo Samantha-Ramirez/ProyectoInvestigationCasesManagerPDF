@@ -9,21 +9,24 @@ import java.util.List;
  * atención.
  */
 public class BandejaView extends BaseView {
+    // Recibir el ID del usuario para cargar solo sus casos
     public BandejaView(int idUsuario) {
-        super("Bandeja de casos");
-        inicializarComponentesEspecificos();
+        super("Bandeja de casos", true);
         cargarDatos(idUsuario);
-        setVisible(true);
     }
 
+    // Configurar componentes específicos de esta vista
     @Override
     protected void inicializarComponentesEspecificos() {
-        configurarTituloSuperior("Bandeja de casos", "Registrar");
+        configurarTituloSuperior("Bandeja de casos", "Registrar", e -> {
+            configurarVista(this, new RegistroCasoView());
+        });
 
         String[] columnas = {"Caso", "Tiempo", "Status", "Acción"};
         configurarTabla(columnas);
     }
 
+    // Cargar los casos asignados al investigador y mostrar en la tabla
     private void cargarDatos(int idUsuario) {
         CasoDAO dao = new CasoDAO();
         List<Caso> casos = dao.consultarCasosInvestigador(idUsuario);
