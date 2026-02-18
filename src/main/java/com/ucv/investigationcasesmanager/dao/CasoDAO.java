@@ -4,9 +4,12 @@ import com.ucv.investigationcasesmanager.model.Caso;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * DAO específico para casos.
+ */
 public class CasoDAO extends GenericDAO<Caso> {
-
-    public List<Caso> listarCasosPorInvestigador(int idInvestigador) {
+    // Consultar casos asignados a un investigador específico
+    public List<Caso> consultarCasosInvestigador(int idInvestigador) {
         List<Caso> lista = new ArrayList<>();
         String sql = "SELECT nro_expediente, estatus, "
                 + "strftime('%d dias_transcurridos', 'now') || ' sin atención' as tiempo "

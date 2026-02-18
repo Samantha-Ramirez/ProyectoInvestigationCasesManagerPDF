@@ -2,10 +2,12 @@ package com.ucv.investigationcasesmanager.dao;
 
 import java.sql.*;
 
+/*
+ * DAO genérico.
+ */
 public abstract class GenericDAO<T> {
-
     // Ejecutar actualizaciones (INSERT, UPDATE, DELETE)
-    protected int ejecutarUpdate(String sql, Object... parametros) {
+    protected int ejecutarActualizacion(String sql, Object... parametros) {
         try (Connection conn = ConexionBD.getInstancia();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -18,7 +20,7 @@ public abstract class GenericDAO<T> {
         }
     }
 
-    // Método genérico para buscar (SELECT)
+    // Ejecutar consultas (SELECT)
     protected void ejecutarConsulta(String sql, ResultSetHandler<T> handler, Object... parametros) {
         try (Connection conn = ConexionBD.getInstancia();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -32,7 +34,7 @@ public abstract class GenericDAO<T> {
         }
     }
 
-    // Auxiliar para setear parámetros de cualquier tipo
+    // Configurar parámetros de cualquier tipo
     private void configurarParametros(PreparedStatement pstmt, Object[] parametros)
             throws SQLException {
         for (int i = 0; i < parametros.length; i++) {
@@ -40,7 +42,7 @@ public abstract class GenericDAO<T> {
         }
     }
 
-    // Interfaz para procesar el ResultSet
+    // Procesar el ResultSet
     @FunctionalInterface
     public interface ResultSetHandler<T> {
         void map(ResultSet rs) throws SQLException;
