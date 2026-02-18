@@ -2,9 +2,9 @@ package com.ucv.investigationcasesmanager.view;
 
 import com.ucv.investigationcasesmanager.model.*;
 import com.ucv.investigationcasesmanager.dao.CasoDAO;
-// import com.ucv.investigationcasesmanager.mediator.RegistroMediator;
+import com.ucv.investigationcasesmanager.factory.InicioClient;
+import com.ucv.investigationcasesmanager.mediator.RegistroMediator;
 import javax.swing.*;
-import java.util.Calendar;
 
 public class RegistroCasoView extends BaseView {
     // Campos de texto y combos basados en el modelo Caso
@@ -62,7 +62,7 @@ public class RegistroCasoView extends BaseView {
         agregarBotonAccionPrincipal("Registrar", e -> accionRegistrar());
     }
 
-    // Acción para registrar un caso nuevo, en la base de datos
+    // Registrar un caso nuevo, en la base de datos
     private void accionRegistrar() {
         Caso caso = new Caso();
 
@@ -70,7 +70,8 @@ public class RegistroCasoView extends BaseView {
         caso.setMovilAfectado(txtMovil.getText());
         caso.setObjetivoAgraviado(txtObjetivo.getText());
         caso.setIncidencia(txtIncidencia.getText());
-        caso.setDuracionDias(Integer.parseInt(txtDuracion.getText()));
+        String duracionStr = txtDuracion.getText();
+
         caso.setDescripcionModusOperandi(txtModusOperandi.getText());
         caso.setAreaApoyoResolver(txtAreaApoyo.getText());
         caso.setDeteccionProcedencia(txtDeteccion.getText());
@@ -78,20 +79,20 @@ public class RegistroCasoView extends BaseView {
         caso.setConclusionesRecomendaciones(txtConclusiones.getText());
         caso.setObservaciones(txtObservaciones.getText());
         caso.setSoporte(txtSoporte.getText());
-
-        Calendar cal = Calendar.getInstance();
-        caso.setFechaInicio(new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
-        caso.setMes(cal.get(Calendar.MONTH) + 1);
-
         caso.setIdTipoCaso(cbTipoCaso.getSelectedIndex() + 1);
         caso.setIdInvestigador(cbInvestigador.getSelectedIndex() + 1);
+        caso.setIdTipoIrregularidad(cbTipoIrregularidad.getSelectedIndex() + 1);
+        caso.setIdSubtipoIrregularidad(cbSubtipo.getSelectedIndex() + 1);
+        caso.setIdAccionRealizada(cbAccion.getSelectedIndex() + 1);
 
-        // RegistroMediator.asignarEstatusInicial(caso, usuarioActual);
+        if (!RegistroMediator.validarYPreparar(caso, usuarioActual, duracionStr)) {
+            JOptionPane.showMessageDialog(this, "Datos inválidos.");
+            return;
+        }
 
         if (new CasoDAO().guardarCaso(caso)) {
-            JOptionPane.showMessageDialog(this,
-                    "Caso registrado con éxito. Estatus: " + caso.getEstatus());
-            configurarVista(this, InicioCreator.inicioSegunRol(usuarioActual));
+            JOptionPane.showMessageDialog(this, "Caso registrado.");
+            configurarVista(this, InicioClient.inicioSegunRol(usuarioActual.getRol()));
         }
     }
 }
