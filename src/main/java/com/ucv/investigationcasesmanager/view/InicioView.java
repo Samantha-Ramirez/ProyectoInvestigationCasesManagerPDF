@@ -1,11 +1,13 @@
 package com.ucv.investigationcasesmanager.view;
 
+import com.ucv.investigationcasesmanager.model.Usuario;
+
 /*
- * PDyF: Este código implementa el patrón Factory Method para decidir qué vista de inicio mostrar
- * según el rol del usuario (Investigador o Administrador)
+ * Vista de inicio. PDyF: Este código implementa el patrón Factory Method para decidir qué vista de
+ * inicio mostrar según el rol del usuario (Investigador o Administrador)
  */
 
-// Producto
+// Producto abstracto
 abstract class InicioView {
     public abstract void mostrar();
 }
@@ -29,16 +31,26 @@ class CarteleraInicioView extends InicioView {
 }
 
 
-
+// Creador abstracto
 abstract class InicioCreator {
-    public abstract InicioView FactoryMethod();
+    public abstract InicioView FactoryMethod(Usuario user);
+
+    public static void inicioSegunRol(Usuario user) {
+        InicioCreator creador;
+        if (user.getRol().equalsIgnoreCase("Administrador")) {
+            creador = new CarteleraInicioCreator();
+        } else {
+            creador = new BandejaInicioCreator();
+        }
+        creador.FactoryMethod(user).mostrar();
+    }
 }
 
 
 // Creador concreto especializado en crear la vista de Investigador
 class BandejaInicioCreator extends InicioCreator {
     @Override
-    public InicioView FactoryMethod() {
+    public InicioView FactoryMethod(Usuario user) {
         return new BandejaInicioView();
     }
 }
@@ -47,7 +59,7 @@ class BandejaInicioCreator extends InicioCreator {
 // Creador concreto especializado en crear la vista de Administrador
 class CarteleraInicioCreator extends InicioCreator {
     @Override
-    public InicioView FactoryMethod() {
+    public InicioView FactoryMethod(Usuario user) {
         return new CarteleraInicioView();
     }
 }

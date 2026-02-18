@@ -2,9 +2,12 @@ package com.ucv.investigationcasesmanager.dao;
 
 import com.ucv.investigationcasesmanager.model.Usuario;
 
+/*
+ * DAO específico para inicio de sesión.
+ */
 public class InicioSesionDAO extends GenericDAO<String> {
-
-    public Usuario iniciarSesion(String cedula) {
+    // Consultar usuario por cédula para iniciar sesión
+    public Usuario consultarUsuario(String cedula) {
         String sql = "SELECT * FROM usuario WHERE cedula = ?";
         Usuario usuario = new Usuario();
 

@@ -1,5 +1,8 @@
 package com.ucv.investigationcasesmanager.model;
 
+/*
+ * Modelo de usuario.
+ */
 public class Usuario {
     private String nombre;
     private String apellido;

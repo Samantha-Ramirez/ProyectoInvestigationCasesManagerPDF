@@ -1,10 +1,15 @@
 package com.ucv.investigationcasesmanager.view;
 
 import com.ucv.investigationcasesmanager.dao.InicioSesionDAO;
+import com.ucv.investigationcasesmanager.model.Sesion;
 import com.ucv.investigationcasesmanager.model.Usuario;
 import javax.swing.*;
 import java.awt.*;
 
+/*
+ * Vista de inicio de sesión. Permite a los usuarios ingresar su cédula para acceder a la
+ * aplicación.
+ */
 public class InicioSesionView extends JFrame {
     private JTextField txtCedula;
     private JPasswordField txtPassword;
@@ -12,7 +17,7 @@ public class InicioSesionView extends JFrame {
 
     public InicioSesionView() {
         setTitle("Inicio de sesión");
-        setSize(800, 500);
+        setSize(1100, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -35,24 +40,17 @@ public class InicioSesionView extends JFrame {
         centerPanel.add(btnLogin);
         add(centerPanel, BorderLayout.CENTER);
 
-        // Acción del botón
         btnLogin.addActionListener(e -> inicioSesion());
     }
 
     private void inicioSesion() {
         InicioSesionDAO dao = new InicioSesionDAO();
-        Usuario usuario = dao.iniciarSesion(txtCedula.getText());
+        Usuario usuario = dao.consultarUsuario(txtCedula.getText());
 
         if (usuario != null) {
             this.dispose();
-
-            InicioCreator creador;
-            if (usuario.getRol().equalsIgnoreCase("Administrador")) {
-                creador = new CarteleraInicioCreator();
-            } else {
-                creador = new BandejaInicioCreator();
-            }
-            creador.FactoryMethod().mostrar();
+            Sesion.setUsuario(usuario);
+            InicioCreator.inicioSegunRol(usuario);
         } else {
             JOptionPane.showMessageDialog(this, "Usuario no encontrado");
         }

@@ -1,5 +1,8 @@
 package com.ucv.investigationcasesmanager.model;
 
+/*
+ * Modelo de caso.
+ */
 public class Caso {
     private String nroExpediente;
     private String fechaInicio;
