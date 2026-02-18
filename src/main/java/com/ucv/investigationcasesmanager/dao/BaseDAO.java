@@ -5,7 +5,7 @@ import java.sql.*;
 /*
  * DAO genérico.
  */
-public abstract class GenericDAO<T> {
+public abstract class BaseDAO<T> {
     // Ejecutar actualizaciones (INSERT, UPDATE, DELETE)
     protected int ejecutarActualizacion(String sql, Object... parametros) {
         try (Connection conn = ConexionBD.getInstancia();

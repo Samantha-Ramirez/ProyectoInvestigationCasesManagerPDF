@@ -7,7 +7,7 @@ import java.util.List;
 /*
  * DAO específico para casos.
  */
-public class CasoDAO extends GenericDAO<Caso> {
+public class CasoDAO extends BaseDAO<Caso> {
     // Consultar casos asignados a un investigador específico
     public List<Caso> consultarCasosInvestigador(int idUsuario) {
         List<Caso> lista = new ArrayList<>();
