@@ -12,8 +12,37 @@ El proyecto utiliza el siguiente stack tecnológico:
 *   **Lenguaje:** Java 21
 *   **Framework:** Java Swing
 *   **Base de Datos:** SQLite
-*   **Infraestructura:** Docker & Docker Compose
-*   **Control de Versiones:** Git
+
+---
+
+## 🚀 Cómo iniciar el proyecto
+
+Siga estos pasos para configurar, compilar y ejecutar la aplicación en su entorno local.
+
+### 1. Requisitos Previos
+* **Java JDK 17** o superior.
+* **Maven 3.6+** (Gestor de dependencias).
+* **SQLite** (Motor de base de datos embebido).
+
+### 2. Configuración de la Base de Datos
+El proyecto incluye un archivo `InvestigationCasesManager.db` pre-configurado.
+* Asegúrese de que el archivo tenga permisos de lectura/escritura.
+* Usuarios de prueba disponibles:
+    * **Administrador:** Cédula `31307714`
+    * **Investigador:** Cédula `30243278`
+
+### 3. Compilación e Instalación
+Desde la raíz del proyecto, ejecute el siguiente comando para descargar las dependencias (JDBC SQLite, etc.):
+
+```bash
+mvn clean install
+```
+
+### 4. Ejecución
+Para iniciar el sistema, ejecute la clase principal:
+```bash
+mvn exec:java -Dexec.mainClass="com.ucv.investigationcasesmanager.Main"
+```
 
 ---
 
