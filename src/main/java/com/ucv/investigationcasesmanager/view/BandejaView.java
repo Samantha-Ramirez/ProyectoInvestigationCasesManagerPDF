@@ -9,10 +9,10 @@ import java.util.List;
  * atención.
  */
 public class BandejaView extends BaseView {
-    // Recibir el ID del usuario para cargar solo sus casos
-    public BandejaView(int idUsuario) {
+    // Configurar la vista de bandeja de casos para el investigador
+    public BandejaView() {
         super("Bandeja de casos", true);
-        cargarDatos(idUsuario);
+        cargarDatos(this.usuarioActual.getId());
     }
 
     // Configurar componentes específicos de esta vista

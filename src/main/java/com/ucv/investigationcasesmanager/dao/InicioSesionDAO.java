@@ -13,9 +13,11 @@ public class InicioSesionDAO extends GenericDAO<String> {
 
         ejecutarConsulta(sql, rs -> {
             if (rs.next()) {
-                usuario.setCedula(rs.getString("cedula"));
+                usuario.setId(rs.getInt("id"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setApellido(rs.getString("apellido"));
+                usuario.setCedula(rs.getString("cedula"));
+                usuario.setEmail(rs.getString("email"));
                 usuario.setRol(rs.getString("rol"));
             }
         }, cedula);

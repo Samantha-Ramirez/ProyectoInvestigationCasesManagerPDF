@@ -24,7 +24,7 @@ public class Caso {
     private String soporte;
 
     private int idInvestigador;
-    private int idTipoCaso; // Gestión, Reclamo o Caso
+    private int idTipoCaso;
     private int idTipoIrregularidad;
     private int idSubtipoIrregularidad;
     private int idAccionRealizada;

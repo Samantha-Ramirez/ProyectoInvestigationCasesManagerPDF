@@ -9,10 +9,10 @@ import java.util.List;
  * atención.
  */
 public class CarteleraView extends BaseView {
-    // Recibir el ID del usuario para cargar solo sus casos
-    public CarteleraView(int idUsuario) {
+    // Configurar la vista de cartelera de casos
+    public CarteleraView() {
         super("Cartelera de casos", true);
-        cargarDatos(idUsuario);
+        cargarDatos(this.usuarioActual.getId());
     }
 
     // Configurar componentes específicos de esta vista
@@ -26,7 +26,7 @@ public class CarteleraView extends BaseView {
         configurarTabla(columnas);
     }
 
-    // Cargar los casos asignados al investigador y mostrar en la tabla
+    // Cargar todos los casos y mostrar en la tabla
     private void cargarDatos(int idUsuario) {
         CasoDAO dao = new CasoDAO();
         List<Caso> casos = dao.consultarCasosAdministrador(idUsuario);

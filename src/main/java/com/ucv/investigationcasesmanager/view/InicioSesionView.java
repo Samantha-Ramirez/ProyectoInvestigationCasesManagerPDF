@@ -3,6 +3,7 @@ package com.ucv.investigationcasesmanager.view;
 import com.ucv.investigationcasesmanager.dao.InicioSesionDAO;
 import com.ucv.investigationcasesmanager.model.Sesion;
 import com.ucv.investigationcasesmanager.model.Usuario;
+import com.ucv.investigationcasesmanager.factory.InicioClient;
 import javax.swing.*;
 
 /*
@@ -37,7 +38,7 @@ public class InicioSesionView extends BaseView {
 
         if (usuario != null) {
             Sesion.setUsuario(usuario);
-            configurarVista(this, InicioCreator.inicioSegunRol(usuario));
+            configurarVista(this, InicioClient.inicioSegunRol(usuario.getRol()));
         } else {
             JOptionPane.showMessageDialog(this, "Usuario no encontrado");
         }

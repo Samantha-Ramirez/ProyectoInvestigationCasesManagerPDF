@@ -2,6 +2,7 @@ package com.ucv.investigationcasesmanager.view;
 
 import com.ucv.investigationcasesmanager.model.Usuario;
 import com.ucv.investigationcasesmanager.model.Sesion;
+import com.ucv.investigationcasesmanager.factory.InicioClient;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -95,8 +96,7 @@ public abstract class BaseView extends JFrame {
 
     // Ir al inicio según el rol del usuario
     private void irAInicio() {
-        this.dispose();
-        InicioCreator.inicioSegunRol(usuarioActual);
+        configurarVista(this, InicioClient.inicioSegunRol(usuarioActual.getRol()));
     }
 
     // Ejecutar el cierre de sesión y volver a la pantalla de inicio de sesión
@@ -105,8 +105,7 @@ public abstract class BaseView extends JFrame {
                 "Salir", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             Sesion.cerrarSesion();
-            this.dispose();
-            new InicioSesionView().setVisible(true);
+            configurarVista(this, new InicioSesionView());
         }
     }
 

@@ -4,6 +4,7 @@ package com.ucv.investigationcasesmanager.model;
  * Modelo de usuario.
  */
 public class Usuario {
+    private int id;
     private String nombre;
     private String apellido;
     private String cedula;
@@ -11,6 +12,14 @@ public class Usuario {
     private String rol;
 
     public Usuario() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNombre() {
         return nombre;
