@@ -26,7 +26,7 @@ public class CarteleraView extends BaseView {
 
     private void cargarDatos(int idUsuario) {
         CasoDAO dao = new CasoDAO();
-        List<Caso> casos = dao.consultarCasosInvestigador(idUsuario);
+        List<Caso> casos = dao.consultarCasosAdministrador(idUsuario);
 
         for (Caso c : casos) {
             modeloTabla.addRow(new Object[] {c.getNroExpediente(), c.getTiempoSinAtencion(),

@@ -67,6 +67,6 @@ Los commit se redactan en **español**:
 * `docs`: Documentación.
 * `chore`: Tareas varias.
 
-**Ejemplos:** `UC3 add: Agregar validación al formulario`, `docs: Modificar README`.
+**Ejemplos:** `add: Agregar validación al formulario`, `docs: Modificar README`.
 
 ---
