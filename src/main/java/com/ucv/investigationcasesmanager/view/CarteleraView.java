@@ -2,6 +2,10 @@ package com.ucv.investigationcasesmanager.view;
 
 import com.ucv.investigationcasesmanager.dao.CasoDAO;
 import com.ucv.investigationcasesmanager.model.Caso;
+
+import javax.swing.*;
+import java.awt.*;
+
 import java.util.List;
 
 /*

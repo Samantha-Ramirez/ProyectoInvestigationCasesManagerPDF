@@ -68,4 +68,23 @@ public class CasoDAO extends BaseDAO<Caso> {
                 caso.getIdInvestigador(), caso.getIdTipoCaso(), caso.getIdTipoIrregularidad(),
                 caso.getIdSubtipoIrregularidad(), caso.getIdAccionRealizada()) > 0;
     }
+
+public Caso buscarPorExpediente(String expediente) {
+    String sql = "SELECT nro_expediente, estatus, id_investigador_asignado "
+                + "FROM caso WHERE nro_expediente = ?";
+    
+    Caso[] caso = new Caso[1];
+    
+    ejecutarConsulta(sql, rs -> {
+        if (rs.next()) {
+            Caso c = new Caso();
+            c.setNroExpediente(rs.getString("nro_expediente"));
+            c.setEstatus(rs.getString("estatus"));
+            c.setIdInvestigador(rs.getInt("id_investigador_asignado"));
+            caso[0] = c;
+        }
+    }, expediente);
+    
+    return caso[0];
+    }
 }
