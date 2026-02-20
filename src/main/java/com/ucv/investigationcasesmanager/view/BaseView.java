@@ -23,8 +23,14 @@ public abstract class BaseView extends JFrame {
     protected JScrollPane scrollFormulario;
     private int filaActual = 0;
 
-    // Configurar la estructura base de la vista
+    // === CONSTRUCTOR ORIGINAL MODIFICADO ===
+    // Ahora llama al nuevo constructor con inicializar=true
     public BaseView(String titulo, Boolean mostrarMenu) {
+        this(titulo, mostrarMenu, true); // ← LLAMA AL NUEVO CONSTRUCTOR
+    }
+
+    // === NUEVO CONSTRUCTOR AGREGADO ===
+    public BaseView(String titulo, Boolean mostrarMenu, boolean inicializar) {
         this.usuarioActual = Sesion.getUsuario();
 
         setTitle(titulo);
@@ -39,7 +45,11 @@ public abstract class BaseView extends JFrame {
         configurarPanelCentral();
 
         setLocationRelativeTo(null);
-        inicializarComponentesEspecificos();
+        
+        // Solo inicializar componentes si se solicita
+        if (inicializar) {
+            inicializarComponentesEspecificos();
+        }
     }
 
     // Configurar la cabecera con el nombre del usuario logueado

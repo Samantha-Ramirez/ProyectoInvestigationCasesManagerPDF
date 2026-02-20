@@ -3,8 +3,8 @@ package com.ucv.investigationcasesmanager.view;
 import com.ucv.investigationcasesmanager.dao.CasoDAO;
 import com.ucv.investigationcasesmanager.model.Caso;
 
-import javax.swing.*;
-import java.awt.*;
+//import javax.swing.*;
+//import java.awt.*;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class CarteleraView extends BaseView {
             configurarVista(this, new RegistroCasoView());
         });
 
-        String[] columnas = {"Caso", "Tiempo", "Status", "Acción"};
+        String[] columnas = { "Caso", "Tiempo", "Status", "Acción" };
         configurarTabla(columnas);
     }
 
@@ -36,8 +36,8 @@ public class CarteleraView extends BaseView {
         List<Caso> casos = dao.consultarCasosAdministrador(idUsuario);
 
         for (Caso c : casos) {
-            modeloTabla.addRow(new Object[] {c.getNroExpediente(), c.getTiempoSinAtencion(),
-                    c.getEstatus(), "📝"});
+            modeloTabla.addRow(new Object[] { c.getNroExpediente(), c.getTiempoSinAtencion(),
+                    c.getEstatus(), "📝" });
         }
     }
 }

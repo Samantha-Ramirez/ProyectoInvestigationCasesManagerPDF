@@ -3,37 +3,54 @@ package com.ucv.investigationcasesmanager.dao;
 import com.ucv.investigationcasesmanager.model.Seguimiento;
 import com.ucv.investigationcasesmanager.model.Caso;
 import java.sql.*;
-//import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SeguimientoDAO extends BaseDAO<Seguimiento> {
 
-    // Métodos en camelCase
     public boolean guardarSeguimiento(Seguimiento seguimiento) {
-        String sql = """
-                    INSERT INTO seguimiento
-                    (id_caso, id_investigador, fecha_registro, actividades_realizadas,
-                     personas_involucradas, monto_expuesto, estatus, observaciones)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO seguimiento (" +
+                "id_caso, id_investigador, fecha_registro, actividades_realizadas, " +
+                "personas_involucradas, monto_expuesto, estatus, observaciones" +
+                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        System.out.println("SQL a ejecutar: " + sql);
+        System.out.println("ID Caso: " + seguimiento.getIdCaso());
+        System.out.println("ID Investigador: " + seguimiento.getIdInvestigador());
+        System.out.println("Actividades: " + seguimiento.getActividadesRealizadas());
 
-        return ejecutarActualizacion(sql,
-                seguimiento.getIdCaso(),
-                seguimiento.getIdInvestigador(),
-                Timestamp.valueOf(seguimiento.getFechaRegistro()),
-                seguimiento.getActividadesRealizadas(),
-                seguimiento.getPersonasInvolucradas(),
-                seguimiento.getMontoExpuesto(),
-                seguimiento.getEstatus(),
-                seguimiento.getObservaciones()) > 0;
+        try {
+            int resultado = ejecutarActualizacion(sql,
+                    seguimiento.getIdCaso(),
+                    seguimiento.getIdInvestigador(),
+                    Timestamp.valueOf(seguimiento.getFechaRegistro()),
+                    seguimiento.getActividadesRealizadas(),
+                    seguimiento.getPersonasInvolucradas(),
+                    seguimiento.getMontoExpuesto(),
+                    seguimiento.getEstatus(),
+                    seguimiento.getObservaciones());
+            
+            System.out.println("Resultado de ejecutarActualizacion: " + resultado);
+            return resultado > 0;
+        } catch (Exception e) {
+            System.err.println("Excepción en guardarSeguimiento: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean actualizarEstatusCaso(int idCaso, String nuevoEstatus) {
-        String sql = "UPDATE caso SET estatus = ? WHERE nro_expediente = " +
-                "(SELECT nro_expediente FROM caso WHERE id = ?)";
-
-        return ejecutarActualizacion(sql, nuevoEstatus, idCaso) > 0;
+        String sql = "UPDATE caso SET estatus = ? WHERE id = ?";
+        System.out.println("Actualizando estatus del caso ID " + idCaso + " a: " + nuevoEstatus);
+        
+        try {
+            int resultado = ejecutarActualizacion(sql, nuevoEstatus, idCaso);
+            System.out.println("Resultado actualización estatus: " + resultado);
+            return resultado > 0;
+        } catch (Exception e) {
+            System.err.println("Error al actualizar estatus: " + e.getMessage());
+            return false;
+        }
     }
 
     public List<Seguimiento> obtenerSeguimientosPorCaso(int idCaso) {
