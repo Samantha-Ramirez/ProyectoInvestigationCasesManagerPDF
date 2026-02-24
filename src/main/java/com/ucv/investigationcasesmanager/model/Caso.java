@@ -4,6 +4,7 @@ package com.ucv.investigationcasesmanager.model;
  * Modelo de caso.
  */
 public class Caso {
+    private int id;
     private String nroExpediente;
     private String fechaInicio;
     private int dias;
@@ -30,6 +31,14 @@ public class Caso {
     private int idAccionRealizada;
 
     public Caso() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNroExpediente() {
         return nroExpediente;

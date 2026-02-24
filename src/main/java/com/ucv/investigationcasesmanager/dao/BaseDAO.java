@@ -11,11 +11,17 @@ public abstract class BaseDAO<T> {
         try (Connection conn = ConexionBD.getInstancia();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
+            System.out.println("Ejecutando update en BD...");
             configurarParametros(pstmt, parametros);
-            return pstmt.executeUpdate();
+
+            int resultado = pstmt.executeUpdate();
+            System.out.println("Update ejecutado, filas afectadas: " + resultado);
+            return resultado;
 
         } catch (SQLException e) {
             System.err.println("Error en Update Genérico: " + e.getMessage());
+            System.err.println("SQL: " + sql);
+            e.printStackTrace();
             return 0;
         }
     }

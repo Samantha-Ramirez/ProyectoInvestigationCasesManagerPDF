@@ -25,6 +25,10 @@ public abstract class BaseView extends JFrame {
 
     // Configurar la estructura base de la vista
     public BaseView(String titulo, Boolean mostrarMenu) {
+        this(titulo, mostrarMenu, true);
+    }
+
+    public BaseView(String titulo, Boolean mostrarMenu, boolean inicializar) {
         this.usuarioActual = Sesion.getUsuario();
 
         setTitle(titulo);
@@ -39,7 +43,11 @@ public abstract class BaseView extends JFrame {
         configurarPanelCentral();
 
         setLocationRelativeTo(null);
-        inicializarComponentesEspecificos();
+
+        // Solo inicializar componentes si se solicita
+        if (inicializar) {
+            inicializarComponentesEspecificos();
+        }
     }
 
     // Configurar la cabecera con el nombre del usuario logueado
@@ -133,6 +141,24 @@ public abstract class BaseView extends JFrame {
             btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             btn.addActionListener(accion);
             panelSuperior.add(btn, BorderLayout.EAST);
+        }
+
+        panelSuperior.add(lblTitulo, BorderLayout.WEST);
+        panelContenido.add(panelSuperior, BorderLayout.NORTH);
+    }
+
+    // Nuevo método para configurar título superior con botón redondeado
+    protected void configurarTituloSuperiorConBotonRedondeado(String tituloSeccion,
+            JButton botonRedondeado) {
+        JPanel panelSuperior = new JPanel(new BorderLayout());
+        panelSuperior.setOpaque(false);
+
+        JLabel lblTitulo = new JLabel(tituloSeccion);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+
+        if (botonRedondeado != null) {
+            botonRedondeado.setPreferredSize(new Dimension(120, 35));
+            panelSuperior.add(botonRedondeado, BorderLayout.EAST);
         }
 
         panelSuperior.add(lblTitulo, BorderLayout.WEST);
@@ -256,6 +282,39 @@ public abstract class BaseView extends JFrame {
         panelBoton.setOpaque(false);
         panelBoton.add(btn);
         panelContenido.add(panelBoton, BorderLayout.SOUTH);
+    }
+
+    protected JButton crearBotonRedondeado(String texto, Color colorFondo, ActionListener accion) {
+        JButton boton = new JButton(texto) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Dibujar fondo redondeado
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+
+                // Dibujar texto
+                super.paintComponent(g);
+                g2.dispose();
+            }
+        };
+
+        boton.setText(texto);
+        boton.setBackground(colorFondo);
+        boton.setForeground(Color.BLACK);
+        boton.setFocusPainted(false);
+        boton.setBorderPainted(false);
+        boton.setContentAreaFilled(false);
+        boton.setOpaque(false);
+        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        boton.setFont(new Font("Arial", Font.PLAIN, 14));
+        boton.setPreferredSize(new Dimension(150, 35));
+        boton.addActionListener(accion);
+
+        return boton;
     }
 
     // Configurar componentes específicos
