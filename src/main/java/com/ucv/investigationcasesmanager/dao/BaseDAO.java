@@ -6,25 +6,25 @@ import java.sql.*;
  * DAO genérico.
  */
 public abstract class BaseDAO<T> {
+    // Ejecutar actualizaciones (INSERT, UPDATE, DELETE)
+    protected int ejecutarActualizacion(String sql, Object... parametros) {
+        try (Connection conn = ConexionBD.getInstancia();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-protected int ejecutarActualizacion(String sql, Object... parametros) {
-    try (Connection conn = ConexionBD.getInstancia();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            System.out.println("Ejecutando update en BD...");
+            configurarParametros(pstmt, parametros);
 
-        System.out.println("Ejecutando update en BD...");
-        configurarParametros(pstmt, parametros);
-        
-        int resultado = pstmt.executeUpdate();
-        System.out.println("Update ejecutado, filas afectadas: " + resultado);
-        return resultado;
+            int resultado = pstmt.executeUpdate();
+            System.out.println("Update ejecutado, filas afectadas: " + resultado);
+            return resultado;
 
-    } catch (SQLException e) {
-        System.err.println("Error en Update Genérico: " + e.getMessage());
-        System.err.println("SQL: " + sql);
-        e.printStackTrace(); // ← IMPORTANTE: Ver la traza completa
-        return 0;
+        } catch (SQLException e) {
+            System.err.println("Error en Update Genérico: " + e.getMessage());
+            System.err.println("SQL: " + sql);
+            e.printStackTrace();
+            return 0;
+        }
     }
-}
 
     // Ejecutar consultas (SELECT)
     protected void ejecutarConsulta(String sql, ResultSetHandler<T> handler, Object... parametros) {

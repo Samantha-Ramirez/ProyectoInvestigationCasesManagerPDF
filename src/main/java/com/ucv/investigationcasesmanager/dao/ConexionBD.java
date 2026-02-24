@@ -17,8 +17,7 @@ public class ConexionBD {
 
     private ConexionBD() {}
 
-    // Retornar la instancia de conexión actual. Si no existe o está cerrada, la
-    // crea
+    // Retornar la instancia de conexión actual. Si no existe o está cerrada, la crea
     public static Connection getInstancia() throws SQLException {
         if (instancia == null || instancia.isClosed()) {
             try {

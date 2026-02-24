@@ -4,8 +4,7 @@ package com.ucv.investigationcasesmanager.model;
  * Modelo de caso.
  */
 public class Caso {
-    private int id; // ID único para cada caso, autoincremental en la base de datos
-
+    private int id;
     private String nroExpediente;
     private String fechaInicio;
     private int dias;
@@ -31,8 +30,7 @@ public class Caso {
     private int idSubtipoIrregularidad;
     private int idAccionRealizada;
 
-    public Caso() {
-    }
+    public Caso() {}
 
     public int getId() {
         return id;

@@ -35,7 +35,7 @@ public class InicioSesionView extends BaseView {
 
         JButton btnIniciarSesion = crearBotonRedondeado("Iniciar sesión", new Color(235, 235, 235),
                 e -> accionIniciarSesion());
-        btnIniciarSesion.setForeground(new Color(128, 0, 128)); // Texto morado
+        btnIniciarSesion.setForeground(new Color(128, 0, 128));
         btnIniciarSesion.setPreferredSize(new Dimension(200, 40));
         panelBoton.add(btnIniciarSesion);
         panelContenido.add(panelBoton, BorderLayout.SOUTH);
