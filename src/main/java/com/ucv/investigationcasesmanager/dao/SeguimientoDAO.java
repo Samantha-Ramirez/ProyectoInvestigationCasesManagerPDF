@@ -11,8 +11,9 @@ public class SeguimientoDAO extends BaseDAO<Seguimiento> {
     public boolean guardarSeguimiento(Seguimiento seguimiento) {
         String sql = "INSERT INTO seguimiento (" +
                 "id_caso, id_investigador, fecha_registro, actividades_realizadas, " +
-                "personas_involucradas, monto_expuesto, estatus, observaciones" +
-                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "personas_involucradas, monto_expuesto, estatus, observaciones, " +
+                "recomendaciones, conclusiones" + // NUEVOS CAMPOS
+                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         System.out.println("SQL a ejecutar: " + sql);
         System.out.println("ID Caso: " + seguimiento.getIdCaso());
@@ -28,7 +29,9 @@ public class SeguimientoDAO extends BaseDAO<Seguimiento> {
                     seguimiento.getPersonasInvolucradas(),
                     seguimiento.getMontoExpuesto(),
                     seguimiento.getEstatus(),
-                    seguimiento.getObservaciones());
+                    seguimiento.getObservaciones(),
+                    seguimiento.getRecomendaciones(), // NUEVO
+                    seguimiento.getConclusiones());   // NUEVO
             
             System.out.println("Resultado de ejecutarActualizacion: " + resultado);
             return resultado > 0;
@@ -69,6 +72,19 @@ public class SeguimientoDAO extends BaseDAO<Seguimiento> {
                 s.setMontoExpuesto(rs.getDouble("monto_expuesto"));
                 s.setEstatus(rs.getString("estatus"));
                 s.setObservaciones(rs.getString("observaciones"));
+                
+                // NUEVOS CAMPOS - Verificar que existan en la BD
+                try {
+                    s.setRecomendaciones(rs.getString("recomendaciones"));
+                } catch (SQLException e) {
+                    s.setRecomendaciones("");
+                }
+                try {
+                    s.setConclusiones(rs.getString("conclusiones"));
+                } catch (SQLException e) {
+                    s.setConclusiones("");
+                }
+                
                 lista.add(s);
             }
         }, idCaso);

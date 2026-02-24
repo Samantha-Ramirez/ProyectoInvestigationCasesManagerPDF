@@ -13,10 +13,9 @@ public class ConexionBD {
     // Instancia única de la conexión
     private static Connection instancia = null;
     // Ruta a la carpeta db
-    private static final String URL = "jdbc:sqlite:ProyectoInvestigationCasesManagerPDF/db/InvestigationCasesManager.db";
+    private static final String URL = "jdbc:sqlite:db/InvestigationCasesManager.db";
 
-    private ConexionBD() {
-    }
+    private ConexionBD() {}
 
     // Retornar la instancia de conexión actual. Si no existe o está cerrada, la
     // crea

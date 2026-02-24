@@ -20,6 +20,8 @@ public class RegistroSeguimientoView extends BaseView {
     private JTextField txtMontoExpuesto;
     private JComboBox<String> cbEstatus;
     private JTextArea txtObservaciones;
+    private JTextArea txtRecomendaciones;
+    private JTextArea txtConclusiones;
 
     public RegistroSeguimientoView(Caso caso, Usuario investigador) {
         // Usar el nuevo constructor con 'false' para que NO inicialice automáticamente
@@ -32,9 +34,7 @@ public class RegistroSeguimientoView extends BaseView {
 
         // Validar que el caso no sea null
         if (casoActual == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Error: Caso no válido.",
-                    "Error",
+            JOptionPane.showMessageDialog(this, "Error: Caso no válido.", "Error",
                     JOptionPane.ERROR_MESSAGE);
             dispose();
             return;
@@ -43,8 +43,7 @@ public class RegistroSeguimientoView extends BaseView {
         // Verificar si el caso está cerrado
         if ("Cerrado".equals(casoActual.getEstatus())) {
             JOptionPane.showMessageDialog(this,
-                    "No se puede registrar seguimiento en un caso cerrado.",
-                    "Caso Cerrado",
+                    "No se puede registrar seguimiento en un caso cerrado.", "Caso Cerrado",
                     JOptionPane.WARNING_MESSAGE);
             dispose();
             return;
@@ -65,9 +64,7 @@ public class RegistroSeguimientoView extends BaseView {
         // Validar que casoActual no sea null (por si acaso)
         if (casoActual == null) {
             System.err.println("ERROR: casoActual es null en inicialización");
-            JOptionPane.showMessageDialog(this,
-                    "Error al cargar el caso.",
-                    "Error",
+            JOptionPane.showMessageDialog(this, "Error al cargar el caso.", "Error",
                     JOptionPane.ERROR_MESSAGE);
             dispose();
             return;
@@ -86,8 +83,23 @@ public class RegistroSeguimientoView extends BaseView {
         // Crear campos del formulario
         crearCamposFormulario();
 
+
+
         // Agregar botón de acción principal
-        agregarBotonAccionPrincipal("Registrar Seguimiento", e -> accionRegistrar());
+        JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
+        panelBoton.setOpaque(false);
+        panelBoton.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
+
+        // Botón redondeado en lugar del estándar
+        JButton btnRegistrar = crearBotonRedondeado("Registrar Seguimiento",
+                new Color(235, 235, 235), e -> accionRegistrar());
+        btnRegistrar.setPreferredSize(new Dimension(200, 45)); // Tamaño fijo
+        btnRegistrar.setMinimumSize(new Dimension(200, 45));
+        btnRegistrar.setMaximumSize(new Dimension(200, 45));
+        btnRegistrar.setFont(new Font("Arial", Font.BOLD, 14)); // Texto en negrita
+
+        panelBoton.add(btnRegistrar);
+        panelContenido.add(panelBoton, BorderLayout.SOUTH);
     }
 
     private JPanel crearPanelInformacionCaso() {
@@ -109,7 +121,8 @@ public class RegistroSeguimientoView extends BaseView {
         panelInfo.add(lblEstatus);
 
         panelInfo.add(new JLabel("Investigador:"));
-        panelInfo.add(new JLabel(investigadorActual.getNombre() + " " + investigadorActual.getApellido()));
+        panelInfo.add(new JLabel(
+                investigadorActual.getNombre() + " " + investigadorActual.getApellido()));
         panelInfo.add(new JLabel("Fecha:"));
         panelInfo.add(new JLabel(LocalDateTime.now().toString().substring(0, 10)));
 
@@ -149,11 +162,7 @@ public class RegistroSeguimientoView extends BaseView {
 
         // Estatus
         JLabel lblEstatus = new JLabel("Cambiar estatus a:");
-        cbEstatus = new JComboBox<>(new String[] {
-                "En Seguimiento",
-                "Cerrado",
-                "Reabierto"
-        });
+        cbEstatus = new JComboBox<>(new String[] {"En Seguimiento", "Cerrado", "Reabierto"});
 
         agregarCampoFormulario(lblEstatus);
         agregarCampoFormulario(cbEstatus);
@@ -168,6 +177,26 @@ public class RegistroSeguimientoView extends BaseView {
 
         agregarCampoFormulario(lblObservaciones);
         agregarCampoFormulario(scrollObs);
+
+        // Recomendaciones
+        JLabel lblRecomendaciones = new JLabel("Recomendaciones:");
+        txtRecomendaciones = new JTextArea(3, 30);
+        txtRecomendaciones.setLineWrap(true);
+        txtRecomendaciones.setWrapStyleWord(true);
+        JScrollPane scrollRecomendaciones = new JScrollPane(txtRecomendaciones);
+        scrollRecomendaciones.setPreferredSize(new Dimension(400, 60));
+        agregarCampoFormulario(lblRecomendaciones);
+        agregarCampoFormulario(scrollRecomendaciones);
+
+        // Conclusiones
+        JLabel lblConclusiones = new JLabel("Conclusiones:");
+        txtConclusiones = new JTextArea(3, 30);
+        txtConclusiones.setLineWrap(true);
+        txtConclusiones.setWrapStyleWord(true);
+        JScrollPane scrollConclusiones = new JScrollPane(txtConclusiones);
+        scrollConclusiones.setPreferredSize(new Dimension(400, 60));
+        agregarCampoFormulario(lblConclusiones);
+        agregarCampoFormulario(scrollConclusiones);
     }
 
     private void accionRegistrar() {
@@ -175,10 +204,8 @@ public class RegistroSeguimientoView extends BaseView {
             // Validar campos obligatorios
             String actividades = txtActividadesRealizadas.getText().trim();
             if (actividades.isEmpty() || actividades.equals("Actividades Realizadas:")) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe describir las actividades realizadas.",
-                        "Campo requerido",
-                        JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Debe describir las actividades realizadas.",
+                        "Campo requerido", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -186,8 +213,7 @@ public class RegistroSeguimientoView extends BaseView {
             if ("Cerrado".equals(casoActual.getEstatus())) {
                 JOptionPane.showMessageDialog(this,
                         "No se puede registrar seguimiento porque el caso ya está cerrado.",
-                        "Caso Cerrado",
-                        JOptionPane.WARNING_MESSAGE);
+                        "Caso Cerrado", JOptionPane.WARNING_MESSAGE);
                 dispose();
                 return;
             }
@@ -199,17 +225,49 @@ public class RegistroSeguimientoView extends BaseView {
                 try {
                     monto = Double.parseDouble(montoStr.replace(",", "."));
                     if (monto < 0) {
-                        JOptionPane.showMessageDialog(this,
-                                "El monto no puede ser negativo.",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "El monto no puede ser negativo.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "El monto debe ser un número válido.",
+                            "Error de formato", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            // Validacion especial para cierre de caso
+            String nuevoEstatus = (String) cbEstatus.getSelectedItem();
+
+            // Si se va a CERRAR el caso, validar campos obligatorios
+            if ("Cerrado".equals(nuevoEstatus)) {
+                String observaciones = txtObservaciones.getText().trim();
+                String recomendaciones = txtRecomendaciones.getText().trim();
+                String conclusiones = txtConclusiones.getText().trim();
+
+                StringBuilder errores = new StringBuilder();
+
+                if (observaciones.isEmpty() || observaciones.equals("Observaciones:")) {
+                    JOptionPane.showMessageDialog(this, "Debe describir las observaciones.",
+                            "Campo requerido", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                if (recomendaciones.isEmpty() || recomendaciones.equals("Recomendaciones:")) {
+                    JOptionPane.showMessageDialog(this, "Debe describir las recomendaciones.",
+                            "Campo requerido", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                if (conclusiones.isEmpty() || conclusiones.equals("Conclusiones:")) {
+                    JOptionPane.showMessageDialog(this, "Debe describir las conclusiones.",
+                            "Campo requerido", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (errores.length() > 0) {
                     JOptionPane.showMessageDialog(this,
-                            "El monto debe ser un número válido.",
-                            "Error de formato",
-                            JOptionPane.ERROR_MESSAGE);
+                            "Para cerrar un caso debe completar los siguientes campos:\n"
+                                    + errores.toString(),
+                            "Campos requeridos para cierre", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
             }
@@ -218,8 +276,7 @@ public class RegistroSeguimientoView extends BaseView {
             int idCaso = obtenerIdCaso(casoActual.getNroExpediente());
             if (idCaso <= 0) {
                 JOptionPane.showMessageDialog(this,
-                        "Error: No se pudo identificar el caso en la base de datos.",
-                        "Error",
+                        "Error: No se pudo identificar el caso en la base de datos.", "Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -234,6 +291,8 @@ public class RegistroSeguimientoView extends BaseView {
             seguimiento.setMontoExpuesto(monto);
             seguimiento.setEstatus((String) cbEstatus.getSelectedItem());
             seguimiento.setObservaciones(txtObservaciones.getText().trim());
+            seguimiento.setRecomendaciones(txtRecomendaciones.getText().trim());
+            seguimiento.setConclusiones(txtConclusiones.getText().trim());
 
             System.out.println("Guardando seguimiento para caso ID: " + idCaso);
             System.out.println("Actividades: " + actividades);
@@ -243,8 +302,7 @@ public class RegistroSeguimientoView extends BaseView {
 
             if (guardado) {
                 // Actualizar estatus del caso
-                boolean estatusActualizado = seguimientoDAO.actualizarEstatusCaso(
-                        idCaso,
+                boolean estatusActualizado = seguimientoDAO.actualizarEstatusCaso(idCaso,
                         (String) cbEstatus.getSelectedItem());
 
                 if (estatusActualizado) {
@@ -254,10 +312,9 @@ public class RegistroSeguimientoView extends BaseView {
                 }
 
                 JOptionPane.showMessageDialog(this,
-                        "Seguimiento registrado exitosamente.\nEstatus actualizado a: " +
-                                cbEstatus.getSelectedItem(),
-                        "Éxito",
-                        JOptionPane.INFORMATION_MESSAGE);
+                        "Seguimiento registrado exitosamente.\nEstatus actualizado a: "
+                                + cbEstatus.getSelectedItem(),
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
                 // Volver a la vista anterior
                 configurarVista(this, InicioClient.inicioSegunRol(usuarioActual.getRol()));
@@ -265,15 +322,12 @@ public class RegistroSeguimientoView extends BaseView {
             } else {
                 JOptionPane.showMessageDialog(this,
                         "Error al guardar el seguimiento. Verifique la conexión con la base de datos.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             System.err.println("Error en accionRegistrar: " + e.getMessage());
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this,
-                    "Error inesperado: " + e.getMessage(),
-                    "Error",
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -285,7 +339,8 @@ public class RegistroSeguimientoView extends BaseView {
 
             if (caso != null) {
                 int id = caso.getId();
-                System.out.println("✅ ID del caso encontrado: " + id + " para expediente: " + nroExpediente);
+                System.out.println(
+                        "✅ ID del caso encontrado: " + id + " para expediente: " + nroExpediente);
                 return id;
             } else {
                 System.err.println("❌ No se encontró el caso con expediente: " + nroExpediente);
@@ -301,7 +356,8 @@ public class RegistroSeguimientoView extends BaseView {
     private void verificarTablaSeguimiento() {
         try {
             String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='seguimiento'";
-            java.sql.Connection conn = com.ucv.investigationcasesmanager.dao.ConexionBD.getInstancia();
+            java.sql.Connection conn =
+                    com.ucv.investigationcasesmanager.dao.ConexionBD.getInstancia();
             java.sql.Statement stmt = conn.createStatement();
             java.sql.ResultSet rs = stmt.executeQuery(sql);
 
@@ -312,7 +368,8 @@ public class RegistroSeguimientoView extends BaseView {
                 java.sql.ResultSet columns = stmt.executeQuery("PRAGMA table_info(seguimiento)");
                 System.out.println("Columnas de la tabla seguimiento:");
                 while (columns.next()) {
-                    System.out.println("  - " + columns.getString("name") + " (" + columns.getString("type") + ")");
+                    System.out.println("  - " + columns.getString("name") + " ("
+                            + columns.getString("type") + ")");
                 }
             } else {
                 System.out.println("❌ Tabla 'seguimiento' NO existe en la BD");

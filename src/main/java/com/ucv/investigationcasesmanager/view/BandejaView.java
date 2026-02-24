@@ -3,7 +3,7 @@ package com.ucv.investigationcasesmanager.view;
 import com.ucv.investigationcasesmanager.dao.CasoDAO;
 import com.ucv.investigationcasesmanager.model.Caso;
 
-//import com.ucv.investigationcasesmanager.model.Sesion;
+// import com.ucv.investigationcasesmanager.model.Sesion;
 import javax.swing.*;
 import java.awt.*;
 
@@ -27,78 +27,55 @@ public class BandejaView extends BaseView {
     // Configurar componentes específicos de esta vista
     @Override
     protected void inicializarComponentesEspecificos() {
-        configurarTituloSuperior("Bandeja de casos", "Registrar", e -> {
-            configurarVista(this, new RegistroCasoView());
-        });
+        // Crear botón redondeado para "Registrar"
+        JButton btnRegistrarRedondeado = crearBotonRedondeado("Registrar", new Color(235, 235, 235),
+                e -> configurarVista(this, new RegistroCasoView()));
+                btnRegistrarRedondeado.setFont(new Font("Arial", Font.BOLD, 14));
+        
+        // Usar el botón redondeado en el título superior
+        configurarTituloSuperiorConBotonRedondeado("Bandeja de casos", btnRegistrarRedondeado);
 
-        String[] columnas = { "Caso", "Tiempo", "Status", "Acción" };
+        String[] columnas = {"Caso", "Tiempo", "Status", "Acción"};
         configurarTabla(columnas);
         // Agregar panel de botones de acción
         agregarPanelBotones();
     }
 
-    // Agregar panel con botones de acción
+    // Agregar panel con botones de acción redondeados
     private void agregarPanelBotones() {
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         panelBotones.setOpaque(false);
 
-        JButton btnSeguimiento = new JButton("Registrar Seguimiento");
-        btnSeguimiento.setBackground(new Color(235, 235, 235));
-        btnSeguimiento.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnSeguimiento.addActionListener(e -> registrarSeguimiento());
+        // Botón Ver Detalles redondeado
+        JButton btnVerDetalles = crearBotonRedondeado("Ver Detalles", new Color(235, 235, 235), 
+                e -> verDetallesCaso());
+            btnVerDetalles.setFont(new Font("Arial", Font.BOLD, 14));
 
-        JButton btnActualizar = new JButton("Actualizar");
-        btnActualizar.setBackground(new Color(235, 235, 235));
-        btnActualizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnActualizar.addActionListener(e -> actualizarTabla());
-
-        panelBotones.add(btnSeguimiento);
-        panelBotones.add(btnActualizar);
+        panelBotones.add(btnVerDetalles);
 
         panelContenido.add(panelBotones, BorderLayout.SOUTH);
     }
 
-    // Registrar seguimiento para el caso seleccionado
-    private void registrarSeguimiento() {
+    // Método para ver detalles del caso seleccionado
+    private void verDetallesCaso() {
         int fila = tabla.getSelectedRow();
         if (fila >= 0) {
             String expediente = (String) modeloTabla.getValueAt(fila, 0);
-            String estatus = (String) modeloTabla.getValueAt(fila, 2);
 
-            if ("Cerrado".equals(estatus)) {
-                JOptionPane.showMessageDialog(this,
-                        "No se puede registrar seguimiento en un caso cerrado.",
-                        "Caso Cerrado",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            // Buscar el caso completo usando el DAO mejorado
+            // Buscar el caso completo
             Caso caso = casoDAO.buscarPorExpediente(expediente);
             if (caso != null) {
-                new RegistroSeguimientoView(caso, usuarioActual).setVisible(true);
+                // Abrir la vista de detalles
+                new DetalleCasoView(caso, usuarioActual).setVisible(true);
+                dispose(); // Cerrar la bandeja actual (opcional)
             } else {
-                JOptionPane.showMessageDialog(this,
-                        "No se pudo encontrar el caso.",
-                        "Error",
+                JOptionPane.showMessageDialog(this, "No se pudo encontrar el caso.", "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor, seleccione un caso de la lista.",
-                    "Ningún caso seleccionado",
-                    JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un caso de la lista.",
+                    "Ningún caso seleccionado", JOptionPane.WARNING_MESSAGE);
         }
-    }
-
-    // Actualizar la tabla con los datos más recientes
-    private void actualizarTabla() {
-        modeloTabla.setRowCount(0);
-        cargarDatos(usuarioActual.getId());
-        JOptionPane.showMessageDialog(this,
-                "Tabla actualizada correctamente.",
-                "Actualización",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 
     // Cargar los casos asignados al investigador y mostrar en la tabla
@@ -107,8 +84,8 @@ public class BandejaView extends BaseView {
         List<Caso> casos = dao.consultarCasosInvestigador(idUsuario);
 
         for (Caso c : casos) {
-            modeloTabla.addRow(new Object[] { c.getNroExpediente(), c.getTiempoSinAtencion(),
-                    c.getEstatus(), "📝" });
+            modeloTabla.addRow(new Object[] {c.getNroExpediente(), c.getTiempoSinAtencion(),
+                    c.getEstatus(), "📝"});
         }
     }
 }
