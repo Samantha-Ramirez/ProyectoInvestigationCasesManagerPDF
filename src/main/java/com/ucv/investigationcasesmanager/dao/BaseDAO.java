@@ -1,6 +1,8 @@
 package com.ucv.investigationcasesmanager.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * PDyF: Este código implementa un DAO genérico que maneja cualquier tipo de entidad.
@@ -40,6 +42,29 @@ public abstract class BaseDAO<T> {
         }
     }
 
+    // Ejecutar consulta y retornar una lista mapeada
+    protected <R> List<R> consultarLista(String sql, RowMapper<R> mapper, Object... parametros) {
+        List<R> resultados = new ArrayList<>();
+        ejecutarConsulta(sql, rs -> {
+            while (rs.next()) {
+                resultados.add(mapper.mapRow(rs));
+            }
+        }, parametros);
+        return resultados;
+    }
+
+    // Ejecutar consulta y retornar un solo resultado
+    @SuppressWarnings("unchecked")
+    protected <R> R consultarUno(String sql, RowMapper<R> mapper, Object... parametros) {
+        final Object[] resultado = new Object[1];
+        ejecutarConsulta(sql, rs -> {
+            if (rs.next()) {
+                resultado[0] = mapper.mapRow(rs);
+            }
+        }, parametros);
+        return (R) resultado[0];
+    }
+
     // Configurar parámetros de cualquier tipo
     private void configurarParametros(PreparedStatement pstmt, Object[] parametros)
             throws SQLException {
@@ -52,5 +77,10 @@ public abstract class BaseDAO<T> {
     @FunctionalInterface
     public interface ResultSetHandler<T> {
         void map(ResultSet rs) throws SQLException;
+    }
+
+    @FunctionalInterface
+    protected interface RowMapper<R> {
+        R mapRow(ResultSet rs) throws SQLException;
     }
 }

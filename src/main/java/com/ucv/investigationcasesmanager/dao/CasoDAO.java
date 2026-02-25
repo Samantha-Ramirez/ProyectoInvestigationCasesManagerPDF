@@ -1,7 +1,6 @@
 package com.ucv.investigationcasesmanager.dao;
 
 import com.ucv.investigationcasesmanager.model.Caso;
-import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -12,42 +11,20 @@ import java.util.List;
 public class CasoDAO extends BaseDAO<Caso> {
     // Consultar casos asignados a un investigador específico
     public List<Caso> consultarCasosInvestigador(int idUsuario) {
-        List<Caso> lista = new ArrayList<>();
         String sql = "SELECT nro_expediente, estatus, "
                 + "strftime('%d dias_transcurridos', 'now') || ' sin atención' as tiempo "
                 + "FROM caso WHERE id_investigador_asignado = ?";
 
-        ejecutarConsulta(sql, rs -> {
-            while (rs.next()) {
-                Caso caso = new Caso();
-                caso.setNroExpediente(rs.getString("nro_expediente"));
-                caso.setEstatus(rs.getString("estatus"));
-                caso.setTiempoSinAtencion(rs.getString("tiempo"));
-                lista.add(caso);
-            }
-        }, idUsuario);
-
-        return lista;
+        return consultarLista(sql, this::mapearResumenCaso, idUsuario);
     }
 
     // Consultar todos los casos
     public List<Caso> consultarCasosAdministrador(int idUsuario) {
-        List<Caso> lista = new ArrayList<>();
         String sql = "SELECT nro_expediente, estatus, "
                 + "strftime('%d dias_transcurridos', 'now') || ' sin atención' as tiempo "
                 + "FROM caso";
 
-        ejecutarConsulta(sql, rs -> {
-            while (rs.next()) {
-                Caso caso = new Caso();
-                caso.setNroExpediente(rs.getString("nro_expediente"));
-                caso.setEstatus(rs.getString("estatus"));
-                caso.setTiempoSinAtencion(rs.getString("tiempo"));
-                lista.add(caso);
-            }
-        });
-
-        return lista;
+        return consultarLista(sql, this::mapearResumenCaso);
     }
 
     // Consultar caso por numero de expediente
@@ -56,23 +33,7 @@ public class CasoDAO extends BaseDAO<Caso> {
                 + "movil_afectado, objetivo_agraviado, incidencia "
                 + "FROM caso WHERE nro_expediente = ?";
 
-        Caso[] caso = new Caso[1];
-
-        ejecutarConsulta(sql, rs -> {
-            if (rs.next()) {
-                Caso c = new Caso();
-                c.setId(rs.getInt("id"));
-                c.setNroExpediente(rs.getString("nro_expediente"));
-                c.setEstatus(rs.getString("estatus"));
-                c.setIdInvestigador(rs.getInt("id_investigador_asignado"));
-                c.setMovilAfectado(rs.getString("movil_afectado"));
-                c.setObjetivoAgraviado(rs.getString("objetivo_agraviado"));
-                c.setIncidencia(rs.getString("incidencia"));
-                caso[0] = c;
-            }
-        }, expediente);
-
-        return caso[0];
+        return consultarUno(sql, this::mapearDetalleCaso, expediente);
     }
 
     // Guardar un nuevo caso
@@ -94,5 +55,25 @@ public class CasoDAO extends BaseDAO<Caso> {
                 caso.getConclusionesRecomendaciones(), caso.getObservaciones(), caso.getSoporte(),
                 caso.getIdInvestigador(), caso.getIdTipoCaso(), caso.getIdTipoIrregularidad(),
                 caso.getIdSubtipoIrregularidad(), caso.getIdAccionRealizada()) > 0;
+    }
+
+    private Caso mapearResumenCaso(java.sql.ResultSet rs) throws java.sql.SQLException {
+        Caso caso = new Caso();
+        caso.setNroExpediente(rs.getString("nro_expediente"));
+        caso.setEstatus(rs.getString("estatus"));
+        caso.setTiempoSinAtencion(rs.getString("tiempo"));
+        return caso;
+    }
+
+    private Caso mapearDetalleCaso(java.sql.ResultSet rs) throws java.sql.SQLException {
+        Caso c = new Caso();
+        c.setId(rs.getInt("id"));
+        c.setNroExpediente(rs.getString("nro_expediente"));
+        c.setEstatus(rs.getString("estatus"));
+        c.setIdInvestigador(rs.getInt("id_investigador_asignado"));
+        c.setMovilAfectado(rs.getString("movil_afectado"));
+        c.setObjetivoAgraviado(rs.getString("objetivo_agraviado"));
+        c.setIncidencia(rs.getString("incidencia"));
+        return c;
     }
 }
