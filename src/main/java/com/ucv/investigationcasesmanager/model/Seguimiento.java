@@ -7,16 +7,17 @@ import java.time.LocalDateTime;
  */
 public class Seguimiento {
     private int id;
-    private int idCaso;
-    private int idInvestigador;
     private LocalDateTime fechaRegistro;
     private String actividadesRealizadas;
     private String personasInvolucradas;
     private double montoExpuesto;
-    private String estatus; // "En Seguimiento", "Cerrado", "Reabierto"
+    private String estatus;
     private String observaciones;
     private String recomendaciones;
     private String conclusiones;
+
+    private int idCaso;
+    private int idInvestigador;
 
     public Seguimiento() {}
 

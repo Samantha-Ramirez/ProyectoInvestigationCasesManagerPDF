@@ -5,6 +5,8 @@ import com.ucv.investigationcasesmanager.model.Caso;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 /*
@@ -12,6 +14,7 @@ import java.util.List;
  */
 public class CarteleraView extends BaseView {
 
+    private static final int COLUMNA_ACCION = 3;
     private final CasoDAO casoDAO;
 
     public CarteleraView() {
@@ -25,24 +28,27 @@ public class CarteleraView extends BaseView {
         configurarTituloSuperior("Cartelera de casos", "Registrar",
                 e -> configurarVista(this, new RegistroCasoView()));
 
-        JButton btnVerDetalles = crearBotonPrimario("Ver detalles", e -> verDetallesCaso());
         JPanel tarjeta = crearTarjetaWireframe();
-        tarjeta.add(crearBarraAcciones("Vista general de casos por investigador", btnVerDetalles),
+        tarjeta.add(crearBarraAcciones("Vista general de casos por investigador", null),
                 BorderLayout.NORTH);
         tarjeta.add(crearTabla(new String[] {"Caso", "Tiempo", "Status", "Acción"}),
                 BorderLayout.CENTER);
 
+        tabla.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila = tabla.rowAtPoint(e.getPoint());
+                int columna = tabla.columnAtPoint(e.getPoint());
+                if (fila >= 0 && columna == COLUMNA_ACCION) {
+                    verDetallesCaso(fila);
+                }
+            }
+        });
+
         panelContenido.add(tarjeta, BorderLayout.CENTER);
     }
 
-    private void verDetallesCaso() {
-        int fila = tabla.getSelectedRow();
-        if (fila < 0) {
-            JOptionPane.showMessageDialog(this, "Seleccione un caso para ver su detalle.", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
+    private void verDetallesCaso(int fila) {
         String expediente = (String) modeloTabla.getValueAt(fila, 0);
         Caso caso = casoDAO.consultarCasoPorNroExpediente(expediente);
         if (caso != null) {
@@ -55,7 +61,7 @@ public class CarteleraView extends BaseView {
         List<Caso> casos = casoDAO.consultarCasosAdministrador(idUsuario);
         for (Caso c : casos) {
             modeloTabla.addRow(new Object[] {c.getNroExpediente(), c.getTiempoSinAtencion(),
-                    c.getEstatus(), "📝"});
+                    c.getEstatus(), "Ver"});
         }
     }
 }
