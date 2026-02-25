@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * DAO específico para casos.
+ * PDyF: Este DAO maneja las operaciones de acceso a datos para la entidad Caso, incluyendo
+ * consultas específicas para investigadores y administradores, así como la creación de nuevos
+ * casos.
  */
 public class CasoDAO extends BaseDAO<Caso> {
     // Consultar casos asignados a un investigador específico
@@ -48,6 +50,31 @@ public class CasoDAO extends BaseDAO<Caso> {
         return lista;
     }
 
+    // Consultar caso por numero de expediente
+    public Caso consultarCasoPorNroExpediente(String expediente) {
+        String sql = "SELECT id, nro_expediente, estatus, id_investigador_asignado, "
+                + "movil_afectado, objetivo_agraviado, incidencia "
+                + "FROM caso WHERE nro_expediente = ?";
+
+        Caso[] caso = new Caso[1];
+
+        ejecutarConsulta(sql, rs -> {
+            if (rs.next()) {
+                Caso c = new Caso();
+                c.setId(rs.getInt("id"));
+                c.setNroExpediente(rs.getString("nro_expediente"));
+                c.setEstatus(rs.getString("estatus"));
+                c.setIdInvestigador(rs.getInt("id_investigador_asignado"));
+                c.setMovilAfectado(rs.getString("movil_afectado"));
+                c.setObjetivoAgraviado(rs.getString("objetivo_agraviado"));
+                c.setIncidencia(rs.getString("incidencia"));
+                caso[0] = c;
+            }
+        }, expediente);
+
+        return caso[0];
+    }
+
     // Guardar un nuevo caso
     public boolean guardarCaso(Caso caso) {
         String sql = "INSERT INTO caso ("
@@ -67,30 +94,5 @@ public class CasoDAO extends BaseDAO<Caso> {
                 caso.getConclusionesRecomendaciones(), caso.getObservaciones(), caso.getSoporte(),
                 caso.getIdInvestigador(), caso.getIdTipoCaso(), caso.getIdTipoIrregularidad(),
                 caso.getIdSubtipoIrregularidad(), caso.getIdAccionRealizada()) > 0;
-    }
-
-// Buscar caso por expediente incluyendo el ID
-public Caso buscarPorExpediente(String expediente) {
-    String sql = "SELECT id, nro_expediente, estatus, id_investigador_asignado, "
-               + "movil_afectado, objetivo_agraviado, incidencia "
-               + "FROM caso WHERE nro_expediente = ?";
-    
-    Caso[] caso = new Caso[1];
-    
-    ejecutarConsulta(sql, rs -> {
-        if (rs.next()) {
-            Caso c = new Caso();
-            c.setId(rs.getInt("id")); // ← IMPORTANTE: obtener el ID
-            c.setNroExpediente(rs.getString("nro_expediente"));
-            c.setEstatus(rs.getString("estatus"));
-            c.setIdInvestigador(rs.getInt("id_investigador_asignado"));
-            c.setMovilAfectado(rs.getString("movil_afectado"));
-            c.setObjetivoAgraviado(rs.getString("objetivo_agraviado"));
-            c.setIncidencia(rs.getString("incidencia"));
-            caso[0] = c;
-        }
-    }, expediente);
-    
-    return caso[0];
     }
 }

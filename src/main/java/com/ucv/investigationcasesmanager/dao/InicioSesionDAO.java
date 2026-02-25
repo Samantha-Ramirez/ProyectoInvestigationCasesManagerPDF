@@ -3,7 +3,8 @@ package com.ucv.investigationcasesmanager.dao;
 import com.ucv.investigationcasesmanager.model.Usuario;
 
 /*
- * DAO específico para inicio de sesión.
+ * PDyF: Este DAO maneja las operaciones de acceso a datos relacionadas con el inicio de sesión,
+ * específicamente la consulta de usuarios por cédula para validar credenciales.
  */
 public class InicioSesionDAO extends BaseDAO<String> {
     // Consultar usuario por cédula para iniciar sesión

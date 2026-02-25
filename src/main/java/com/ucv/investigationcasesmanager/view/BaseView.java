@@ -1,16 +1,19 @@
 package com.ucv.investigationcasesmanager.view;
 
-import com.ucv.investigationcasesmanager.model.Usuario;
-import com.ucv.investigationcasesmanager.model.Sesion;
 import com.ucv.investigationcasesmanager.factory.InicioClient;
+import com.ucv.investigationcasesmanager.model.Sesion;
+import com.ucv.investigationcasesmanager.model.Usuario;
+import com.ucv.investigationcasesmanager.ui.factory.UIComponentFactory;
+import com.ucv.investigationcasesmanager.ui.factory.WireframeUIFactory;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
 /*
- * Vista base para las diferentes secciones de la aplicación. Contiene la estructura común de
- * cabecera, menú lateral y panel central.
+ * Vista base con estructura compartida y helpers para construir pantallas wireframe con FlatLaf.
  */
 public abstract class BaseView extends JFrame {
     protected Usuario usuarioActual;
@@ -21,20 +24,22 @@ public abstract class BaseView extends JFrame {
     protected JTable tabla;
     protected JPanel panelFormulario;
     protected JScrollPane scrollFormulario;
+    protected final UIComponentFactory uiFactory;
     private int filaActual = 0;
 
-    // Configurar la estructura base de la vista
     public BaseView(String titulo, Boolean mostrarMenu) {
         this(titulo, mostrarMenu, true);
     }
 
     public BaseView(String titulo, Boolean mostrarMenu, boolean inicializar) {
         this.usuarioActual = Sesion.getUsuario();
+        this.uiFactory = new WireframeUIFactory();
 
         setTitle(titulo);
         setSize(1100, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+        getContentPane().setBackground(new Color(242, 242, 242));
 
         configurarCabecera();
         if (mostrarMenu) {
@@ -44,70 +49,61 @@ public abstract class BaseView extends JFrame {
 
         setLocationRelativeTo(null);
 
-        // Solo inicializar componentes si se solicita
         if (inicializar) {
             inicializarComponentesEspecificos();
         }
     }
 
-    // Configurar la cabecera con el nombre del usuario logueado
     private void configurarCabecera() {
         cabecera = new JPanel(new BorderLayout());
-        cabecera.setBackground(new Color(128, 0, 128));
-        cabecera.setPreferredSize(new Dimension(1100, 80));
+        cabecera.setBackground(uiFactory.getPrimaryColor());
+        cabecera.setPreferredSize(new Dimension(1100, 50));
 
         String infoUser = (usuarioActual != null)
                 ? usuarioActual.getNombre() + " " + usuarioActual.getApellido()
-                : "Iniciar sesión";
-        JLabel lblUser = new JLabel(infoUser + " 👤 ");
+                : "Usuario 1";
+
+        JLabel lblUser = new JLabel(infoUser + "  ");
         lblUser.setForeground(Color.WHITE);
-        lblUser.setFont(new Font("Arial", Font.BOLD, 14));
-        lblUser.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+        lblUser.setFont(new Font("Arial", Font.BOLD, 13));
+        lblUser.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 16));
 
         cabecera.add(lblUser, BorderLayout.EAST);
         add(cabecera, BorderLayout.NORTH);
     }
 
-    // Configurar el menú lateral con opciones comunes
     private void configurarMenuLateral() {
         menuLateral = new JPanel();
         menuLateral.setLayout(new BoxLayout(menuLateral, BoxLayout.Y_AXIS));
         menuLateral.setBackground(Color.WHITE);
-        menuLateral.setPreferredSize(new Dimension(180, 0));
-        menuLateral.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
+        menuLateral.setPreferredSize(new Dimension(160, 0));
+        menuLateral
+                .setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(230, 230, 230)));
 
-        agregarBotonMenu("🏠 Inicio", e -> irAInicio());
-        agregarBotonMenu("📊 Reportes", e -> irAInicio());
-        agregarBotonMenu("🔍 Auditoría", e -> irAInicio());
-        agregarBotonMenu("📂 Entidades", e -> irAInicio());
-        agregarBotonMenu("🚪 Cerrar Sesión", e -> ejecutarCerrarSesion());
-        menuLateral.add(Box.createVerticalStrut(20));
+        menuLateral.add(Box.createVerticalStrut(12));
+        agregarBotonMenu("⌂  Inicio", e -> irAInicio());
+        agregarBotonMenu("⚑  Bandeja", e -> irAInicio());
+        agregarBotonMenu("↺  Reportes", e -> irAInicio());
+        agregarBotonMenu("⚙  Entidades", e -> irAInicio());
+        agregarBotonMenu("◌  Auditoría", e -> irAInicio());
+        menuLateral.add(Box.createVerticalGlue());
+        agregarBotonMenu("⇦  Cerrar sesión", e -> ejecutarCerrarSesion());
+        menuLateral.add(Box.createVerticalStrut(14));
 
         add(menuLateral, BorderLayout.WEST);
     }
 
-    // Agregar botones al menú lateral con estilo uniforme
     private void agregarBotonMenu(String texto, ActionListener accion) {
-        JButton btn = new JButton(texto);
-        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btn.setBorderPainted(false);
-        btn.setContentAreaFilled(false);
-        btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.setFont(new Font("Arial", Font.PLAIN, 16));
-        btn.setMaximumSize(new Dimension(200, 50));
-        btn.addActionListener(accion);
-
-        menuLateral.add(Box.createVerticalStrut(10));
+        JButton btn = uiFactory.createMenuButton(texto, accion);
+        btn.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 0));
         menuLateral.add(btn);
+        menuLateral.add(Box.createVerticalStrut(2));
     }
 
-    // Ir al inicio según el rol del usuario
     private void irAInicio() {
         configurarVista(this, InicioClient.inicioSegunRol(usuarioActual.getRol()));
     }
 
-    // Ejecutar el cierre de sesión y volver a la pantalla de inicio de sesión
     private void ejecutarCerrarSesion() {
         int confirm = JOptionPane.showConfirmDialog(this, "¿Desea cerrar la sesión actual?",
                 "Salir", JOptionPane.YES_NO_OPTION);
@@ -117,74 +113,164 @@ public abstract class BaseView extends JFrame {
         }
     }
 
-    // Configurar el panel central donde se mostrarán los contenidos específicos de cada sección
     private void configurarPanelCentral() {
-        panelContenido = new JPanel(new BorderLayout(15, 15));
+        panelContenido = new JPanel(new BorderLayout(12, 12));
         panelContenido.setBackground(Color.WHITE);
-        panelContenido.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        panelContenido.setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
         add(panelContenido, BorderLayout.CENTER);
     }
 
-    // Configurar el título superior de cada sección con un botón de acción opcional
     protected void configurarTituloSuperior(String tituloSeccion, String textoBoton,
             ActionListener accion) {
         JPanel panelSuperior = new JPanel(new BorderLayout());
         panelSuperior.setOpaque(false);
 
         JLabel lblTitulo = new JLabel(tituloSeccion);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panelSuperior.add(lblTitulo, BorderLayout.WEST);
 
-        if (textoBoton != null) {
-            JButton btn = new JButton(textoBoton);
-            btn.setPreferredSize(new Dimension(120, 35));
-            btn.setBackground(new Color(235, 235, 235));
-            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            btn.addActionListener(accion);
-            panelSuperior.add(btn, BorderLayout.EAST);
+        if (textoBoton != null && accion != null) {
+            panelSuperior.add(crearBotonEncabezado(textoBoton, accion), BorderLayout.EAST);
         }
 
-        panelSuperior.add(lblTitulo, BorderLayout.WEST);
         panelContenido.add(panelSuperior, BorderLayout.NORTH);
     }
 
-    // Nuevo método para configurar título superior con botón redondeado
     protected void configurarTituloSuperiorConBotonRedondeado(String tituloSeccion,
             JButton botonRedondeado) {
         JPanel panelSuperior = new JPanel(new BorderLayout());
         panelSuperior.setOpaque(false);
 
         JLabel lblTitulo = new JLabel(tituloSeccion);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panelSuperior.add(lblTitulo, BorderLayout.WEST);
 
         if (botonRedondeado != null) {
-            botonRedondeado.setPreferredSize(new Dimension(120, 35));
             panelSuperior.add(botonRedondeado, BorderLayout.EAST);
         }
 
-        panelSuperior.add(lblTitulo, BorderLayout.WEST);
         panelContenido.add(panelSuperior, BorderLayout.NORTH);
     }
 
-    // Configurar la tabla para mostrar datos en el panel central
-    protected void configurarTabla(String[] columnas) {
+    protected JButton crearBotonEncabezado(String texto, ActionListener accion) {
+        return uiFactory.createHeaderActionButton(texto, accion);
+    }
+
+    protected JButton crearBotonPrimario(String texto, ActionListener accion) {
+        return uiFactory.createPrimaryActionButton(texto, accion);
+    }
+
+    protected JPanel crearTarjetaWireframe() {
+        JPanel card = new JPanel(new BorderLayout(0, 10));
+        card.setBackground(Color.WHITE);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(232, 232, 232)),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        return card;
+    }
+
+    protected JPanel crearBarraAcciones(String textoInfo, JButton botonDerecha) {
+        JPanel barra = new JPanel(new BorderLayout());
+        barra.setOpaque(false);
+
+        if (textoInfo != null && !textoInfo.isBlank()) {
+            JLabel lblInfo = new JLabel(textoInfo);
+            lblInfo.setFont(new Font("Arial", Font.PLAIN, 12));
+            lblInfo.setForeground(new Color(95, 95, 95));
+            barra.add(lblInfo, BorderLayout.WEST);
+        }
+
+        if (botonDerecha != null) {
+            barra.add(botonDerecha, BorderLayout.EAST);
+        }
+
+        return barra;
+    }
+
+    protected JScrollPane crearTabla(String[] columnas) {
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
         tabla = new JTable(modeloTabla);
-        tabla.setRowHeight(45);
+        tabla.setRowHeight(34);
         tabla.getTableHeader().setReorderingAllowed(false);
+        uiFactory.styleTable(tabla);
+
+        if (columnas.length > 2 && "Status".equalsIgnoreCase(columnas[2])) {
+            tabla.getColumnModel().getColumn(2).setCellRenderer(new StatusBadgeRenderer());
+        }
 
         JScrollPane scroll = new JScrollPane(tabla);
-        scroll.setBorder(BorderFactory.createLineBorder(new Color(240, 240, 240)));
+        scroll.setBorder(BorderFactory.createLineBorder(new Color(236, 236, 236)));
         scroll.getViewport().setBackground(Color.WHITE);
-
-        panelContenido.add(scroll, BorderLayout.CENTER);
+        return scroll;
     }
 
-    // Configurar el formulario para registrar o editar casos
+    protected void configurarTabla(String[] columnas) {
+        panelContenido.add(crearTabla(columnas), BorderLayout.CENTER);
+    }
+
+    protected JPanel crearFormularioEtiquetado() {
+        JPanel form = new JPanel(new GridBagLayout());
+        form.setOpaque(false);
+        return form;
+    }
+
+    protected int agregarCampoEtiquetado(JPanel form, int fila, String etiqueta, JComponent campo) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = fila;
+        gbc.insets = new Insets(6, 4, 6, 12);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        JLabel label = new JLabel(etiqueta + ":");
+        label.setFont(new Font("Arial", Font.PLAIN, 12));
+        form.add(label, gbc);
+
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        form.add(campo, gbc);
+        return fila + 1;
+    }
+
+    protected JTextArea crearAreaTextoEstilizada(int filas, int columnas, int altoPreferido) {
+        JTextArea area = new JTextArea(filas, columnas);
+        area.setLineWrap(true);
+        area.setWrapStyleWord(true);
+        area.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+        area.setBackground(new Color(237, 237, 237));
+        area.setPreferredSize(new Dimension(420, altoPreferido));
+        area.setFont(new Font("Arial", Font.PLAIN, 12));
+        return area;
+    }
+
+    protected JScrollPane envolverEnScroll(JComponent componente) {
+        JScrollPane scroll = new JScrollPane(componente);
+        scroll.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 230)));
+        scroll.getViewport().setBackground(Color.WHITE);
+        return scroll;
+    }
+
+    protected void estilizarEntrada(JComponent component) {
+        uiFactory.styleInput(component);
+    }
+
+    protected JPanel crearPanelAccionesInferior(JButton... botones) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 8));
+        panel.setOpaque(false);
+        for (JButton boton : botones) {
+            if (boton != null) {
+                panel.add(boton);
+            }
+        }
+        return panel;
+    }
+
     protected void configurarFormulario() {
         panelFormulario = new JPanel(new GridBagLayout());
         panelFormulario.setOpaque(false);
@@ -193,32 +279,29 @@ public abstract class BaseView extends JFrame {
         scrollFormulario = new JScrollPane(panelFormulario);
         scrollFormulario.setBorder(null);
         scrollFormulario.getViewport().setBackground(Color.WHITE);
-
         scrollFormulario.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollFormulario.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
         scrollFormulario.getVerticalScrollBar().setUnitIncrement(16);
 
         panelContenido.add(scrollFormulario, BorderLayout.CENTER);
     }
 
-    // Configurar la vista a mostrar
     protected void configurarVista(JFrame vistaActual, JFrame vistaNueva) {
         vistaActual.dispose();
         vistaNueva.setVisible(true);
     }
 
-    // Agregar un campo al formulario con estilo uniforme
     protected void agregarCampoFormulario(JComponent componente) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = filaActual++;
-        gbc.insets = new Insets(8, 20, 8, 20);
+        gbc.insets = new Insets(6, 10, 6, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
 
-        if (componente instanceof JTextField || componente instanceof JTextArea) {
+        if (componente instanceof JTextField || componente instanceof JTextArea
+                || componente instanceof JComboBox<?>) {
             configurarEstiloYPlaceholder(componente);
         }
 
@@ -226,14 +309,14 @@ public abstract class BaseView extends JFrame {
         panelFormulario.revalidate();
     }
 
-    // Configurar estilo y comportamiento de placeholder para campos de texto
     private void configurarEstiloYPlaceholder(JComponent componente) {
-        componente.setBackground(new Color(235, 235, 235));
-        componente.setForeground(Color.GRAY); // Color de placeholder inicial
-        componente.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200)),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        uiFactory.styleInput(componente);
 
+        if (!(componente instanceof JTextField || componente instanceof JTextArea)) {
+            return;
+        }
+
+        componente.setForeground(Color.GRAY);
         String placeholder =
                 (componente instanceof JTextField) ? ((JTextField) componente).getText()
                         : ((JTextArea) componente).getText();
@@ -246,10 +329,11 @@ public abstract class BaseView extends JFrame {
                                 : ((JTextArea) componente).getText();
 
                 if (textoActual.equals(placeholder)) {
-                    if (componente instanceof JTextField)
+                    if (componente instanceof JTextField) {
                         ((JTextField) componente).setText("");
-                    else
+                    } else {
                         ((JTextArea) componente).setText("");
+                    }
                     componente.setForeground(Color.BLACK);
                 }
             }
@@ -261,62 +345,41 @@ public abstract class BaseView extends JFrame {
                                 : ((JTextArea) componente).getText();
 
                 if (textoActual.isEmpty()) {
-                    if (componente instanceof JTextField)
+                    if (componente instanceof JTextField) {
                         ((JTextField) componente).setText(placeholder);
-                    else
+                    } else {
                         ((JTextArea) componente).setText(placeholder);
+                    }
                     componente.setForeground(Color.GRAY);
                 }
             }
         });
     }
 
-    // Agregar un botón de acción principal al formulario
-    protected void agregarBotonAccionPrincipal(String texto, java.awt.event.ActionListener accion) {
-        JButton btn = new JButton(texto);
-        btn.setBackground(new Color(220, 220, 220));
-        btn.setPreferredSize(new Dimension(150, 40));
-        btn.addActionListener(accion);
-
-        JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panelBoton.setOpaque(false);
-        panelBoton.add(btn);
-        panelContenido.add(panelBoton, BorderLayout.SOUTH);
+    protected void agregarBotonAccionPrincipal(String texto, ActionListener accion) {
+        panelContenido.add(crearPanelAccionesInferior(crearBotonPrimario(texto, accion)),
+                BorderLayout.SOUTH);
     }
 
     protected JButton crearBotonRedondeado(String texto, Color colorFondo, ActionListener accion) {
-        JButton boton = new JButton(texto) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_ON);
-
-                // Dibujar fondo redondeado
-                g2.setColor(getBackground());
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
-
-                // Dibujar texto
-                super.paintComponent(g);
-                g2.dispose();
-            }
-        };
-
-        boton.setText(texto);
+        JButton boton = uiFactory.createHeaderActionButton(texto, accion);
         boton.setBackground(colorFondo);
-        boton.setForeground(Color.BLACK);
-        boton.setFocusPainted(false);
-        boton.setBorderPainted(false);
-        boton.setContentAreaFilled(false);
-        boton.setOpaque(false);
-        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        boton.setFont(new Font("Arial", Font.PLAIN, 14));
-        boton.setPreferredSize(new Dimension(150, 35));
-        boton.addActionListener(accion);
-
         return boton;
     }
 
-    // Configurar componentes específicos
     protected abstract void inicializarComponentesEspecificos();
+
+    private class StatusBadgeRenderer implements TableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            JLabel badge = uiFactory.createStatusBadge(String.valueOf(value));
+            if (isSelected) {
+                badge.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(185, 170, 212)),
+                        BorderFactory.createEmptyBorder(2, 8, 2, 8)));
+            }
+            return badge;
+        }
+    }
 }

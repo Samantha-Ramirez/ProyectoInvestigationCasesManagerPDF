@@ -7,32 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SeguimientoDAO extends BaseDAO<Seguimiento> {
-
+    // Guardar un nuevo seguimiento en la base de datos
     public boolean guardarSeguimiento(Seguimiento seguimiento) {
-        String sql = "INSERT INTO seguimiento (" +
-                "id_caso, id_investigador, fecha_registro, actividades_realizadas, " +
-                "personas_involucradas, monto_expuesto, estatus, observaciones, " +
-                "recomendaciones, conclusiones" + // NUEVOS CAMPOS
-                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        System.out.println("SQL a ejecutar: " + sql);
-        System.out.println("ID Caso: " + seguimiento.getIdCaso());
-        System.out.println("ID Investigador: " + seguimiento.getIdInvestigador());
-        System.out.println("Actividades: " + seguimiento.getActividadesRealizadas());
+        String sql = "INSERT INTO seguimiento ("
+                + "id_caso, id_investigador, fecha_registro, actividades_realizadas, "
+                + "personas_involucradas, monto_expuesto, estatus, observaciones, "
+                + "recomendaciones, conclusiones" + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
-            int resultado = ejecutarActualizacion(sql,
-                    seguimiento.getIdCaso(),
+            int resultado = ejecutarActualizacion(sql, seguimiento.getIdCaso(),
                     seguimiento.getIdInvestigador(),
                     Timestamp.valueOf(seguimiento.getFechaRegistro()),
-                    seguimiento.getActividadesRealizadas(),
-                    seguimiento.getPersonasInvolucradas(),
-                    seguimiento.getMontoExpuesto(),
-                    seguimiento.getEstatus(),
-                    seguimiento.getObservaciones(),
-                    seguimiento.getRecomendaciones(), // NUEVO
-                    seguimiento.getConclusiones());   // NUEVO
-            
+                    seguimiento.getActividadesRealizadas(), seguimiento.getPersonasInvolucradas(),
+                    seguimiento.getMontoExpuesto(), seguimiento.getEstatus(),
+                    seguimiento.getObservaciones(), seguimiento.getRecomendaciones(), // NUEVO
+                    seguimiento.getConclusiones()); // NUEVO
+
             System.out.println("Resultado de ejecutarActualizacion: " + resultado);
             return resultado > 0;
         } catch (Exception e) {
@@ -42,10 +32,11 @@ public class SeguimientoDAO extends BaseDAO<Seguimiento> {
         }
     }
 
+    // Actualizar el estatus del caso asociado a un seguimiento
     public boolean actualizarEstatusCaso(int idCaso, String nuevoEstatus) {
         String sql = "UPDATE caso SET estatus = ? WHERE id = ?";
         System.out.println("Actualizando estatus del caso ID " + idCaso + " a: " + nuevoEstatus);
-        
+
         try {
             int resultado = ejecutarActualizacion(sql, nuevoEstatus, idCaso);
             System.out.println("Resultado actualización estatus: " + resultado);
@@ -56,6 +47,7 @@ public class SeguimientoDAO extends BaseDAO<Seguimiento> {
         }
     }
 
+    // Obtener todos los seguimientos asociados a un caso específico
     public List<Seguimiento> obtenerSeguimientosPorCaso(int idCaso) {
         List<Seguimiento> lista = new ArrayList<>();
         String sql = "SELECT * FROM seguimiento WHERE id_caso = ? ORDER BY fecha_registro DESC";
@@ -72,7 +64,7 @@ public class SeguimientoDAO extends BaseDAO<Seguimiento> {
                 s.setMontoExpuesto(rs.getDouble("monto_expuesto"));
                 s.setEstatus(rs.getString("estatus"));
                 s.setObservaciones(rs.getString("observaciones"));
-                
+
                 // NUEVOS CAMPOS - Verificar que existan en la BD
                 try {
                     s.setRecomendaciones(rs.getString("recomendaciones"));
@@ -84,7 +76,7 @@ public class SeguimientoDAO extends BaseDAO<Seguimiento> {
                 } catch (SQLException e) {
                     s.setConclusiones("");
                 }
-                
+
                 lista.add(s);
             }
         }, idCaso);
@@ -92,6 +84,7 @@ public class SeguimientoDAO extends BaseDAO<Seguimiento> {
         return lista;
     }
 
+    // Consultar casos asignados a un investigador específico
     public List<Caso> consultarCasosInvestigador(int idInvestigador) {
         return new CasoDAO().consultarCasosInvestigador(idInvestigador);
     }

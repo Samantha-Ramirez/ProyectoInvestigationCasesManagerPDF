@@ -6,8 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /*
- * DAO específico para la conexión. PDyF: Este código implementa el patrón Singleton para asegurar
- * una única instancia de conexión.
+ * PDyF: Este código implementa el patrón Singleton para asegurar una única instancia de conexión.
  */
 public class ConexionBD {
     // Instancia única de la conexión

@@ -3,7 +3,7 @@ package com.ucv.investigationcasesmanager.dao;
 import java.sql.*;
 
 /*
- * DAO genérico.
+ * PDyF: Este código implementa un DAO genérico que maneja cualquier tipo de entidad.
  */
 public abstract class BaseDAO<T> {
     // Ejecutar actualizaciones (INSERT, UPDATE, DELETE)
@@ -11,11 +11,9 @@ public abstract class BaseDAO<T> {
         try (Connection conn = ConexionBD.getInstancia();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            System.out.println("Ejecutando update en BD...");
             configurarParametros(pstmt, parametros);
 
             int resultado = pstmt.executeUpdate();
-            System.out.println("Update ejecutado, filas afectadas: " + resultado);
             return resultado;
 
         } catch (SQLException e) {
@@ -37,6 +35,8 @@ public abstract class BaseDAO<T> {
             }
         } catch (SQLException e) {
             System.err.println("Error en Consulta Genérica: " + e.getMessage());
+            System.err.println("SQL: " + sql);
+            e.printStackTrace();
         }
     }
 
