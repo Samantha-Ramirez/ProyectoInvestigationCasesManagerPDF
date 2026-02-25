@@ -24,7 +24,7 @@ public class InicioSesionView extends BaseView {
         panelContenido.removeAll();
         panelContenido.setLayout(new GridBagLayout());
 
-        JPanel tarjetaLogin = crearTarjetaWireframe();
+        JPanel tarjetaLogin = crearTarjeta();
         tarjetaLogin.setLayout(new GridBagLayout());
         tarjetaLogin.setPreferredSize(new Dimension(470, 270));
 

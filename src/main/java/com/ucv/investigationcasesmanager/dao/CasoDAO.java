@@ -28,12 +28,12 @@ public class CasoDAO extends BaseDAO<Caso> {
     }
 
     // Consultar caso por numero de expediente
-    public Caso consultarCasoPorNroExpediente(String expediente) {
+    public Caso consultarCasoPorNroExpediente(String nroExpediente) {
         String sql = "SELECT id, nro_expediente, estatus, id_investigador_asignado, "
                 + "movil_afectado, objetivo_agraviado, incidencia "
                 + "FROM caso WHERE nro_expediente = ?";
 
-        return consultarUno(sql, this::mapearDetalleCaso, expediente);
+        return consultarUno(sql, this::mapearDetalleCaso, nroExpediente);
     }
 
     // Guardar un nuevo caso
@@ -57,6 +57,7 @@ public class CasoDAO extends BaseDAO<Caso> {
                 caso.getIdSubtipoIrregularidad(), caso.getIdAccionRealizada()) > 0;
     }
 
+    // Mapear resultado de consulta a un objeto Caso (resumen)
     private Caso mapearResumenCaso(java.sql.ResultSet rs) throws java.sql.SQLException {
         Caso caso = new Caso();
         caso.setNroExpediente(rs.getString("nro_expediente"));
@@ -65,15 +66,16 @@ public class CasoDAO extends BaseDAO<Caso> {
         return caso;
     }
 
+    // Mapear resultado de consulta a un objeto Caso (detalle)
     private Caso mapearDetalleCaso(java.sql.ResultSet rs) throws java.sql.SQLException {
-        Caso c = new Caso();
-        c.setId(rs.getInt("id"));
-        c.setNroExpediente(rs.getString("nro_expediente"));
-        c.setEstatus(rs.getString("estatus"));
-        c.setIdInvestigador(rs.getInt("id_investigador_asignado"));
-        c.setMovilAfectado(rs.getString("movil_afectado"));
-        c.setObjetivoAgraviado(rs.getString("objetivo_agraviado"));
-        c.setIncidencia(rs.getString("incidencia"));
-        return c;
+        Caso caso = new Caso();
+        caso.setId(rs.getInt("id"));
+        caso.setNroExpediente(rs.getString("nro_expediente"));
+        caso.setEstatus(rs.getString("estatus"));
+        caso.setIdInvestigador(rs.getInt("id_investigador_asignado"));
+        caso.setMovilAfectado(rs.getString("movil_afectado"));
+        caso.setObjetivoAgraviado(rs.getString("objetivo_agraviado"));
+        caso.setIncidencia(rs.getString("incidencia"));
+        return caso;
     }
 }

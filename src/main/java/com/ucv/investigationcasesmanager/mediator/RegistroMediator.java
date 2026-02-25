@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 public class RegistroMediator {
     // Validar los datos obligatorios, manejar la lógica de estatus y asignar fecha/mes
     public static boolean validarYPreparar(Caso caso, Usuario usuario, String duracionTexto) {
-        // Manejo de tipos de datos y validaciones básicas
         try {
             int duracion =
                     (duracionTexto.equals("Duración (Días)")) ? 0 : Integer.parseInt(duracionTexto);
@@ -22,14 +21,12 @@ public class RegistroMediator {
             return false;
         }
 
-        // Asignar Estatus por Rol
         if (usuario.getRol().equalsIgnoreCase("Administrador")) {
             caso.setEstatus("Asignado");
         } else {
             caso.setEstatus("Abierto");
         }
 
-        // Asignar Fecha y Mes
         Calendar cal = Calendar.getInstance();
         caso.setFechaInicio(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
         caso.setMes(cal.get(Calendar.MONTH) + 1);

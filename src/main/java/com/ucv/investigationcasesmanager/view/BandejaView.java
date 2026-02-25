@@ -28,7 +28,7 @@ public class BandejaView extends BaseView {
         configurarTituloSuperior("Bandeja de casos", "Registrar",
                 e -> configurarVista(this, new RegistroCasoView()));
 
-        JPanel tarjeta = crearTarjetaWireframe();
+        JPanel tarjeta = crearTarjeta();
         tarjeta.add(crearBarraAcciones("Orden: más reciente → más antiguo", null),
                 BorderLayout.NORTH);
         tarjeta.add(crearTabla(new String[] {"Caso", "Tiempo", "Status", "Acción"}),

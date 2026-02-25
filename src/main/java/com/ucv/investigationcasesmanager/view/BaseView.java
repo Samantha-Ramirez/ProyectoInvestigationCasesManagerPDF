@@ -3,8 +3,8 @@ package com.ucv.investigationcasesmanager.view;
 import com.ucv.investigationcasesmanager.factory.InicioClient;
 import com.ucv.investigationcasesmanager.model.Sesion;
 import com.ucv.investigationcasesmanager.model.Usuario;
-import com.ucv.investigationcasesmanager.ui.factory.UIComponentFactory;
-import com.ucv.investigationcasesmanager.ui.factory.WireframeUIFactory;
+import com.ucv.investigationcasesmanager.ui.factory.UIAbstractFactory;
+import com.ucv.investigationcasesmanager.ui.factory.PantallaConcreteFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -24,7 +24,7 @@ public abstract class BaseView extends JFrame {
     protected JTable tabla;
     protected JPanel panelFormulario;
     protected JScrollPane scrollFormulario;
-    protected final UIComponentFactory uiFactory;
+    protected final UIAbstractFactory uiFactory;
     private int filaActual = 0;
 
     public BaseView(String titulo, Boolean mostrarMenu) {
@@ -33,7 +33,7 @@ public abstract class BaseView extends JFrame {
 
     public BaseView(String titulo, Boolean mostrarMenu, boolean inicializar) {
         this.usuarioActual = Sesion.getUsuario();
-        this.uiFactory = new WireframeUIFactory();
+        this.uiFactory = new PantallaConcreteFactory();
 
         setTitle(titulo);
         setSize(1100, 700);
@@ -56,7 +56,7 @@ public abstract class BaseView extends JFrame {
 
     private void configurarCabecera() {
         cabecera = new JPanel(new BorderLayout());
-        cabecera.setBackground(uiFactory.getPrimaryColor());
+        cabecera.setBackground(uiFactory.obtenerColorPrimario());
         cabecera.setPreferredSize(new Dimension(1100, 50));
 
         String infoUser = (usuarioActual != null)
@@ -94,7 +94,7 @@ public abstract class BaseView extends JFrame {
     }
 
     private void agregarBotonMenu(String texto, ActionListener accion) {
-        JButton btn = uiFactory.createMenuButton(texto, accion);
+        JButton btn = uiFactory.crearBotonMenu(texto, accion);
         btn.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 0));
         menuLateral.add(btn);
         menuLateral.add(Box.createVerticalStrut(2));
@@ -136,31 +136,15 @@ public abstract class BaseView extends JFrame {
         panelContenido.add(panelSuperior, BorderLayout.NORTH);
     }
 
-    protected void configurarTituloSuperiorConBotonRedondeado(String tituloSeccion,
-            JButton botonRedondeado) {
-        JPanel panelSuperior = new JPanel(new BorderLayout());
-        panelSuperior.setOpaque(false);
-
-        JLabel lblTitulo = new JLabel(tituloSeccion);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
-        panelSuperior.add(lblTitulo, BorderLayout.WEST);
-
-        if (botonRedondeado != null) {
-            panelSuperior.add(botonRedondeado, BorderLayout.EAST);
-        }
-
-        panelContenido.add(panelSuperior, BorderLayout.NORTH);
-    }
-
     protected JButton crearBotonEncabezado(String texto, ActionListener accion) {
-        return uiFactory.createHeaderActionButton(texto, accion);
+        return uiFactory.crearBotonEncabezado(texto, accion);
     }
 
     protected JButton crearBotonPrimario(String texto, ActionListener accion) {
-        return uiFactory.createPrimaryActionButton(texto, accion);
+        return uiFactory.crearBotonPrimario(texto, accion);
     }
 
-    protected JPanel crearTarjetaWireframe() {
+    protected JPanel crearTarjeta() {
         JPanel card = new JPanel(new BorderLayout(0, 10));
         card.setBackground(Color.WHITE);
         card.setBorder(BorderFactory.createCompoundBorder(
@@ -198,7 +182,7 @@ public abstract class BaseView extends JFrame {
         tabla = new JTable(modeloTabla);
         tabla.setRowHeight(34);
         tabla.getTableHeader().setReorderingAllowed(false);
-        uiFactory.styleTable(tabla);
+        uiFactory.estilizarTabla(tabla);
 
         if (columnas.length > 2 && "Status".equalsIgnoreCase(columnas[2])) {
             tabla.getColumnModel().getColumn(2).setCellRenderer(new StatusBadgeRenderer());
@@ -257,7 +241,7 @@ public abstract class BaseView extends JFrame {
     }
 
     protected void estilizarEntrada(JComponent component) {
-        uiFactory.styleInput(component);
+        uiFactory.estilizarTexto(component);
     }
 
     protected JPanel crearPanelAccionesInferior(JButton... botones) {
@@ -310,7 +294,7 @@ public abstract class BaseView extends JFrame {
     }
 
     private void configurarEstiloYPlaceholder(JComponent componente) {
-        uiFactory.styleInput(componente);
+        uiFactory.estilizarTexto(componente);
 
         if (!(componente instanceof JTextField || componente instanceof JTextArea)) {
             return;
@@ -362,7 +346,7 @@ public abstract class BaseView extends JFrame {
     }
 
     protected JButton crearBotonRedondeado(String texto, Color colorFondo, ActionListener accion) {
-        JButton boton = uiFactory.createHeaderActionButton(texto, accion);
+        JButton boton = uiFactory.crearBotonEncabezado(texto, accion);
         boton.setBackground(colorFondo);
         return boton;
     }
@@ -373,7 +357,7 @@ public abstract class BaseView extends JFrame {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
-            JLabel badge = uiFactory.createStatusBadge(String.valueOf(value));
+            JLabel badge = uiFactory.crearEstatusIcono(String.valueOf(value));
             if (isSelected) {
                 badge.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(new Color(185, 170, 212)),

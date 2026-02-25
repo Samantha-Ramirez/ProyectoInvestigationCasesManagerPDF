@@ -8,6 +8,9 @@ import com.ucv.investigationcasesmanager.model.Caso;
 import javax.swing.*;
 import java.awt.*;
 
+/*
+ * Vista de registro de casos, con un formulario unificado para diferentes tipos de casos.
+ */
 public class RegistroCasoView extends BaseView {
     private JTextField txtNroExpediente, txtMovil, txtObjetivo, txtIncidencia, txtDuracion;
     private JTextArea txtModusOperandi, txtAreaApoyo, txtDeteccion, txtDiagnostico, txtConclusiones,
@@ -21,15 +24,15 @@ public class RegistroCasoView extends BaseView {
     @Override
     protected void inicializarComponentesEspecificos() {
         configurarTituloSuperior("Registro de casos", null, null);
-        panelContenido.add(crearPanelRegistroUnificado(), BorderLayout.CENTER);
+        panelContenido.add(crearPanelRegistro(), BorderLayout.CENTER);
 
         panelContenido.add(
                 crearPanelAccionesInferior(crearBotonPrimario("Registrar", e -> accionRegistrar())),
                 BorderLayout.SOUTH);
     }
 
-    private JComponent crearPanelRegistroUnificado() {
-        JPanel card = crearTarjetaWireframe();
+    private JComponent crearPanelRegistro() {
+        JPanel card = crearTarjeta();
         JPanel form = crearFormularioEtiquetado();
 
         txtNroExpediente = new JTextField();

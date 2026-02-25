@@ -10,8 +10,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+/*
+ * Vista de detalle de caso, mostrando información general y un historial de seguimientos.
+ */
 public class DetalleCasoView extends BaseView {
-
     private final Caso casoActual;
     private final Usuario investigadorActual;
     private final SeguimientoDAO seguimientoDAO;
@@ -57,7 +59,7 @@ public class DetalleCasoView extends BaseView {
     }
 
     private JComponent crearPanelInformacionGeneral() {
-        JPanel card = crearTarjetaWireframe();
+        JPanel card = crearTarjeta();
         JPanel form = crearFormularioEtiquetado();
 
         int fila = 0;
@@ -95,7 +97,7 @@ public class DetalleCasoView extends BaseView {
     }
 
     private JComponent crearPanelSeguimientos() {
-        JPanel card = crearTarjetaWireframe();
+        JPanel card = crearTarjeta();
 
         String[] columnas =
                 {"Fecha", "Actividades", "Personas", "Monto", "Estatus", "Observaciones"};
@@ -109,7 +111,7 @@ public class DetalleCasoView extends BaseView {
         JTable tablaSeguimientos = new JTable(modeloTablaSeguimientos);
         tablaSeguimientos.setRowHeight(32);
         tablaSeguimientos.getTableHeader().setReorderingAllowed(false);
-        uiFactory.styleTable(tablaSeguimientos);
+        uiFactory.estilizarTabla(tablaSeguimientos);
 
         card.add(new JScrollPane(tablaSeguimientos), BorderLayout.CENTER);
         return card;

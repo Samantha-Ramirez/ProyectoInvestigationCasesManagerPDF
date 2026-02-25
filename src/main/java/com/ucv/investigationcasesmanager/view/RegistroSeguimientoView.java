@@ -11,8 +11,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
 
+/*
+ * Vista de registro de seguimiento, con un formulario para agregar nuevas entradas al historial de
+ * un caso.
+ */
 public class RegistroSeguimientoView extends BaseView {
-
     private final Caso casoActual;
     private final Usuario investigadorActual;
     private final SeguimientoDAO seguimientoDAO;
@@ -64,7 +67,7 @@ public class RegistroSeguimientoView extends BaseView {
     }
 
     private JPanel crearPanelInformacionCaso() {
-        JPanel panelInfo = crearTarjetaWireframe();
+        JPanel panelInfo = crearTarjeta();
         panelInfo.setLayout(new GridLayout(2, 4, 10, 6));
 
         panelInfo.add(new JLabel("Expediente:"));
@@ -88,7 +91,7 @@ public class RegistroSeguimientoView extends BaseView {
     }
 
     private JComponent crearPanelFormularioSeguimiento() {
-        JPanel card = crearTarjetaWireframe();
+        JPanel card = crearTarjeta();
         JPanel form = crearFormularioEtiquetado();
 
         txtActividadesRealizadas = crearAreaTextoEstilizada(4, 30, 80);

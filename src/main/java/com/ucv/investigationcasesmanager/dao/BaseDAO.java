@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * PDyF: Este código implementa un DAO genérico que maneja cualquier tipo de entidad.
+ * PDyF: Este DAO genérico maneja cualquier tipo de entidad.
  */
 public abstract class BaseDAO<T> {
     // Ejecutar actualizaciones (INSERT, UPDATE, DELETE)
     protected int ejecutarActualizacion(String sql, Object... parametros) {
-        try (Connection conn = ConexionBD.getInstancia();
+        try (Connection conn = ConexionBD.obtenerInstancia();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             configurarParametros(pstmt, parametros);
@@ -28,7 +28,7 @@ public abstract class BaseDAO<T> {
 
     // Ejecutar consultas (SELECT)
     protected void ejecutarConsulta(String sql, ResultSetHandler<T> handler, Object... parametros) {
-        try (Connection conn = ConexionBD.getInstancia();
+        try (Connection conn = ConexionBD.obtenerInstancia();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             configurarParametros(pstmt, parametros);
@@ -79,6 +79,7 @@ public abstract class BaseDAO<T> {
         void map(ResultSet rs) throws SQLException;
     }
 
+    // Mapear una fila del ResultSet a un objeto
     @FunctionalInterface
     protected interface RowMapper<R> {
         R mapRow(ResultSet rs) throws SQLException;
