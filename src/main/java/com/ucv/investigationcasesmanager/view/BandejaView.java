@@ -3,89 +3,69 @@ package com.ucv.investigationcasesmanager.view;
 import com.ucv.investigationcasesmanager.dao.CasoDAO;
 import com.ucv.investigationcasesmanager.model.Caso;
 
-// import com.ucv.investigationcasesmanager.model.Sesion;
 import javax.swing.*;
 import java.awt.*;
-
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 /*
- * Vista de la bandeja de casos para investigadores. Muestra los casos asignados y el tiempo sin
- * atención.
+ * Vista de la bandeja de casos para investigadores.
  */
 public class BandejaView extends BaseView {
 
-    private CasoDAO casoDAO;
+    private static final int COLUMNA_ACCION = 3;
+    private final CasoDAO casoDAO;
 
-    // Configurar la vista de bandeja de casos para el investigador
     public BandejaView() {
         super("Bandeja de casos", true);
         this.casoDAO = new CasoDAO();
         cargarDatos(this.usuarioActual.getId());
     }
 
-    // Configurar componentes específicos de esta vista
     @Override
     protected void inicializarComponentesEspecificos() {
-        // Crear botón redondeado para "Registrar"
-        JButton btnRegistrarRedondeado = crearBotonRedondeado("Registrar", new Color(235, 235, 235),
+        configurarTituloSuperior("Bandeja de casos", "Registrar",
                 e -> configurarVista(this, new RegistroCasoView()));
-                btnRegistrarRedondeado.setFont(new Font("Arial", Font.BOLD, 14));
-        
-        // Usar el botón redondeado en el título superior
-        configurarTituloSuperiorConBotonRedondeado("Bandeja de casos", btnRegistrarRedondeado);
 
-        String[] columnas = {"Caso", "Tiempo", "Status", "Acción"};
-        configurarTabla(columnas);
-        // Agregar panel de botones de acción
-        agregarPanelBotones();
-    }
+        JPanel tarjeta = crearTarjeta();
+        tarjeta.add(crearBarraAcciones("Orden: más reciente → más antiguo", null),
+                BorderLayout.NORTH);
+        tarjeta.add(crearTabla(new String[] {"Caso", "Tiempo", "Status", "Acción"}),
+                BorderLayout.CENTER);
 
-    // Agregar panel con botones de acción redondeados
-    private void agregarPanelBotones() {
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        panelBotones.setOpaque(false);
-
-        // Botón Ver Detalles redondeado
-        JButton btnVerDetalles = crearBotonRedondeado("Ver Detalles", new Color(235, 235, 235), 
-                e -> verDetallesCaso());
-            btnVerDetalles.setFont(new Font("Arial", Font.BOLD, 14));
-
-        panelBotones.add(btnVerDetalles);
-
-        panelContenido.add(panelBotones, BorderLayout.SOUTH);
-    }
-
-    // Método para ver detalles del caso seleccionado
-    private void verDetallesCaso() {
-        int fila = tabla.getSelectedRow();
-        if (fila >= 0) {
-            String expediente = (String) modeloTabla.getValueAt(fila, 0);
-
-            // Buscar el caso completo
-            Caso caso = casoDAO.buscarPorExpediente(expediente);
-            if (caso != null) {
-                // Abrir la vista de detalles
-                new DetalleCasoView(caso, usuarioActual).setVisible(true);
-                dispose(); // Cerrar la bandeja actual (opcional)
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo encontrar el caso.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
+        tabla.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila = tabla.rowAtPoint(e.getPoint());
+                int columna = tabla.columnAtPoint(e.getPoint());
+                if (fila >= 0 && columna == COLUMNA_ACCION) {
+                    verDetallesCaso(fila);
+                }
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un caso de la lista.",
-                    "Ningún caso seleccionado", JOptionPane.WARNING_MESSAGE);
-        }
+        });
+
+        panelContenido.add(tarjeta, BorderLayout.CENTER);
     }
 
-    // Cargar los casos asignados al investigador y mostrar en la tabla
-    private void cargarDatos(int idUsuario) {
-        CasoDAO dao = new CasoDAO();
-        List<Caso> casos = dao.consultarCasosInvestigador(idUsuario);
+    private void verDetallesCaso(int fila) {
+        String expediente = (String) modeloTabla.getValueAt(fila, 0);
+        Caso caso = casoDAO.consultarCasoPorNroExpediente(expediente);
+        if (caso == null) {
+            JOptionPane.showMessageDialog(this, "No se pudo encontrar el caso.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
+        new DetalleCasoView(caso, usuarioActual).setVisible(true);
+        dispose();
+    }
+
+    private void cargarDatos(int idUsuario) {
+        List<Caso> casos = casoDAO.consultarCasosInvestigador(idUsuario);
         for (Caso c : casos) {
             modeloTabla.addRow(new Object[] {c.getNroExpediente(), c.getTiempoSinAtencion(),
-                    c.getEstatus(), "📝"});
+                    c.getEstatus(), "Ver"});
         }
     }
 }

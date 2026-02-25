@@ -6,8 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /*
- * DAO específico para la conexión. PDyF: Este código implementa el patrón Singleton para asegurar
- * una única instancia de conexión.
+ * PDyF: Este código implementa el patrón Singleton para asegurar una única instancia de conexión.
  */
 public class ConexionBD {
     // Instancia única de la conexión
@@ -18,7 +17,7 @@ public class ConexionBD {
     private ConexionBD() {}
 
     // Retornar la instancia de conexión actual. Si no existe o está cerrada, la crea
-    public static Connection getInstancia() throws SQLException {
+    public static Connection obtenerInstancia() throws SQLException {
         if (instancia == null || instancia.isClosed()) {
             try {
                 Class.forName("org.sqlite.JDBC");

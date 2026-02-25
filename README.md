@@ -10,7 +10,7 @@ Es un sistema que permite registrar y controlar información de casos de investi
 
 El proyecto utiliza el siguiente stack tecnológico:
 *   **Lenguaje:** Java 21
-*   **Framework:** Java Swing
+*   **Framework:** Java Swing + FlatLaf
 *   **Base de Datos:** SQLite
 
 ---

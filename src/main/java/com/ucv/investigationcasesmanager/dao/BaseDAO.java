@@ -1,21 +1,21 @@
 package com.ucv.investigationcasesmanager.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
- * DAO genérico.
+ * PDyF: Este DAO genérico maneja cualquier tipo de entidad.
  */
 public abstract class BaseDAO<T> {
     // Ejecutar actualizaciones (INSERT, UPDATE, DELETE)
     protected int ejecutarActualizacion(String sql, Object... parametros) {
-        try (Connection conn = ConexionBD.getInstancia();
+        try (Connection conn = ConexionBD.obtenerInstancia();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            System.out.println("Ejecutando update en BD...");
             configurarParametros(pstmt, parametros);
 
             int resultado = pstmt.executeUpdate();
-            System.out.println("Update ejecutado, filas afectadas: " + resultado);
             return resultado;
 
         } catch (SQLException e) {
@@ -28,7 +28,7 @@ public abstract class BaseDAO<T> {
 
     // Ejecutar consultas (SELECT)
     protected void ejecutarConsulta(String sql, ResultSetHandler<T> handler, Object... parametros) {
-        try (Connection conn = ConexionBD.getInstancia();
+        try (Connection conn = ConexionBD.obtenerInstancia();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             configurarParametros(pstmt, parametros);
@@ -37,7 +37,32 @@ public abstract class BaseDAO<T> {
             }
         } catch (SQLException e) {
             System.err.println("Error en Consulta Genérica: " + e.getMessage());
+            System.err.println("SQL: " + sql);
+            e.printStackTrace();
         }
+    }
+
+    // Ejecutar consulta y retornar una lista mapeada
+    protected <R> List<R> consultarLista(String sql, RowMapper<R> mapper, Object... parametros) {
+        List<R> resultados = new ArrayList<>();
+        ejecutarConsulta(sql, rs -> {
+            while (rs.next()) {
+                resultados.add(mapper.mapRow(rs));
+            }
+        }, parametros);
+        return resultados;
+    }
+
+    // Ejecutar consulta y retornar un solo resultado
+    @SuppressWarnings("unchecked")
+    protected <R> R consultarUno(String sql, RowMapper<R> mapper, Object... parametros) {
+        final Object[] resultado = new Object[1];
+        ejecutarConsulta(sql, rs -> {
+            if (rs.next()) {
+                resultado[0] = mapper.mapRow(rs);
+            }
+        }, parametros);
+        return (R) resultado[0];
     }
 
     // Configurar parámetros de cualquier tipo
@@ -52,5 +77,11 @@ public abstract class BaseDAO<T> {
     @FunctionalInterface
     public interface ResultSetHandler<T> {
         void map(ResultSet rs) throws SQLException;
+    }
+
+    // Mapear una fila del ResultSet a un objeto
+    @FunctionalInterface
+    protected interface RowMapper<R> {
+        R mapRow(ResultSet rs) throws SQLException;
     }
 }

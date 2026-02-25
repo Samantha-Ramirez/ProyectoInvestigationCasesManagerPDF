@@ -2,53 +2,110 @@ package com.ucv.investigationcasesmanager.model;
 
 import java.time.LocalDateTime;
 
+/*
+ * Modelo de seguimiento.
+ */
 public class Seguimiento {
     private int id;
-    private int idCaso;
-    private int idInvestigador;
     private LocalDateTime fechaRegistro;
     private String actividadesRealizadas;
     private String personasInvolucradas;
     private double montoExpuesto;
-    private String estatus; // "En Seguimiento", "Cerrado", "Reabierto"
+    private String estatus;
     private String observaciones;
     private String recomendaciones;
     private String conclusiones;
 
-    public Seguimiento() {
+    private int idCaso;
+    private int idInvestigador;
+
+    public Seguimiento() {}
+
+    public int getId() {
+        return id;
     }
 
-    // Getters y Setters existentes...
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public int getIdCaso() { return idCaso; }
-    public void setIdCaso(int idCaso) { this.idCaso = idCaso; }
+    public int getIdCaso() {
+        return idCaso;
+    }
 
-    public int getIdInvestigador() { return idInvestigador; }
-    public void setIdInvestigador(int idInvestigador) { this.idInvestigador = idInvestigador; }
+    public void setIdCaso(int idCaso) {
+        this.idCaso = idCaso;
+    }
 
-    public LocalDateTime getFechaRegistro() { return fechaRegistro; }
-    public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
+    public int getIdInvestigador() {
+        return idInvestigador;
+    }
 
-    public String getActividadesRealizadas() { return actividadesRealizadas; }
-    public void setActividadesRealizadas(String actividadesRealizadas) { this.actividadesRealizadas = actividadesRealizadas; }
+    public void setIdInvestigador(int idInvestigador) {
+        this.idInvestigador = idInvestigador;
+    }
 
-    public String getPersonasInvolucradas() { return personasInvolucradas; }
-    public void setPersonasInvolucradas(String personasInvolucradas) { this.personasInvolucradas = personasInvolucradas; }
+    public LocalDateTime getFechaRegistro() {
+        return fechaRegistro;
+    }
 
-    public double getMontoExpuesto() { return montoExpuesto; }
-    public void setMontoExpuesto(double montoExpuesto) { this.montoExpuesto = montoExpuesto; }
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
 
-    public String getEstatus() { return estatus; }
-    public void setEstatus(String estatus) { this.estatus = estatus; }
+    public String getActividadesRealizadas() {
+        return actividadesRealizadas;
+    }
 
-    public String getObservaciones() { return observaciones; }
-    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+    public void setActividadesRealizadas(String actividadesRealizadas) {
+        this.actividadesRealizadas = actividadesRealizadas;
+    }
 
-    public String getRecomendaciones() { return recomendaciones; }
-    public void setRecomendaciones(String recomendaciones) { this.recomendaciones = recomendaciones; }
+    public String getPersonasInvolucradas() {
+        return personasInvolucradas;
+    }
 
-    public String getConclusiones() { return conclusiones; }
-    public void setConclusiones(String conclusiones) { this.conclusiones = conclusiones; }
+    public void setPersonasInvolucradas(String personasInvolucradas) {
+        this.personasInvolucradas = personasInvolucradas;
+    }
+
+    public double getMontoExpuesto() {
+        return montoExpuesto;
+    }
+
+    public void setMontoExpuesto(double montoExpuesto) {
+        this.montoExpuesto = montoExpuesto;
+    }
+
+    public String getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public String getRecomendaciones() {
+        return recomendaciones;
+    }
+
+    public void setRecomendaciones(String recomendaciones) {
+        this.recomendaciones = recomendaciones;
+    }
+
+    public String getConclusiones() {
+        return conclusiones;
+    }
+
+    public void setConclusiones(String conclusiones) {
+        this.conclusiones = conclusiones;
+    }
 }
