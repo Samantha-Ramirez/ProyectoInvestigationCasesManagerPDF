@@ -9,10 +9,10 @@ import javax.swing.JPanel;
  */
 
 // Componente concreto
-public class PanelBaseComponent implements PanelComponent {
+public class PanelConcreteComponent implements PanelComponent {
     private final JPanel panel;
 
-    public PanelBaseComponent(JPanel panel) {
+    public PanelConcreteComponent(JPanel panel) {
         this.panel = panel;
     }
 

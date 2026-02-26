@@ -6,7 +6,11 @@ package com.ucv.investigationcasesmanager.mediator;
  * preparación del caso.
  */
 
-// Mediador abstracto
-public abstract class RegistroMediator {
-    public abstract boolean enviar(String evento, RegistroColleague colleague);
+// Colega abstracto
+public abstract class RegistroColleague {
+    protected final RegistroMediator mediator;
+
+    protected RegistroColleague(RegistroMediator mediator) {
+        this.mediator = mediator;
+    }
 }

@@ -3,7 +3,7 @@ package com.ucv.investigationcasesmanager.view;
 // import com.ucv.investigationcasesmanager.dao.AuditoriaDAO;
 import com.ucv.investigationcasesmanager.controller.ReporteController;
 import com.ucv.investigationcasesmanager.factory.ReporteProduct;
-import com.ucv.investigationcasesmanager.view.decorator.PanelBaseComponent;
+import com.ucv.investigationcasesmanager.view.decorator.PanelConcreteComponent;
 import com.ucv.investigationcasesmanager.view.decorator.PanelComponent;
 import com.ucv.investigationcasesmanager.view.decorator.PanelBordeDecorator;
 import com.ucv.investigationcasesmanager.view.decorator.PanelTituloDecorator;
@@ -34,8 +34,8 @@ public class ReportesView extends BaseView {
         JPanel panelSeleccion = crearPanelSeleccionReporte();
 
         PanelComponent decorado = new PanelBordeDecorator(
-                new PanelTituloDecorator(new PanelBaseComponent(panelSeleccion), "Filtros"), 6, 8,
-                6, 8);
+                new PanelTituloDecorator(new PanelConcreteComponent(panelSeleccion), "Filtros"), 6,
+                8, 6, 8);
 
         tarjeta.add(decorado.build(), BorderLayout.NORTH);
         tarjeta.add(crearTabla(new String[] {"Reporte", "Resultado"}), BorderLayout.CENTER);

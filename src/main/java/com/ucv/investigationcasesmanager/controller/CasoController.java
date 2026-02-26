@@ -34,8 +34,8 @@ public class CasoController {
 
     // Guardar nuevo caso
     public boolean guardarCaso(Caso caso, Usuario usuarioActual, String duracion) {
-        if (!com.ucv.investigationcasesmanager.mediator.RegistroMediator.validarYPreparar(caso,
-                usuarioActual, duracion)) {
+        if (!com.ucv.investigationcasesmanager.mediator.RegistroMediatorClient
+                .validarYPreparar(caso, usuarioActual, duracion)) {
             return false;
         }
         return casoDAO.guardarCaso(caso);
