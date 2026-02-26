@@ -1,6 +1,6 @@
 package com.ucv.investigationcasesmanager.view;
 
-import com.ucv.investigationcasesmanager.dao.CasoDAO;
+import com.ucv.investigationcasesmanager.controller.CasoController;
 import com.ucv.investigationcasesmanager.model.Caso;
 
 import javax.swing.*;
@@ -10,16 +10,16 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 /*
- * Vista de la bandeja de casos para investigadores.
+ * Vista de bandeja.
  */
 public class BandejaView extends BaseView {
 
     private static final int COLUMNA_ACCION = 3;
-    private final CasoDAO casoDAO;
+    private final CasoController casoController;
 
     public BandejaView() {
         super("Bandeja de casos", true);
-        this.casoDAO = new CasoDAO();
+        this.casoController = new CasoController();
         cargarDatos(this.usuarioActual.getId());
     }
 
@@ -50,7 +50,7 @@ public class BandejaView extends BaseView {
 
     private void verDetallesCaso(int fila) {
         String expediente = (String) modeloTabla.getValueAt(fila, 0);
-        Caso caso = casoDAO.consultarCasoPorNroExpediente(expediente);
+        Caso caso = casoController.obtenerCasoPorNroExpediente(expediente);
         if (caso == null) {
             JOptionPane.showMessageDialog(this, "No se pudo encontrar el caso.", "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -62,7 +62,7 @@ public class BandejaView extends BaseView {
     }
 
     private void cargarDatos(int idUsuario) {
-        List<Caso> casos = casoDAO.consultarCasosInvestigador(idUsuario);
+        List<Caso> casos = casoController.obtenerCasosInvestigador(idUsuario);
         for (Caso c : casos) {
             modeloTabla.addRow(new Object[] {c.getNroExpediente(), c.getTiempoSinAtencion(),
                     c.getEstatus(), "Ver"});

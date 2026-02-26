@@ -3,32 +3,35 @@ package com.ucv.investigationcasesmanager.dao;
 import java.util.List;
 
 /*
- * DAO para consultas agregadas usadas por el módulo de reportes.
+ * PDyF: Este DAO maneja las operaciones de acceso a datos relacionadas con los reportes,
+ * específicamente consultas para generar reportes de casos, investigadores y empresas.
  */
 public class ReporteDAO extends BaseDAO<Object[]> {
-
-    public List<Object[]> consultarEmpresasConMayoresCasos() {
+    // Obtener empresas con mayor cantidad de casos registrados
+    public List<Object[]> obtenerEmpresasConMayoresCasos() {
         String sql = "SELECT COALESCE(objetivo_agraviado, 'No especificada') AS empresa, "
                 + "COUNT(*) AS total_casos " + "FROM caso "
                 + "GROUP BY COALESCE(objetivo_agraviado, 'No especificada') "
                 + "ORDER BY total_casos DESC, empresa ASC";
 
-        return consultarLista(sql,
+        return obtenerLista(sql,
                 rs -> new Object[] {rs.getString("empresa"), rs.getInt("total_casos")});
     }
 
-    public List<Object[]> consultarInvestigadoresConMasCasos() {
+    // Obtener investigadores con mayor cantidad de casos asignados
+    public List<Object[]> obtenerInvestigadoresConMasCasos() {
         String sql = "SELECT u.nombre || ' ' || u.apellido AS investigador, u.cedula, "
                 + "COUNT(c.id) AS total_casos " + "FROM usuario u "
                 + "LEFT JOIN caso c ON c.id_investigador_asignado = u.id "
                 + "WHERE u.rol = 'Investigador' " + "GROUP BY u.id, investigador, u.cedula "
                 + "ORDER BY total_casos DESC, investigador ASC";
 
-        return consultarLista(sql, rs -> new Object[] {rs.getString("investigador"),
+        return obtenerLista(sql, rs -> new Object[] {rs.getString("investigador"),
                 rs.getString("cedula"), rs.getInt("total_casos")});
     }
 
-    public List<Object[]> consultarCasosConMasDeTresRelacionados() {
+    // Obtener casos relacionados por subtipo de irregularidad con más de 3 casos registrados
+    public List<Object[]> obtenerCasosConMasDeTresRelacionados() {
         String sql = "SELECT c.nro_expediente, "
                 + "COALESCE(CAST(c.id_subtipo_irregularidad AS TEXT), 'Sin subtipo') "
                 + "AS subtipo_relacion, r.total_relacionados " + "FROM caso c " + "JOIN ( "
@@ -37,7 +40,7 @@ public class ReporteDAO extends BaseDAO<Object[]> {
                 + ") r ON c.id_subtipo_irregularidad = r.id_subtipo_irregularidad "
                 + "ORDER BY r.total_relacionados DESC, c.nro_expediente ASC";
 
-        return consultarLista(sql, rs -> new Object[] {rs.getString("nro_expediente"),
+        return obtenerLista(sql, rs -> new Object[] {rs.getString("nro_expediente"),
                 rs.getString("subtipo_relacion"), rs.getInt("total_relacionados")});
     }
 }

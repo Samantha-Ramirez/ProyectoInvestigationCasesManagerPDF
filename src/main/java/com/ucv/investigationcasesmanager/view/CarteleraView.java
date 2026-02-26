@@ -1,6 +1,6 @@
 package com.ucv.investigationcasesmanager.view;
 
-import com.ucv.investigationcasesmanager.dao.CasoDAO;
+import com.ucv.investigationcasesmanager.controller.CasoController;
 import com.ucv.investigationcasesmanager.model.Caso;
 
 import javax.swing.*;
@@ -10,16 +10,16 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 /*
- * Vista de la cartelera de casos para administradores.
+ * Vista de cartelera.
  */
 public class CarteleraView extends BaseView {
 
     private static final int COLUMNA_ACCION = 3;
-    private final CasoDAO casoDAO;
+    private final CasoController casoController;
 
     public CarteleraView() {
         super("Cartelera de casos", true);
-        this.casoDAO = new CasoDAO();
+        this.casoController = new CasoController();
         cargarDatos(this.usuarioActual.getId());
     }
 
@@ -50,7 +50,7 @@ public class CarteleraView extends BaseView {
 
     private void verDetallesCaso(int fila) {
         String expediente = (String) modeloTabla.getValueAt(fila, 0);
-        Caso caso = casoDAO.consultarCasoPorNroExpediente(expediente);
+        Caso caso = casoController.obtenerCasoPorNroExpediente(expediente);
         if (caso != null) {
             new DetalleCasoView(caso, usuarioActual).setVisible(true);
             dispose();
@@ -58,7 +58,7 @@ public class CarteleraView extends BaseView {
     }
 
     private void cargarDatos(int idUsuario) {
-        List<Caso> casos = casoDAO.consultarCasosAdministrador(idUsuario);
+        List<Caso> casos = casoController.obtenerCasosAdministrador(idUsuario);
         for (Caso c : casos) {
             modeloTabla.addRow(new Object[] {c.getNroExpediente(), c.getTiempoSinAtencion(),
                     c.getEstatus(), "Ver"});

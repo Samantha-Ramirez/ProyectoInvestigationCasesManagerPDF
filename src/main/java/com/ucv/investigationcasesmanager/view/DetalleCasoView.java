@@ -1,6 +1,6 @@
 package com.ucv.investigationcasesmanager.view;
 
-import com.ucv.investigationcasesmanager.dao.SeguimientoDAO;
+import com.ucv.investigationcasesmanager.controller.SeguimientoController;
 import com.ucv.investigationcasesmanager.model.Caso;
 import com.ucv.investigationcasesmanager.model.Seguimiento;
 import com.ucv.investigationcasesmanager.model.Usuario;
@@ -11,12 +11,12 @@ import java.awt.*;
 import java.util.List;
 
 /*
- * Vista de detalle de caso, mostrando información general y un historial de seguimientos.
+ * Vista de detalle de caso.
  */
 public class DetalleCasoView extends BaseView {
     private final Caso casoActual;
     private final Usuario investigadorActual;
-    private final SeguimientoDAO seguimientoDAO;
+    private final SeguimientoController seguimientoController;
 
     private DefaultTableModel modeloTablaSeguimientos;
 
@@ -25,7 +25,7 @@ public class DetalleCasoView extends BaseView {
 
         this.casoActual = caso;
         this.investigadorActual = investigador;
-        this.seguimientoDAO = new SeguimientoDAO();
+        this.seguimientoController = new SeguimientoController();
 
         inicializarComponentesEspecificos();
         cargarSeguimientos();
@@ -121,7 +121,7 @@ public class DetalleCasoView extends BaseView {
         modeloTablaSeguimientos.setRowCount(0);
 
         List<Seguimiento> seguimientos =
-                seguimientoDAO.obtenerSeguimientosPorCaso(casoActual.getId());
+                seguimientoController.obtenerSeguimientosPorCaso(casoActual.getId());
         if (seguimientos.isEmpty()) {
             modeloTablaSeguimientos
                     .addRow(new Object[] {"No hay seguimientos registrados", "", "", "", "", ""});

@@ -101,7 +101,7 @@ public abstract class BaseView extends JFrame {
     }
 
     private void irAInicio() {
-        configurarVista(this, InicioClient.inicioSegunRol(usuarioActual.getRol()));
+        configurarVista(this, InicioClient.obtenerInicio(usuarioActual.getRol()));
     }
 
     private void irAReportes() {

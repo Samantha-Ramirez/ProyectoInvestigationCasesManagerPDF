@@ -9,13 +9,13 @@ import com.ucv.investigationcasesmanager.view.BaseView;
 
 // Cliente que utiliza el Factory Method para obtener la vista de inicio según el rol del usuario
 public class InicioClient {
-    public static BaseView inicioSegunRol(String rol) {
+    public static BaseView obtenerInicio(String rol) {
         InicioCreator creador;
         if (rol.equalsIgnoreCase("Administrador")) {
             creador = new CarteleraInicioCreator();
         } else {
             creador = new BandejaInicioCreator();
         }
-        return creador.FactoryMethod().getVista();
+        return creador.factoryMethod().getVista();
     }
 }

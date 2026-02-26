@@ -1,7 +1,6 @@
 package com.ucv.investigationcasesmanager.view;
 
-import com.ucv.investigationcasesmanager.dao.CasoDAO;
-import com.ucv.investigationcasesmanager.dao.SeguimientoDAO;
+import com.ucv.investigationcasesmanager.controller.SeguimientoController;
 import com.ucv.investigationcasesmanager.factory.InicioClient;
 import com.ucv.investigationcasesmanager.model.Caso;
 import com.ucv.investigationcasesmanager.model.Seguimiento;
@@ -12,13 +11,12 @@ import java.awt.*;
 import java.time.LocalDateTime;
 
 /*
- * Vista de registro de seguimiento, con un formulario para agregar nuevas entradas al historial de
- * un caso.
+ * Vista de registro de seguimiento.
  */
 public class RegistroSeguimientoView extends BaseView {
     private final Caso casoActual;
     private final Usuario investigadorActual;
-    private final SeguimientoDAO seguimientoDAO;
+    private final SeguimientoController seguimientoController;
 
     private JTextArea txtActividadesRealizadas;
     private JTextArea txtPersonasInvolucradas;
@@ -33,8 +31,7 @@ public class RegistroSeguimientoView extends BaseView {
 
         this.casoActual = caso;
         this.investigadorActual = investigador;
-        this.seguimientoDAO = new SeguimientoDAO();
-
+        this.seguimientoController = new SeguimientoController();
         if (casoActual == null) {
             JOptionPane.showMessageDialog(this, "Error: Caso no válido.", "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -181,7 +178,8 @@ public class RegistroSeguimientoView extends BaseView {
             seguimiento.setRecomendaciones(txtRecomendaciones.getText().trim());
             seguimiento.setConclusiones(txtConclusiones.getText().trim());
 
-            boolean guardado = seguimientoDAO.guardarSeguimiento(seguimiento);
+            boolean guardado =
+                    seguimientoController.registrarSeguimiento(seguimiento, idCaso, nuevoEstatus);
             if (!guardado) {
                 JOptionPane.showMessageDialog(this,
                         "Error al guardar el seguimiento. Verifique la conexión con la base de datos.",
@@ -189,12 +187,11 @@ public class RegistroSeguimientoView extends BaseView {
                 return;
             }
 
-            seguimientoDAO.actualizarEstatusCaso(idCaso, nuevoEstatus);
             JOptionPane.showMessageDialog(this,
                     "Seguimiento registrado exitosamente.\nEstatus actualizado a: " + nuevoEstatus,
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-            configurarVista(this, InicioClient.inicioSegunRol(usuarioActual.getRol()));
+            configurarVista(this, InicioClient.obtenerInicio(usuarioActual.getRol()));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -222,8 +219,7 @@ public class RegistroSeguimientoView extends BaseView {
 
     private int obtenerIdCaso(String nroExpediente) {
         try {
-            Caso caso = new CasoDAO().consultarCasoPorNroExpediente(nroExpediente);
-            return caso != null ? caso.getId() : -1;
+            return seguimientoController.obtenerIdCaso(nroExpediente);
         } catch (Exception e) {
             return -1;
         }

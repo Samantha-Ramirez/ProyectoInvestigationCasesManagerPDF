@@ -4,67 +4,73 @@ import com.ucv.investigationcasesmanager.dao.ReporteDAO;
 
 import java.util.List;
 
-/*
- * Producto del Factory Method para reportes de negocio.
+/**
+ * PDyF: Este código implementa el patrón Factory Method para resolver qué reporte generar según el
+ * tipo solicitado
  */
-public abstract class ReporteProduct {
-    public abstract String getNombre();
 
-    public abstract String[] getColumnas();
+// Producto abstracto
+public abstract class ReporteProduct {
+    public abstract String obtenerNombre();
+
+    public abstract String[] obtenerColumnas();
 
     public abstract List<Object[]> generar(ReporteDAO reporteDAO);
 }
 
 
+// Producto concreto para el reporte de empresas con mayores casos
 class EmpresasReporteProduct extends ReporteProduct {
     @Override
-    public String getNombre() {
+    public String obtenerNombre() {
         return "Empresas con mayores casos";
     }
 
     @Override
-    public String[] getColumnas() {
+    public String[] obtenerColumnas() {
         return new String[] {"Empresa", "Casos registrados"};
     }
 
     @Override
     public List<Object[]> generar(ReporteDAO reporteDAO) {
-        return reporteDAO.consultarEmpresasConMayoresCasos();
+        return reporteDAO.obtenerEmpresasConMayoresCasos();
     }
 }
 
 
+// Producto concreto para el reporte de investigadores con mayores casos
 class InvestigadoresReporteProduct extends ReporteProduct {
     @Override
-    public String getNombre() {
+    public String obtenerNombre() {
         return "Investigadores con mayores casos";
     }
 
     @Override
-    public String[] getColumnas() {
+    public String[] obtenerColumnas() {
         return new String[] {"Investigador", "Cédula", "Casos atendidos"};
     }
 
     @Override
     public List<Object[]> generar(ReporteDAO reporteDAO) {
-        return reporteDAO.consultarInvestigadoresConMasCasos();
+        return reporteDAO.obtenerInvestigadoresConMasCasos();
     }
 }
 
 
+// Producto concreto para el reporte de casos con más de 3 casos relacionados
 class CasosRelacionadosReporteProduct extends ReporteProduct {
     @Override
-    public String getNombre() {
+    public String obtenerNombre() {
         return "Casos con más de 3 casos relacionados";
     }
 
     @Override
-    public String[] getColumnas() {
+    public String[] obtenerColumnas() {
         return new String[] {"Nro. Expediente", "Subtipo relación", "Casos relacionados"};
     }
 
     @Override
     public List<Object[]> generar(ReporteDAO reporteDAO) {
-        return reporteDAO.consultarCasosConMasDeTresRelacionados();
+        return reporteDAO.obtenerCasosConMasDeTresRelacionados();
     }
 }
