@@ -7,10 +7,10 @@ import com.ucv.investigationcasesmanager.model.Usuario;
  * específicamente la consulta de usuarios por cédula para validar credenciales.
  */
 public class InicioSesionDAO extends BaseDAO<String> {
-    // Consultar usuario por cédula para iniciar sesión
-    public Usuario consultarUsuario(String cedula) {
+    // Obtener usuario por cédula para iniciar sesión
+    public Usuario obtenerUsuario(String cedula) {
         String sql = "SELECT * FROM usuario WHERE cedula = ?";
-        return consultarUno(sql, this::mapearUsuario, cedula);
+        return obtenerUno(sql, this::mapearUsuario, cedula);
     }
 
     // Mapear resultado de consulta a un objeto Usuario

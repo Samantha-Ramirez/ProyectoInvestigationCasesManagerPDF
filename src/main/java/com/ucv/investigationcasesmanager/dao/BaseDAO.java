@@ -8,8 +8,8 @@ import java.util.List;
  * PDyF: Este DAO genérico maneja cualquier tipo de entidad.
  */
 public abstract class BaseDAO<T> {
-    // Ejecutar actualizaciones (INSERT, UPDATE, DELETE)
-    protected int ejecutarActualizacion(String sql, Object... parametros) {
+    // Actualizar (INSERT, UPDATE, DELETE)
+    protected int actualizar(String sql, Object... parametros) {
         try (Connection conn = ConexionBD.obtenerInstancia();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -26,8 +26,8 @@ public abstract class BaseDAO<T> {
         }
     }
 
-    // Ejecutar consultas (SELECT)
-    protected void ejecutarConsulta(String sql, ResultSetHandler<T> handler, Object... parametros) {
+    // Obtener (SELECT)
+    protected void obtener(String sql, ResultSetHandler<T> handler, Object... parametros) {
         try (Connection conn = ConexionBD.obtenerInstancia();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -42,10 +42,10 @@ public abstract class BaseDAO<T> {
         }
     }
 
-    // Ejecutar consulta y retornar una lista mapeada
-    protected <R> List<R> consultarLista(String sql, RowMapper<R> mapper, Object... parametros) {
+    // Obtener una lista mapeada
+    protected <R> List<R> obtenerLista(String sql, RowMapper<R> mapper, Object... parametros) {
         List<R> resultados = new ArrayList<>();
-        ejecutarConsulta(sql, rs -> {
+        obtener(sql, rs -> {
             while (rs.next()) {
                 resultados.add(mapper.mapRow(rs));
             }
@@ -53,11 +53,11 @@ public abstract class BaseDAO<T> {
         return resultados;
     }
 
-    // Ejecutar consulta y retornar un solo resultado
+    // Obtener un solo resultado mapeado
     @SuppressWarnings("unchecked")
-    protected <R> R consultarUno(String sql, RowMapper<R> mapper, Object... parametros) {
+    protected <R> R obtenerUno(String sql, RowMapper<R> mapper, Object... parametros) {
         final Object[] resultado = new Object[1];
-        ejecutarConsulta(sql, rs -> {
+        obtener(sql, rs -> {
             if (rs.next()) {
                 resultado[0] = mapper.mapRow(rs);
             }

@@ -7,14 +7,14 @@ package com.ucv.investigationcasesmanager.factory;
 
 // Creador abstracto
 public abstract class InicioCreator {
-    public abstract InicioProduct FactoryMethod();
+    public abstract InicioProduct factoryMethod();
 }
 
 
 // Creador concreto especializado en crear la vista de Investigador
 class BandejaInicioCreator extends InicioCreator {
     @Override
-    public InicioProduct FactoryMethod() {
+    public InicioProduct factoryMethod() {
         return new BandejaInicioProduct();
     }
 }
@@ -23,7 +23,7 @@ class BandejaInicioCreator extends InicioCreator {
 // Creador concreto especializado en crear la vista de Administrador
 class CarteleraInicioCreator extends InicioCreator {
     @Override
-    public InicioProduct FactoryMethod() {
+    public InicioProduct factoryMethod() {
         return new CarteleraInicioProduct();
     }
 }

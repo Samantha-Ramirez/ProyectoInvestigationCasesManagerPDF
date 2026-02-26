@@ -9,31 +9,31 @@ import java.util.List;
  * casos.
  */
 public class CasoDAO extends BaseDAO<Caso> {
-    // Consultar casos asignados a un investigador específico
-    public List<Caso> consultarCasosInvestigador(int idUsuario) {
+    // Obtener casos asignados a un investigador específico
+    public List<Caso> obtenerCasosInvestigador(int idUsuario) {
         String sql = "SELECT nro_expediente, estatus, "
                 + "strftime('%d dias_transcurridos', 'now') || ' sin atención' as tiempo "
                 + "FROM caso WHERE id_investigador_asignado = ?";
 
-        return consultarLista(sql, this::mapearResumenCaso, idUsuario);
+        return obtenerLista(sql, this::mapearResumenCaso, idUsuario);
     }
 
-    // Consultar todos los casos
-    public List<Caso> consultarCasosAdministrador(int idUsuario) {
+    // Obtener todos los casos
+    public List<Caso> obtenerCasosAdministrador(int idUsuario) {
         String sql = "SELECT nro_expediente, estatus, "
                 + "strftime('%d dias_transcurridos', 'now') || ' sin atención' as tiempo "
                 + "FROM caso";
 
-        return consultarLista(sql, this::mapearResumenCaso);
+        return obtenerLista(sql, this::mapearResumenCaso);
     }
 
-    // Consultar caso por numero de expediente
-    public Caso consultarCasoPorNroExpediente(String nroExpediente) {
+    // Obtener caso por numero de expediente
+    public Caso obtenerCasoPorNroExpediente(String nroExpediente) {
         String sql = "SELECT id, nro_expediente, estatus, id_investigador_asignado, "
                 + "movil_afectado, objetivo_agraviado, incidencia "
                 + "FROM caso WHERE nro_expediente = ?";
 
-        return consultarUno(sql, this::mapearDetalleCaso, nroExpediente);
+        return obtenerUno(sql, this::mapearDetalleCaso, nroExpediente);
     }
 
     // Guardar un nuevo caso
@@ -47,8 +47,8 @@ public class CasoDAO extends BaseDAO<Caso> {
                 + "id_subtipo_irregularidad, id_accion_realizada) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        return ejecutarActualizacion(sql, caso.getNroExpediente(), caso.getFechaInicio(),
-                caso.getDias(), caso.getMes(), caso.getEstatus(), caso.getMovilAfectado(),
+        return actualizar(sql, caso.getNroExpediente(), caso.getFechaInicio(), caso.getDias(),
+                caso.getMes(), caso.getEstatus(), caso.getMovilAfectado(),
                 caso.getObjetivoAgraviado(), caso.getIncidencia(), caso.getDuracionDias(),
                 caso.getDescripcionModusOperandi(), caso.getAreaApoyoResolver(),
                 caso.getDeteccionProcedencia(), caso.getDiagnosticoDetalleFraude(),

@@ -3,7 +3,7 @@ package com.ucv.investigationcasesmanager.view;
 import com.ucv.investigationcasesmanager.factory.InicioClient;
 import com.ucv.investigationcasesmanager.model.Sesion;
 import com.ucv.investigationcasesmanager.model.Usuario;
-import com.ucv.investigationcasesmanager.ui.factory.UIAbstractFactory;
+import com.ucv.investigationcasesmanager.ui.factory.PantallaAbstractFactory;
 import com.ucv.investigationcasesmanager.ui.factory.PantallaConcreteFactory;
 
 import javax.swing.*;
@@ -24,7 +24,7 @@ public abstract class BaseView extends JFrame {
     protected JTable tabla;
     protected JPanel panelFormulario;
     protected JScrollPane scrollFormulario;
-    protected final UIAbstractFactory uiFactory;
+    protected final PantallaAbstractFactory uiFactory;
     private int filaActual = 0;
 
     public BaseView(String titulo, Boolean mostrarMenu) {
@@ -83,7 +83,7 @@ public abstract class BaseView extends JFrame {
         menuLateral.add(Box.createVerticalStrut(12));
         agregarBotonMenu("⌂  Inicio", e -> irAInicio());
         agregarBotonMenu("⚑  Bandeja", e -> irAInicio());
-        agregarBotonMenu("↺  Reportes", e -> irAInicio());
+        agregarBotonMenu("↺  Reportes", e -> irAReportes());
         agregarBotonMenu("⚙  Entidades", e -> irAInicio());
         agregarBotonMenu("◌  Auditoría", e -> irAInicio());
         menuLateral.add(Box.createVerticalGlue());
@@ -101,7 +101,11 @@ public abstract class BaseView extends JFrame {
     }
 
     private void irAInicio() {
-        configurarVista(this, InicioClient.inicioSegunRol(usuarioActual.getRol()));
+        configurarVista(this, InicioClient.obtenerInicio(usuarioActual.getRol()));
+    }
+
+    private void irAReportes() {
+        configurarVista(this, new ReportesView());
     }
 
     private void ejecutarCerrarSesion() {

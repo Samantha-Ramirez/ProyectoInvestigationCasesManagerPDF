@@ -1,17 +1,17 @@
 package com.ucv.investigationcasesmanager.view;
 
-import com.ucv.investigationcasesmanager.dao.CasoDAO;
+import com.ucv.investigationcasesmanager.controller.CasoController;
 import com.ucv.investigationcasesmanager.factory.InicioClient;
-import com.ucv.investigationcasesmanager.mediator.RegistroMediator;
 import com.ucv.investigationcasesmanager.model.Caso;
 
 import javax.swing.*;
 import java.awt.*;
 
 /*
- * Vista de registro de casos, con un formulario unificado para diferentes tipos de casos.
+ * Vista de registro de casos.
  */
 public class RegistroCasoView extends BaseView {
+    private final CasoController casoController;
     private JTextField txtNroExpediente, txtMovil, txtObjetivo, txtIncidencia, txtDuracion;
     private JTextArea txtModusOperandi, txtAreaApoyo, txtDeteccion, txtDiagnostico, txtConclusiones,
             txtObservaciones, txtSoporte;
@@ -19,6 +19,7 @@ public class RegistroCasoView extends BaseView {
 
     public RegistroCasoView() {
         super("Registro de casos", true);
+        this.casoController = new CasoController();
     }
 
     @Override
@@ -113,14 +114,14 @@ public class RegistroCasoView extends BaseView {
         caso.setIdSubtipoIrregularidad(cbSubtipo.getSelectedIndex() + 1);
         caso.setIdAccionRealizada(cbAccion.getSelectedIndex() + 1);
 
-        if (!RegistroMediator.validarYPreparar(caso, usuarioActual, duracionStr)) {
+        if (!casoController.guardarCaso(caso, usuarioActual, duracionStr)) {
             JOptionPane.showMessageDialog(this, "Datos inválidos.");
             return;
         }
 
-        if (new CasoDAO().guardarCaso(caso)) {
+        {
             JOptionPane.showMessageDialog(this, "Caso registrado.");
-            configurarVista(this, InicioClient.inicioSegunRol(usuarioActual.getRol()));
+            configurarVista(this, InicioClient.obtenerInicio(usuarioActual.getRol()));
         }
     }
 }

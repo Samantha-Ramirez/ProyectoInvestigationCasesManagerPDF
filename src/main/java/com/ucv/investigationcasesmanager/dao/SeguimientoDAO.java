@@ -11,6 +11,18 @@ import java.util.List;
  * seguimientos por caso.
  */
 public class SeguimientoDAO extends BaseDAO<Seguimiento> {
+    // Obtener todos los seguimientos asociados a un caso específico
+    public List<Seguimiento> obtenerSeguimientosPorCaso(int idCaso) {
+        String sql = "SELECT * FROM seguimiento WHERE id_caso = ? ORDER BY fecha_registro DESC";
+
+        return obtenerLista(sql, this::mapearSeguimiento, idCaso);
+    }
+
+    // Obtener casos asignados a un investigador específico
+    public List<Caso> obtenerCasosInvestigador(int idInvestigador) {
+        return new CasoDAO().obtenerCasosInvestigador(idInvestigador);
+    }
+
     // Guardar un nuevo seguimiento
     public boolean guardarSeguimiento(Seguimiento seguimiento) {
         String sql = "INSERT INTO seguimiento ("
@@ -18,7 +30,7 @@ public class SeguimientoDAO extends BaseDAO<Seguimiento> {
                 + "personas_involucradas, monto_expuesto, estatus, observaciones, "
                 + "recomendaciones, conclusiones" + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        return ejecutarActualizacion(sql, seguimiento.getIdCaso(), seguimiento.getIdInvestigador(),
+        return actualizar(sql, seguimiento.getIdCaso(), seguimiento.getIdInvestigador(),
                 Timestamp.valueOf(seguimiento.getFechaRegistro()),
                 seguimiento.getActividadesRealizadas(), seguimiento.getPersonasInvolucradas(),
                 seguimiento.getMontoExpuesto(), seguimiento.getEstatus(),
@@ -29,19 +41,7 @@ public class SeguimientoDAO extends BaseDAO<Seguimiento> {
     // Actualizar el estatus del caso asociado a un seguimiento
     public boolean actualizarEstatusCaso(int idCaso, String estatus) {
         String sql = "UPDATE caso SET estatus = ? WHERE id = ?";
-        return ejecutarActualizacion(sql, estatus, idCaso) > 0;
-    }
-
-    // Obtener todos los seguimientos asociados a un caso específico
-    public List<Seguimiento> obtenerSeguimientosPorCaso(int idCaso) {
-        String sql = "SELECT * FROM seguimiento WHERE id_caso = ? ORDER BY fecha_registro DESC";
-
-        return consultarLista(sql, this::mapearSeguimiento, idCaso);
-    }
-
-    // Consultar casos asignados a un investigador específico
-    public List<Caso> consultarCasosInvestigador(int idInvestigador) {
-        return new CasoDAO().consultarCasosInvestigador(idInvestigador);
+        return actualizar(sql, estatus, idCaso) > 0;
     }
 
     // Mapear resultado de consulta a un objeto Seguimiento

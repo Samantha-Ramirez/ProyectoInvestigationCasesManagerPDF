@@ -1,6 +1,6 @@
 package com.ucv.investigationcasesmanager.view;
 
-import com.ucv.investigationcasesmanager.dao.InicioSesionDAO;
+import com.ucv.investigationcasesmanager.controller.InicioSesionController;
 import com.ucv.investigationcasesmanager.factory.InicioClient;
 import com.ucv.investigationcasesmanager.model.Sesion;
 import com.ucv.investigationcasesmanager.model.Usuario;
@@ -12,11 +12,13 @@ import java.awt.*;
  * Vista de inicio de sesión.
  */
 public class InicioSesionView extends BaseView {
+    private final InicioSesionController inicioSesionController;
     private JTextField txtCedula;
     private JPasswordField txtPassword;
 
     public InicioSesionView() {
         super("Inicio de sesión", false);
+        this.inicioSesionController = new InicioSesionController();
     }
 
     @Override
@@ -67,12 +69,11 @@ public class InicioSesionView extends BaseView {
     }
 
     private void accionIniciarSesion() {
-        InicioSesionDAO dao = new InicioSesionDAO();
-        Usuario usuario = dao.consultarUsuario(txtCedula.getText().trim());
+        Usuario usuario = inicioSesionController.autenticar(txtCedula.getText().trim());
 
         if (usuario != null) {
             Sesion.setUsuario(usuario);
-            configurarVista(this, InicioClient.inicioSegunRol(usuario.getRol()));
+            configurarVista(this, InicioClient.obtenerInicio(usuario.getRol()));
         } else {
             JOptionPane.showMessageDialog(this, "Usuario no encontrado");
         }

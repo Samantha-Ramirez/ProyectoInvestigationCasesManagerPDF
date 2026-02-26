@@ -10,8 +10,8 @@ import java.awt.event.ActionListener;
  * estilo consistente basado en los wireframes.
  */
 
-// Fabrica concreta del estilo de los wireframes
-public class PantallaConcreteFactory implements UIAbstractFactory {
+// Fabrica concreta
+public class PantallaConcreteFactory extends PantallaAbstractFactory {
     private static final Color PRIMARY = new Color(125, 21, 175);
     private static final Color LIGHT_BG = new Color(248, 248, 251);
     private static final Color INPUT_BG = new Color(237, 237, 237);
