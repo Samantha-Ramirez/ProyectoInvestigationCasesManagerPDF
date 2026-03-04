@@ -64,6 +64,56 @@ CREATE TABLE IF NOT EXISTS case_follow_up (
 );
 
 -- ─────────────────────────────────────────────────────────────────────────────
+-- Tablas de catálogos para UC09 – Gestionar Entidades del Sistema
+-- ─────────────────────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS gap_type (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS project_type (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS corrected_process (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS performed_process (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS company (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS record_subtype (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS irregularity_type (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS irregularity_subtype (
+    id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    name    TEXT NOT NULL,
+    type_id INTEGER,
+    FOREIGN KEY (type_id) REFERENCES irregularity_type(id)
+);
+
+CREATE TABLE IF NOT EXISTS case_origin (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+-- ─────────────────────────────────────────────────────────────────────────────
 -- Datos de ejemplo (usuarios de prueba)
 -- ─────────────────────────────────────────────────────────────────────────────
 INSERT INTO user (first_name, last_name, id_number, email, role)

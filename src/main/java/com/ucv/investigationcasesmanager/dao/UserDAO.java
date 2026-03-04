@@ -14,6 +14,20 @@ public class UserDAO extends BaseDAO<User> {
         return queryList(sql, this::mapUser);
     }
 
+    // Registrar un nuevo investigador en la tabla user
+    public boolean saveInvestigator(String firstName, String lastName, String idNumber,
+            String email) {
+        String sql =
+                "INSERT INTO user (first_name, last_name, id_number, email, role) VALUES (?, ?, ?, ?, 'Investigador')";
+        return execute(sql, firstName, lastName, idNumber, email) > 0;
+    }
+
+    // Actualizar nombre y apellido de un investigador existente
+    public boolean updateName(int id, String firstName, String lastName) {
+        String sql = "UPDATE user SET first_name = ?, last_name = ? WHERE id = ?";
+        return execute(sql, firstName, lastName, id) > 0;
+    }
+
     // Mapear una fila del ResultSet a un objeto User
     private User mapUser(java.sql.ResultSet rs) throws java.sql.SQLException {
         User u = new User();
