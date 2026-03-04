@@ -82,7 +82,9 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
     }
 
     @Override
-    public Color getPrimaryColor() { return PRIMARY; }
+    public Color getPrimaryColor() {
+        return PRIMARY;
+    }
 
     private JButton createRoundedButton(String text, Color bg, Color fg, int width, int height) {
         JButton btn = new JButton(text) {

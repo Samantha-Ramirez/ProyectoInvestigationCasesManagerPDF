@@ -64,8 +64,7 @@ public class RegisterFollowUpView extends BaseView {
         centerPanel.add(createFollowUpFormPanel(), BorderLayout.CENTER);
 
         contentPanel.add(centerPanel, BorderLayout.CENTER);
-        contentPanel.add(
-                createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
+        contentPanel.add(createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
                 BorderLayout.SOUTH);
     }
 
@@ -100,7 +99,7 @@ public class RegisterFollowUpView extends BaseView {
         txtActivities = createTextArea(4, 30, 80);
         txtInvolvedPersons = createTextArea(3, 30, 60);
         txtAmount = new JTextField("0.00", 20);
-        cbStatus = new JComboBox<>(new String[]{"En Seguimiento", "Cerrado", "Reabierto"});
+        cbStatus = new JComboBox<>(new String[] {"En Seguimiento", "Cerrado", "Reabierto"});
         txtObservations = createTextArea(2, 30, 50);
         txtRecommendations = createTextArea(3, 30, 60);
         txtConclusions = createTextArea(3, 30, 60);

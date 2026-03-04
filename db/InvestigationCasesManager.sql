@@ -4,9 +4,9 @@
 PRAGMA foreign_keys = ON;
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Tabla: users  (reemplaza a: usuario)
+-- Tabla: user  (reemplaza a: usuario)
 -- ─────────────────────────────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS user (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name TEXT NOT NULL,
     last_name  TEXT NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS investigation_case (
     irregularity_type_id        INTEGER,
     irregularity_subtype_id     INTEGER,
     action_performed_id         INTEGER,
-    FOREIGN KEY (investigator_id) REFERENCES users(id)
+    FOREIGN KEY (investigator_id) REFERENCES user(id)
 );
 
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -60,12 +60,12 @@ CREATE TABLE IF NOT EXISTS case_follow_up (
     recommendations      TEXT,
     conclusions          TEXT,
     FOREIGN KEY (case_id)         REFERENCES investigation_case(id),
-    FOREIGN KEY (investigator_id) REFERENCES users(id)
+    FOREIGN KEY (investigator_id) REFERENCES user(id)
 );
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- Datos de ejemplo (usuarios de prueba)
 -- ─────────────────────────────────────────────────────────────────────────────
--- INSERT INTO users (first_name, last_name, id_number, email, role)
--- VALUES ('Samantha', 'Ramirez', '31307714', 'samantha@gmail.com', 'Administrador'),
---        ('María',    'Miranda', '30243278', 'maria@gmail.com',    'Investigador');
+INSERT INTO user (first_name, last_name, id_number, email, role)
+VALUES ('Samantha', 'Ramirez', '31307714', 'samantha@gmail.com', 'Administrador'),
+       ('María',    'Miranda', '30243278', 'maria@gmail.com',    'Investigador');

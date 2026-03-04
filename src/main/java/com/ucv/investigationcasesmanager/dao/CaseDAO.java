@@ -4,8 +4,8 @@ import com.ucv.investigationcasesmanager.model.Case;
 import java.util.List;
 
 /*
- * PDyF: DAO que maneja las operaciones de acceso a datos para la entidad Case,
- * incluyendo consultas para investigadores, administradores y registro de nuevos casos.
+ * PDyF: DAO que maneja las operaciones de acceso a datos para la entidad Case, incluyendo consultas
+ * para investigadores, administradores y registro de nuevos casos.
  */
 public class CaseDAO extends BaseDAO<Case> {
 
@@ -22,8 +22,7 @@ public class CaseDAO extends BaseDAO<Case> {
     public List<Case> findAll() {
         String sql = "SELECT case_number, status, "
                 + "CAST(CAST((julianday('now') - julianday(start_date)) AS INTEGER) AS TEXT)"
-                + " || ' días sin atención' AS time_without_attention "
-                + "FROM investigation_case";
+                + " || ' días sin atención' AS time_without_attention " + "FROM investigation_case";
         return queryList(sql, this::mapSummary);
     }
 
@@ -47,12 +46,11 @@ public class CaseDAO extends BaseDAO<Case> {
                 + "investigator_id, case_type_id, irregularity_type_id, "
                 + "irregularity_subtype_id, action_performed_id) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        return execute(sql,
-                c.getCaseNumber(), c.getStartDate(), c.getDays(), c.getMonth(), c.getStatus(),
-                c.getMobileAffected(), c.getObjectiveVictim(), c.getIncident(), c.getDurationDays(),
-                c.getModusOperandiDescription(), c.getSupportArea(), c.getDetectionOrigin(),
-                c.getFraudDiagnosis(), c.getConclusionsRecommendations(), c.getObservations(),
-                c.getSupport(), c.getInvestigatorId(), c.getCaseTypeId(),
+        return execute(sql, c.getCaseNumber(), c.getStartDate(), c.getDays(), c.getMonth(),
+                c.getStatus(), c.getMobileAffected(), c.getObjectiveVictim(), c.getIncident(),
+                c.getDurationDays(), c.getModusOperandiDescription(), c.getSupportArea(),
+                c.getDetectionOrigin(), c.getFraudDiagnosis(), c.getConclusionsRecommendations(),
+                c.getObservations(), c.getSupport(), c.getInvestigatorId(), c.getCaseTypeId(),
                 c.getIrregularityTypeId(), c.getIrregularitySubtypeId(),
                 c.getActionPerformedId()) > 0;
     }

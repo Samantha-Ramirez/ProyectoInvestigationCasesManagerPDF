@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /*
- * Controlador para las operaciones sobre seguimientos de casos. Contiene toda la validación
- * y lógica de negocio relacionada con el registro de seguimientos.
+ * Controlador para las operaciones sobre seguimientos de casos. Contiene toda la validación y
+ * lógica de negocio relacionada con el registro de seguimientos.
  */
 public class CaseFollowUpController {
     private final CaseFollowUpDAO followUpDAO;
@@ -34,6 +34,7 @@ public class CaseFollowUpController {
 
     /**
      * Valida, construye y guarda un seguimiento, luego actualiza el estatus del caso.
+     * 
      * @return null si el registro fue exitoso, o un mensaje de error en caso de fallo
      */
     public String registerFollowUp(FollowUpFormData data) {
@@ -76,11 +77,13 @@ public class CaseFollowUpController {
         followUp.setInvestigatorId(data.investigatorId);
         followUp.setRegistrationDate(LocalDateTime.now());
         followUp.setActivitiesPerformed(data.activities.trim());
-        followUp.setInvolvedPersons(data.involvedPersons != null ? data.involvedPersons.trim() : "");
+        followUp.setInvolvedPersons(
+                data.involvedPersons != null ? data.involvedPersons.trim() : "");
         followUp.setExposedAmount(amount);
         followUp.setStatus(data.status);
         followUp.setObservations(data.observations != null ? data.observations.trim() : "");
-        followUp.setRecommendations(data.recommendations != null ? data.recommendations.trim() : "");
+        followUp.setRecommendations(
+                data.recommendations != null ? data.recommendations.trim() : "");
         followUp.setConclusions(data.conclusions != null ? data.conclusions.trim() : "");
 
         if (!followUpDAO.save(followUp)) {

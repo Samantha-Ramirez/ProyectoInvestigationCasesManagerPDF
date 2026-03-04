@@ -3,14 +3,14 @@ package com.ucv.investigationcasesmanager.dao;
 import com.ucv.investigationcasesmanager.model.User;
 
 /*
- * PDyF: DAO que maneja las operaciones de acceso a datos para el inicio de sesión,
- * específicamente la búsqueda de usuarios por cédula para validar credenciales.
+ * PDyF: DAO que maneja las operaciones de acceso a datos para el inicio de sesión, específicamente
+ * la búsqueda de usuarios por cédula para validar credenciales.
  */
 public class LoginDAO extends BaseDAO<String> {
 
     // Buscar un usuario por su número de cédula
     public User findByIdNumber(String idNumber) {
-        String sql = "SELECT * FROM users WHERE id_number = ?";
+        String sql = "SELECT * FROM user WHERE id_number = ?";
         return queryOne(sql, this::mapUser, idNumber);
     }
 

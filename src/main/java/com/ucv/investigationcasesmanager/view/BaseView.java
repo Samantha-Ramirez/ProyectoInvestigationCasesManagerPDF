@@ -59,9 +59,9 @@ public abstract class BaseView extends JFrame {
         header.setBackground(uiFactory.getPrimaryColor());
         header.setPreferredSize(new Dimension(1100, 50));
 
-        String userInfo = (currentUser != null)
-                ? currentUser.getFirstName() + " " + currentUser.getLastName()
-                : "Usuario 1";
+        String userInfo =
+                (currentUser != null) ? currentUser.getFirstName() + " " + currentUser.getLastName()
+                        : "Usuario 1";
 
         JLabel lblUser = new JLabel(userInfo + "  ");
         lblUser.setForeground(Color.WHITE);
@@ -304,9 +304,8 @@ public abstract class BaseView extends JFrame {
         }
 
         component.setForeground(Color.GRAY);
-        String placeholder =
-                (component instanceof JTextField) ? ((JTextField) component).getText()
-                        : ((JTextArea) component).getText();
+        String placeholder = (component instanceof JTextField) ? ((JTextField) component).getText()
+                : ((JTextArea) component).getText();
 
         component.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
@@ -355,8 +354,8 @@ public abstract class BaseView extends JFrame {
 
     private class StatusBadgeRenderer implements TableCellRenderer {
         @Override
-        public Component getTableCellRendererComponent(JTable t, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
+                boolean hasFocus, int row, int column) {
             JLabel badge = uiFactory.createStatusBadge(String.valueOf(value));
             if (isSelected) {
                 badge.setBorder(BorderFactory.createCompoundBorder(

@@ -10,7 +10,7 @@ public class UserDAO extends BaseDAO<User> {
 
     // Obtener todos los investigadores registrados en el sistema
     public List<User> findInvestigators() {
-        String sql = "SELECT id, first_name, last_name FROM users WHERE role = 'Investigador'";
+        String sql = "SELECT id, first_name, last_name FROM user WHERE role = 'Investigador'";
         return queryList(sql, this::mapUser);
     }
 

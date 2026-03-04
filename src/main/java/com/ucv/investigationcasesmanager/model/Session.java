@@ -1,8 +1,8 @@
 package com.ucv.investigationcasesmanager.model;
 
 /*
- * PDyF: Singleton estático que gestiona la sesión del usuario activo en toda la aplicación.
- * Permite acceder al usuario autenticado desde cualquier parte del sistema sin pasar referencias.
+ * PDyF: Singleton estático que gestiona la sesión del usuario activo en toda la aplicación. Permite
+ * acceder al usuario autenticado desde cualquier parte del sistema sin pasar referencias.
  */
 public class Session {
     private static User currentUser;

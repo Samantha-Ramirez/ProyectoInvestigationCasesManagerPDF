@@ -5,14 +5,15 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /*
- * PDyF: DAO que maneja las operaciones de acceso a datos relacionadas con los
- * seguimientos de casos, incluyendo registro, consulta y actualización de estatus.
+ * PDyF: DAO que maneja las operaciones de acceso a datos relacionadas con los seguimientos de
+ * casos, incluyendo registro, consulta y actualización de estatus.
  */
 public class CaseFollowUpDAO extends BaseDAO<CaseFollowUp> {
 
     // Obtener todos los seguimientos de un caso ordenados del más reciente al más antiguo
     public List<CaseFollowUp> findByCaseId(int caseId) {
-        String sql = "SELECT * FROM case_follow_up WHERE case_id = ? ORDER BY registration_date DESC";
+        String sql =
+                "SELECT * FROM case_follow_up WHERE case_id = ? ORDER BY registration_date DESC";
         return queryList(sql, this::mapFollowUp, caseId);
     }
 
@@ -22,13 +23,11 @@ public class CaseFollowUpDAO extends BaseDAO<CaseFollowUp> {
                 + "case_id, investigator_id, registration_date, activities_performed, "
                 + "involved_persons, exposed_amount, status, observations, "
                 + "recommendations, conclusions) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        return execute(sql,
-                followUp.getCaseId(), followUp.getInvestigatorId(),
+        return execute(sql, followUp.getCaseId(), followUp.getInvestigatorId(),
                 Timestamp.valueOf(followUp.getRegistrationDate()),
                 followUp.getActivitiesPerformed(), followUp.getInvolvedPersons(),
-                followUp.getExposedAmount(), followUp.getStatus(),
-                followUp.getObservations(), followUp.getRecommendations(),
-                followUp.getConclusions()) > 0;
+                followUp.getExposedAmount(), followUp.getStatus(), followUp.getObservations(),
+                followUp.getRecommendations(), followUp.getConclusions()) > 0;
     }
 
     // Actualizar el estatus del caso al registrar un nuevo seguimiento

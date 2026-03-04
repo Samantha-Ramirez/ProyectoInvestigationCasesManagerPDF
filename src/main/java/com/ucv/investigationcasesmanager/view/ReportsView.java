@@ -31,11 +31,11 @@ public class ReportsView extends BaseView {
         JPanel selectionPanel = createReportSelectionPanel();
 
         PanelComponent decorated = new PanelBorderDecorator(
-                new PanelTitleDecorator(new PanelConcreteComponent(selectionPanel), "Filtros"),
-                6, 8, 6, 8);
+                new PanelTitleDecorator(new PanelConcreteComponent(selectionPanel), "Filtros"), 6,
+                8, 6, 8);
 
         card.add(decorated.build(), BorderLayout.NORTH);
-        card.add(createTable(new String[]{"Reporte", "Resultado"}), BorderLayout.CENTER);
+        card.add(createTable(new String[] {"Reporte", "Resultado"}), BorderLayout.CENTER);
 
         contentPanel.add(card, BorderLayout.CENTER);
     }
@@ -45,10 +45,8 @@ public class ReportsView extends BaseView {
         panel.setOpaque(false);
 
         panel.add(new JLabel("Tipo de reporte:"));
-        cmbReportType = new JComboBox<>(new String[]{
-                "Empresas con mayores casos",
-                "Investigadores con mayores casos",
-                "Casos con más de 3 casos relacionados"});
+        cmbReportType = new JComboBox<>(new String[] {"Empresas con mayores casos",
+                "Investigadores con mayores casos", "Casos con más de 3 casos relacionados"});
         cmbReportType.setPreferredSize(new Dimension(330, 34));
         panel.add(cmbReportType);
 
@@ -67,7 +65,7 @@ public class ReportsView extends BaseView {
 
         List<Object[]> rows = reportController.generateRows(report);
         if (rows.isEmpty()) {
-            tableModel.addRow(new Object[]{"Sin datos", "No hay información para este criterio"});
+            tableModel.addRow(new Object[] {"Sin datos", "No hay información para este criterio"});
         } else {
             for (Object[] row : rows) {
                 tableModel.addRow(row);
