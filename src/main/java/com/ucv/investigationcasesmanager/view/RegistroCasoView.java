@@ -3,9 +3,11 @@ package com.ucv.investigationcasesmanager.view;
 import com.ucv.investigationcasesmanager.controller.CasoController;
 import com.ucv.investigationcasesmanager.factory.InicioClient;
 import com.ucv.investigationcasesmanager.model.Caso;
+import com.ucv.investigationcasesmanager.model.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 /*
  * Vista de registro de casos.
@@ -16,6 +18,7 @@ public class RegistroCasoView extends BaseView {
     private JTextArea txtModusOperandi, txtAreaApoyo, txtDeteccion, txtDiagnostico, txtConclusiones,
             txtObservaciones, txtSoporte;
     private JComboBox<String> cbTipoCaso, cbInvestigador, cbTipoIrregularidad, cbSubtipo, cbAccion;
+    private List<Usuario> investigadores;
 
     public RegistroCasoView() {
         super("Registro de casos", true);
@@ -38,7 +41,7 @@ public class RegistroCasoView extends BaseView {
 
         txtNroExpediente = new JTextField();
         cbTipoCaso = new JComboBox<>(new String[] {"Gestión", "Reclamo", "Caso"});
-        cbInvestigador = new JComboBox<>(new String[] {"Investigador 1", "Investigador 2"});
+        cbInvestigador = cargarComboInvestigadores();
         txtMovil = new JTextField();
         txtObjetivo = new JTextField();
         txtIncidencia = new JTextField();
@@ -92,6 +95,32 @@ public class RegistroCasoView extends BaseView {
         return card;
     }
 
+    private JComboBox<String> cargarComboInvestigadores() {
+        investigadores = casoController.obtenerInvestigadores();
+        JComboBox<String> combo = new JComboBox<>();
+
+        if (investigadores.isEmpty()) {
+            combo.addItem("Sin investigadores");
+        } else {
+            for (Usuario inv : investigadores) {
+                combo.addItem(inv.getNombre() + " " + inv.getApellido());
+            }
+        }
+
+        // Si el usuario actual es investigador, preseleccionar su propio nombre y deshabilitar
+        if ("Investigador".equalsIgnoreCase(usuarioActual.getRol())) {
+            for (int i = 0; i < investigadores.size(); i++) {
+                if (investigadores.get(i).getId() == usuarioActual.getId()) {
+                    combo.setSelectedIndex(i);
+                    break;
+                }
+            }
+            combo.setEnabled(false);
+        }
+
+        return combo;
+    }
+
     private void accionRegistrar() {
         Caso caso = new Caso();
 
@@ -109,19 +138,25 @@ public class RegistroCasoView extends BaseView {
         caso.setObservaciones(txtObservaciones.getText());
         caso.setSoporte(txtSoporte.getText());
         caso.setIdTipoCaso(cbTipoCaso.getSelectedIndex() + 1);
-        caso.setIdInvestigador(cbInvestigador.getSelectedIndex() + 1);
         caso.setIdTipoIrregularidad(cbTipoIrregularidad.getSelectedIndex() + 1);
         caso.setIdSubtipoIrregularidad(cbSubtipo.getSelectedIndex() + 1);
         caso.setIdAccionRealizada(cbAccion.getSelectedIndex() + 1);
+
+        int selectedIdx = cbInvestigador.getSelectedIndex();
+        if (selectedIdx >= 0 && selectedIdx < investigadores.size()) {
+            caso.setIdInvestigador(investigadores.get(selectedIdx).getId());
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay investigadores disponibles para asignar.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         if (!casoController.guardarCaso(caso, usuarioActual, duracionStr)) {
             JOptionPane.showMessageDialog(this, "Datos inválidos.");
             return;
         }
 
-        {
-            JOptionPane.showMessageDialog(this, "Caso registrado.");
-            configurarVista(this, InicioClient.obtenerInicio(usuarioActual.getRol()));
-        }
+        JOptionPane.showMessageDialog(this, "Caso registrado.");
+        configurarVista(this, InicioClient.obtenerInicio(usuarioActual.getRol()));
     }
 }

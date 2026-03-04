@@ -1,6 +1,7 @@
 package com.ucv.investigationcasesmanager.controller;
 
 import com.ucv.investigationcasesmanager.dao.CasoDAO;
+import com.ucv.investigationcasesmanager.dao.UsuarioDAO;
 import com.ucv.investigationcasesmanager.model.Caso;
 import com.ucv.investigationcasesmanager.model.Usuario;
 import com.ucv.investigationcasesmanager.service.ServiceLocator;
@@ -12,9 +13,11 @@ import java.util.List;
  */
 public class CasoController {
     private final CasoDAO casoDAO;
+    private final UsuarioDAO usuarioDAO;
 
     public CasoController() {
         this.casoDAO = ServiceLocator.obtenerServicio(CasoDAO.class);
+        this.usuarioDAO = ServiceLocator.obtenerServicio(UsuarioDAO.class);
     }
 
     // Obtener casos para un investigador específico
@@ -39,5 +42,10 @@ public class CasoController {
             return false;
         }
         return casoDAO.guardarCaso(caso);
+    }
+
+    // Obtener lista de investigadores disponibles
+    public List<Usuario> obtenerInvestigadores() {
+        return usuarioDAO.obtenerInvestigadores();
     }
 }
