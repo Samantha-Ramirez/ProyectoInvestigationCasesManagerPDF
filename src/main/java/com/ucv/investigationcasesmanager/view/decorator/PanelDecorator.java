@@ -3,21 +3,18 @@ package com.ucv.investigationcasesmanager.view.decorator;
 import javax.swing.JPanel;
 
 /**
- * PDyF: Este código implementa el patrón Decorator para agregar funcionalidades visuales a los
- * paneles de manera flexible y reutilizable, permitiendo componer decoradores para lograr el diseño
- * deseado.
+ * PDyF: Patrón Decorator - decorador abstracto que envuelve un PanelComponent y delega
+ * la construcción del panel al componente interno.
  */
-
-// Decorador abstracto
 public abstract class PanelDecorator implements PanelComponent {
-    protected final PanelComponent panelComponent;
+    protected final PanelComponent component;
 
-    protected PanelDecorator(PanelComponent panelComponent) {
-        this.panelComponent = panelComponent;
+    protected PanelDecorator(PanelComponent component) {
+        this.component = component;
     }
 
     @Override
     public JPanel build() {
-        return panelComponent.build();
+        return component.build();
     }
 }
