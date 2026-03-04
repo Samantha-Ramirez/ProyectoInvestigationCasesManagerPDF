@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * PDyF: Service Locator - centraliza la creación y acceso a los servicios (DAOs) del sistema.
- * Evita instanciar múltiples veces los mismos objetos de acceso a datos.
+ * PDyF: Service Locator - centraliza la creación y acceso a los servicios (DAOs) del sistema. Evita
+ * instanciar múltiples veces los mismos objetos de acceso a datos.
  */
 public final class ServiceLocator {
     private static final Map<Class<?>, Object> SERVICES = new HashMap<>();

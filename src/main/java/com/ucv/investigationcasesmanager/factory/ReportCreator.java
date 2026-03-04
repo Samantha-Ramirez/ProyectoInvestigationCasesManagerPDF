@@ -12,17 +12,23 @@ public abstract class ReportCreator {
 
 class CompaniesReportCreator extends ReportCreator {
     @Override
-    public ReportProduct factoryMethod() { return new CompaniesReportProduct(); }
+    public ReportProduct factoryMethod() {
+        return new CompaniesReportProduct();
+    }
 }
 
 
 class InvestigatorsReportCreator extends ReportCreator {
     @Override
-    public ReportProduct factoryMethod() { return new InvestigatorsReportProduct(); }
+    public ReportProduct factoryMethod() {
+        return new InvestigatorsReportProduct();
+    }
 }
 
 
 class RelatedCasesReportCreator extends ReportCreator {
     @Override
-    public ReportProduct factoryMethod() { return new RelatedCasesReportProduct(); }
+    public ReportProduct factoryMethod() {
+        return new RelatedCasesReportProduct();
+    }
 }

@@ -20,7 +20,11 @@ public class CaseRegistrationColleague extends RegistrationColleague {
         return mediator.send("VALIDATE_AND_PREPARE", this);
     }
 
-    public Case getCase() { return caseObj; }
+    public Case getCase() {
+        return caseObj;
+    }
 
-    public String getDurationText() { return durationText; }
+    public String getDurationText() {
+        return durationText;
+    }
 }

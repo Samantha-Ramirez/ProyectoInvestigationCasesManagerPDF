@@ -54,11 +54,17 @@ public class RegisterFollowUpView extends BaseView {
 
     @Override
     protected void initComponents() {
-        setupTitle("Registrar seguimiento", null, null);
-        contentPanel.add(createCaseInfoPanel(), BorderLayout.NORTH);
-        contentPanel.add(createFollowUpFormPanel(), BorderLayout.CENTER);
-        contentPanel.add(
-                createBottomPanel(createPrimaryButton("Registrar seguimiento", e -> handleRegister())),
+        setupTitle("Seguimiento de caso", null, null);
+
+        // Por qué: se agrupa el panel de info y el formulario en un panel
+        // central para no solaparse con el título en BorderLayout.NORTH.
+        JPanel centerPanel = new JPanel(new BorderLayout(0, 12));
+        centerPanel.setOpaque(false);
+        centerPanel.add(createCaseInfoPanel(), BorderLayout.NORTH);
+        centerPanel.add(createFollowUpFormPanel(), BorderLayout.CENTER);
+
+        contentPanel.add(centerPanel, BorderLayout.CENTER);
+        contentPanel.add(createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
                 BorderLayout.SOUTH);
     }
 
@@ -93,7 +99,7 @@ public class RegisterFollowUpView extends BaseView {
         txtActivities = createTextArea(4, 30, 80);
         txtInvolvedPersons = createTextArea(3, 30, 60);
         txtAmount = new JTextField("0.00", 20);
-        cbStatus = new JComboBox<>(new String[]{"En Seguimiento", "Cerrado", "Reabierto"});
+        cbStatus = new JComboBox<>(new String[] {"En Seguimiento", "Cerrado", "Reabierto"});
         txtObservations = createTextArea(2, 30, 50);
         txtRecommendations = createTextArea(3, 30, 60);
         txtConclusions = createTextArea(3, 30, 60);

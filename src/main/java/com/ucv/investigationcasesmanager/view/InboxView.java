@@ -23,12 +23,13 @@ public class InboxView extends BaseView {
 
     @Override
     protected void initComponents() {
-        setupTitle("Bandeja de casos", "Registrar",
-                e -> navigate(this, new RegisterCaseView()));
+        setupTitle("Bandeja de casos", "Registrar", e -> navigate(this, new RegisterCaseView()));
 
         JPanel card = createCard();
-        card.add(createActionBar("Orden: más reciente → más antiguo", null), java.awt.BorderLayout.NORTH);
-        card.add(createTable(new String[]{"Caso", "Tiempo", "Status", "Acción"}), java.awt.BorderLayout.CENTER);
+        card.add(createActionBar("Orden: más reciente → más antiguo", null),
+                java.awt.BorderLayout.NORTH);
+        card.add(createTable(new String[] {"Caso", "Tiempo", "Status", "Acción"}),
+                java.awt.BorderLayout.CENTER);
 
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -59,7 +60,7 @@ public class InboxView extends BaseView {
     private void loadData(int userId) {
         List<Case> cases = caseController.getCasesForInvestigator(userId);
         for (Case c : cases) {
-            tableModel.addRow(new Object[]{c.getCaseNumber(), c.getTimeWithoutAttention(),
+            tableModel.addRow(new Object[] {c.getCaseNumber(), c.getTimeWithoutAttention(),
                     c.getStatus(), "Ver"});
         }
     }

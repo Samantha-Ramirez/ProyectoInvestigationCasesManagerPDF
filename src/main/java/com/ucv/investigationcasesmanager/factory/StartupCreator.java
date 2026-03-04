@@ -12,11 +12,15 @@ public abstract class StartupCreator {
 
 class InboxStartupCreator extends StartupCreator {
     @Override
-    public StartupProduct factoryMethod() { return new InboxStartupProduct(); }
+    public StartupProduct factoryMethod() {
+        return new InboxStartupProduct();
+    }
 }
 
 
 class BoardStartupCreator extends StartupCreator {
     @Override
-    public StartupProduct factoryMethod() { return new BoardStartupProduct(); }
+    public StartupProduct factoryMethod() {
+        return new BoardStartupProduct();
+    }
 }

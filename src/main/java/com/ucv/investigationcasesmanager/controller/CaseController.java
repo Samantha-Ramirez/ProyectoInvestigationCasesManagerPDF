@@ -37,7 +37,6 @@ public class CaseController {
 
     /**
      * Construye un objeto Case a partir del formulario, lo valida mediante el mediador y lo guarda.
-     * @return null si el registro fue exitoso, o un mensaje de error en caso de fallo
      */
     public String registerCase(CaseFormData data, User currentUser) {
         if (data.investigatorId <= 0) {

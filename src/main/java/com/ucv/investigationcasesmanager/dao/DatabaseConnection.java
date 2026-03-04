@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /*
- * PDyF: Singleton que gestiona la conexión a la base de datos SQLite.
- * Se reutiliza la misma instancia mientras la conexión esté activa.
+ * PDyF: Singleton que gestiona la conexión a la base de datos SQLite. Se reutiliza la misma
+ * instancia mientras la conexión esté activa.
  */
 public class DatabaseConnection {
     private static Connection instance = null;
@@ -23,7 +23,8 @@ public class DatabaseConnection {
                 configurePragmas(instance);
                 System.out.println("Conexión a la base de datos establecida.");
             } catch (ClassNotFoundException e) {
-                throw new SQLException("No se encontró el driver de SQLite en el classpath de Maven.", e);
+                throw new SQLException(
+                        "No se encontró el driver de SQLite en el classpath de Maven.", e);
             }
         }
         return instance;

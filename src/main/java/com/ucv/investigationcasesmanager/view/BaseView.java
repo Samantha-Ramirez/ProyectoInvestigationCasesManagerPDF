@@ -59,9 +59,9 @@ public abstract class BaseView extends JFrame {
         header.setBackground(uiFactory.getPrimaryColor());
         header.setPreferredSize(new Dimension(1100, 50));
 
-        String userInfo = (currentUser != null)
-                ? currentUser.getFirstName() + " " + currentUser.getLastName()
-                : "Usuario 1";
+        String userInfo =
+                (currentUser != null) ? currentUser.getFirstName() + " " + currentUser.getLastName()
+                        : "Usuario 1";
 
         JLabel lblUser = new JLabel(userInfo + "  ");
         lblUser.setForeground(Color.WHITE);
@@ -210,18 +210,19 @@ public abstract class BaseView extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = row;
-        gbc.insets = new Insets(6, 4, 6, 12);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        gbc.insets = new Insets(8, 4, 2, 4);
         gbc.anchor = GridBagConstraints.WEST;
 
         JLabel lbl = new JLabel(label + ":");
         lbl.setFont(new Font("Arial", Font.PLAIN, 12));
         form.add(lbl, gbc);
 
-        gbc.gridx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1;
+        gbc.gridy = row + 1;
+        gbc.insets = new Insets(0, 4, 8, 4);
         form.add(field, gbc);
-        return row + 1;
+        return row + 2;
     }
 
     protected JTextArea createTextArea(int rows, int cols, int preferredHeight) {
@@ -303,9 +304,8 @@ public abstract class BaseView extends JFrame {
         }
 
         component.setForeground(Color.GRAY);
-        String placeholder =
-                (component instanceof JTextField) ? ((JTextField) component).getText()
-                        : ((JTextArea) component).getText();
+        String placeholder = (component instanceof JTextField) ? ((JTextField) component).getText()
+                : ((JTextArea) component).getText();
 
         component.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
@@ -354,8 +354,8 @@ public abstract class BaseView extends JFrame {
 
     private class StatusBadgeRenderer implements TableCellRenderer {
         @Override
-        public Component getTableCellRendererComponent(JTable t, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
+                boolean hasFocus, int row, int column) {
             JLabel badge = uiFactory.createStatusBadge(String.valueOf(value));
             if (isSelected) {
                 badge.setBorder(BorderFactory.createCompoundBorder(

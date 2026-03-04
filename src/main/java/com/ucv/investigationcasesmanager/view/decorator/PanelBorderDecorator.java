@@ -27,8 +27,8 @@ public class PanelBorderDecorator extends PanelDecorator {
         JPanel panel = super.build();
         Border existing = panel.getBorder();
         Border padding = BorderFactory.createEmptyBorder(top, left, bottom, right);
-        panel.setBorder(existing == null ? padding
-                : BorderFactory.createCompoundBorder(existing, padding));
+        panel.setBorder(
+                existing == null ? padding : BorderFactory.createCompoundBorder(existing, padding));
         return panel;
     }
 }

@@ -10,7 +10,7 @@ public class UserDAO extends BaseDAO<User> {
 
     // Obtener todos los investigadores registrados en el sistema
     public List<User> findInvestigators() {
-        String sql = "SELECT id, nombre, apellido FROM usuario WHERE rol = 'Investigador'";
+        String sql = "SELECT id, first_name, last_name FROM user WHERE role = 'Investigador'";
         return queryList(sql, this::mapUser);
     }
 
@@ -18,8 +18,8 @@ public class UserDAO extends BaseDAO<User> {
     private User mapUser(java.sql.ResultSet rs) throws java.sql.SQLException {
         User u = new User();
         u.setId(rs.getInt("id"));
-        u.setFirstName(rs.getString("nombre"));
-        u.setLastName(rs.getString("apellido"));
+        u.setFirstName(rs.getString("first_name"));
+        u.setLastName(rs.getString("last_name"));
         return u;
     }
 }

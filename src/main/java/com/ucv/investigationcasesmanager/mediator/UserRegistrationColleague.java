@@ -13,5 +13,7 @@ public class UserRegistrationColleague extends RegistrationColleague {
         this.user = user;
     }
 
-    public User getUser() { return user; }
+    public User getUser() {
+        return user;
+    }
 }

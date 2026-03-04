@@ -68,21 +68,24 @@ public class CaseDetailView extends BaseView {
                 new JLabel(String.valueOf(currentCase.getDurationDays())));
         row = addField(form, row, "Móvil afectado", new JLabel(
                 currentCase.getMobileAffected() != null ? currentCase.getMobileAffected() : "N/A"));
-        row = addField(form, row, "Objetivo/Agraviado", new JLabel(
-                currentCase.getObjectiveVictim() != null ? currentCase.getObjectiveVictim() : "N/A"));
-        row = addField(form, row, "Incidencia", new JLabel(
-                currentCase.getIncident() != null ? currentCase.getIncident() : "N/A"));
+        row = addField(form, row, "Objetivo/Agraviado",
+                new JLabel(
+                        currentCase.getObjectiveVictim() != null ? currentCase.getObjectiveVictim()
+                                : "N/A"));
+        row = addField(form, row, "Incidencia",
+                new JLabel(currentCase.getIncident() != null ? currentCase.getIncident() : "N/A"));
 
         JTextArea txtModus = createTextArea(3, 30, 80);
         txtModus.setEditable(false);
         txtModus.setText(currentCase.getModusOperandiDescription() != null
-                ? currentCase.getModusOperandiDescription() : "N/A");
+                ? currentCase.getModusOperandiDescription()
+                : "N/A");
         row = addField(form, row, "Modus operandi", wrapInScroll(txtModus));
 
         JTextArea txtObs = createTextArea(3, 30, 70);
         txtObs.setEditable(false);
-        txtObs.setText(currentCase.getObservations() != null
-                ? currentCase.getObservations() : "N/A");
+        txtObs.setText(
+                currentCase.getObservations() != null ? currentCase.getObservations() : "N/A");
         addField(form, row, "Observaciones", wrapInScroll(txtObs));
 
         card.add(wrapInScroll(form), BorderLayout.CENTER);
@@ -92,10 +95,13 @@ public class CaseDetailView extends BaseView {
     private JComponent createFollowUpPanel() {
         JPanel card = createCard();
 
-        String[] columns = {"Fecha", "Actividades", "Personas", "Monto", "Estatus", "Observaciones"};
+        String[] columns =
+                {"Fecha", "Actividades", "Personas", "Monto", "Estatus", "Observaciones"};
         followUpTableModel = new DefaultTableModel(columns, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) { return false; }
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
 
         JTable followUpTable = new JTable(followUpTableModel);
@@ -112,17 +118,16 @@ public class CaseDetailView extends BaseView {
         List<CaseFollowUp> followUps = followUpController.getFollowUps(currentCase.getId());
 
         if (followUps.isEmpty()) {
-            followUpTableModel.addRow(new Object[]{"No hay seguimientos registrados", "", "", "", "", ""});
+            followUpTableModel
+                    .addRow(new Object[] {"No hay seguimientos registrados", "", "", "", "", ""});
             return;
         }
 
         for (CaseFollowUp f : followUps) {
-            followUpTableModel.addRow(new Object[]{
-                    f.getRegistrationDate().toString().substring(0, 10),
-                    f.getActivitiesPerformed(),
+            followUpTableModel.addRow(new Object[] {
+                    f.getRegistrationDate().toString().substring(0, 10), f.getActivitiesPerformed(),
                     f.getInvolvedPersons() != null ? f.getInvolvedPersons() : "",
-                    String.format("$%,.2f", f.getExposedAmount()),
-                    f.getStatus(),
+                    String.format("$%,.2f", f.getExposedAmount()), f.getStatus(),
                     f.getObservations() != null ? f.getObservations() : ""});
         }
     }

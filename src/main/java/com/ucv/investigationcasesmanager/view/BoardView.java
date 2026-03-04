@@ -23,12 +23,13 @@ public class BoardView extends BaseView {
 
     @Override
     protected void initComponents() {
-        setupTitle("Cartelera de casos", "Registrar",
-                e -> navigate(this, new RegisterCaseView()));
+        setupTitle("Cartelera de casos", "Registrar", e -> navigate(this, new RegisterCaseView()));
 
         JPanel card = createCard();
-        card.add(createActionBar("Vista general de casos por investigador", null), java.awt.BorderLayout.NORTH);
-        card.add(createTable(new String[]{"Caso", "Tiempo", "Status", "Acción"}), java.awt.BorderLayout.CENTER);
+        card.add(createActionBar("Vista general de casos por investigador", null),
+                java.awt.BorderLayout.NORTH);
+        card.add(createTable(new String[] {"Caso", "Tiempo", "Status", "Acción"}),
+                java.awt.BorderLayout.CENTER);
 
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -56,7 +57,7 @@ public class BoardView extends BaseView {
     private void loadData(int userId) {
         List<Case> cases = caseController.getAllCases();
         for (Case c : cases) {
-            tableModel.addRow(new Object[]{c.getCaseNumber(), c.getTimeWithoutAttention(),
+            tableModel.addRow(new Object[] {c.getCaseNumber(), c.getTimeWithoutAttention(),
                     c.getStatus(), "Ver"});
         }
     }

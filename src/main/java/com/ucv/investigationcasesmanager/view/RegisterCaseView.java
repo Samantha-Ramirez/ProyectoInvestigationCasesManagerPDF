@@ -15,22 +15,24 @@ import java.util.List;
 public class RegisterCaseView extends BaseView {
     private final CaseController caseController;
     private JTextField txtCaseNumber, txtMobile, txtVictim, txtIncident, txtDuration;
-    private JTextArea txtModusOperandi, txtSupportArea, txtDetection, txtDiagnosis,
-            txtConclusions, txtObservations, txtSupport;
+    private JTextArea txtModusOperandi, txtSupportArea, txtDetection, txtDiagnosis, txtConclusions,
+            txtObservations, txtSupport;
     private JComboBox<String> cbCaseType, cbInvestigator, cbIrregularityType, cbSubtype, cbAction;
     private List<User> investigators;
 
     public RegisterCaseView() {
-        super("Registro de casos", true);
+        // Por qué: se pospone initComponents() para que caseController esté
+        // asignado antes de que loadInvestigatorsCombo() lo invoque.
+        super("Registro de casos", true, false);
         this.caseController = new CaseController();
+        initComponents();
     }
 
     @Override
     protected void initComponents() {
         setupTitle("Registro de casos", null, null);
         contentPanel.add(createFormPanel(), BorderLayout.CENTER);
-        contentPanel.add(
-                createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
+        contentPanel.add(createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
                 BorderLayout.SOUTH);
     }
 
@@ -39,15 +41,15 @@ public class RegisterCaseView extends BaseView {
         JPanel form = createForm();
 
         txtCaseNumber = new JTextField();
-        cbCaseType = new JComboBox<>(new String[]{"Gestión", "Reclamo", "Caso"});
+        cbCaseType = new JComboBox<>(new String[] {"Gestión", "Reclamo", "Caso"});
         cbInvestigator = loadInvestigatorsCombo();
         txtMobile = new JTextField();
         txtVictim = new JTextField();
         txtIncident = new JTextField();
         txtDuration = new JTextField();
-        cbIrregularityType = new JComboBox<>(new String[]{"Tipo Irregularidad 1", "Tipo 2"});
-        cbSubtype = new JComboBox<>(new String[]{"Subtipo A", "Subtipo B"});
-        cbAction = new JComboBox<>(new String[]{"Acción Realizada 1", "Acción 2"});
+        cbIrregularityType = new JComboBox<>(new String[] {"Tipo Irregularidad 1", "Tipo 2"});
+        cbSubtype = new JComboBox<>(new String[] {"Subtipo A", "Subtipo B"});
+        cbAction = new JComboBox<>(new String[] {"Acción Realizada 1", "Acción 2"});
         txtModusOperandi = createTextArea(3, 20, 80);
         txtSupportArea = createTextArea(2, 20, 60);
         txtDetection = createTextArea(2, 20, 60);
