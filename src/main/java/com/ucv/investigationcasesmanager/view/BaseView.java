@@ -210,18 +210,19 @@ public abstract class BaseView extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = row;
-        gbc.insets = new Insets(6, 4, 6, 12);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        gbc.insets = new Insets(8, 4, 2, 4);
         gbc.anchor = GridBagConstraints.WEST;
 
         JLabel lbl = new JLabel(label + ":");
         lbl.setFont(new Font("Arial", Font.PLAIN, 12));
         form.add(lbl, gbc);
 
-        gbc.gridx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1;
+        gbc.gridy = row + 1;
+        gbc.insets = new Insets(0, 4, 8, 4);
         form.add(field, gbc);
-        return row + 1;
+        return row + 2;
     }
 
     protected JTextArea createTextArea(int rows, int cols, int preferredHeight) {

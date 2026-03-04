@@ -10,40 +10,40 @@ public class ReportDAO extends BaseDAO<Object[]> {
 
     // Obtener las empresas con mayor cantidad de casos registrados
     public List<Object[]> findTopCompaniesByCase() {
-        String sql = "SELECT COALESCE(objetivo_agraviado, 'No especificada') AS empresa, "
+        String sql = "SELECT COALESCE(objective_victim, 'No especificada') AS empresa, "
                 + "COUNT(*) AS total_casos "
-                + "FROM caso "
-                + "GROUP BY COALESCE(objetivo_agraviado, 'No especificada') "
+                + "FROM investigation_case "
+                + "GROUP BY COALESCE(objective_victim, 'No especificada') "
                 + "ORDER BY total_casos DESC, empresa ASC";
         return queryList(sql, rs -> new Object[]{rs.getString("empresa"), rs.getInt("total_casos")});
     }
 
     // Obtener los investigadores con mayor cantidad de casos asignados
     public List<Object[]> findTopInvestigatorsByCase() {
-        String sql = "SELECT u.nombre || ' ' || u.apellido AS investigador, u.cedula, "
+        String sql = "SELECT u.first_name || ' ' || u.last_name AS investigador, u.id_number, "
                 + "COUNT(c.id) AS total_casos "
-                + "FROM usuario u "
-                + "LEFT JOIN caso c ON c.id_investigador_asignado = u.id "
-                + "WHERE u.rol = 'Investigador' "
-                + "GROUP BY u.id, investigador, u.cedula "
+                + "FROM users u "
+                + "LEFT JOIN investigation_case c ON c.investigator_id = u.id "
+                + "WHERE u.role = 'Investigador' "
+                + "GROUP BY u.id, investigador, u.id_number "
                 + "ORDER BY total_casos DESC, investigador ASC";
         return queryList(sql, rs -> new Object[]{
-                rs.getString("investigador"), rs.getString("cedula"), rs.getInt("total_casos")});
+                rs.getString("investigador"), rs.getString("id_number"), rs.getInt("total_casos")});
     }
 
     // Obtener los casos que tienen más de 3 casos relacionados por subtipo de irregularidad
     public List<Object[]> findCasesWithMoreThanThreeRelated() {
-        String sql = "SELECT c.nro_expediente, "
-                + "COALESCE(CAST(c.id_subtipo_irregularidad AS TEXT), 'Sin subtipo') "
+        String sql = "SELECT c.case_number, "
+                + "COALESCE(CAST(c.irregularity_subtype_id AS TEXT), 'Sin subtipo') "
                 + "AS subtipo_relacion, r.total_relacionados "
-                + "FROM caso c "
+                + "FROM investigation_case c "
                 + "JOIN ( "
-                + "SELECT id_subtipo_irregularidad, COUNT(*) AS total_relacionados "
-                + "FROM caso GROUP BY id_subtipo_irregularidad HAVING COUNT(*) > 3 "
-                + ") r ON c.id_subtipo_irregularidad = r.id_subtipo_irregularidad "
-                + "ORDER BY r.total_relacionados DESC, c.nro_expediente ASC";
+                + "SELECT irregularity_subtype_id, COUNT(*) AS total_relacionados "
+                + "FROM investigation_case GROUP BY irregularity_subtype_id HAVING COUNT(*) > 3 "
+                + ") r ON c.irregularity_subtype_id = r.irregularity_subtype_id "
+                + "ORDER BY r.total_relacionados DESC, c.case_number ASC";
         return queryList(sql, rs -> new Object[]{
-                rs.getString("nro_expediente"), rs.getString("subtipo_relacion"),
+                rs.getString("case_number"), rs.getString("subtipo_relacion"),
                 rs.getInt("total_relacionados")});
     }
 }

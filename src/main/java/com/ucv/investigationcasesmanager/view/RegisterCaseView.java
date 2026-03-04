@@ -21,8 +21,11 @@ public class RegisterCaseView extends BaseView {
     private List<User> investigators;
 
     public RegisterCaseView() {
-        super("Registro de casos", true);
+        // Por qué: se pospone initComponents() para que caseController esté
+        // asignado antes de que loadInvestigatorsCombo() lo invoque.
+        super("Registro de casos", true, false);
         this.caseController = new CaseController();
+        initComponents();
     }
 
     @Override

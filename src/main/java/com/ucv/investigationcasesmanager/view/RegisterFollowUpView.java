@@ -54,11 +54,18 @@ public class RegisterFollowUpView extends BaseView {
 
     @Override
     protected void initComponents() {
-        setupTitle("Registrar seguimiento", null, null);
-        contentPanel.add(createCaseInfoPanel(), BorderLayout.NORTH);
-        contentPanel.add(createFollowUpFormPanel(), BorderLayout.CENTER);
+        setupTitle("Seguimiento de caso", null, null);
+
+        // Por qué: se agrupa el panel de info y el formulario en un panel
+        // central para no solaparse con el título en BorderLayout.NORTH.
+        JPanel centerPanel = new JPanel(new BorderLayout(0, 12));
+        centerPanel.setOpaque(false);
+        centerPanel.add(createCaseInfoPanel(), BorderLayout.NORTH);
+        centerPanel.add(createFollowUpFormPanel(), BorderLayout.CENTER);
+
+        contentPanel.add(centerPanel, BorderLayout.CENTER);
         contentPanel.add(
-                createBottomPanel(createPrimaryButton("Registrar seguimiento", e -> handleRegister())),
+                createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
                 BorderLayout.SOUTH);
     }
 
