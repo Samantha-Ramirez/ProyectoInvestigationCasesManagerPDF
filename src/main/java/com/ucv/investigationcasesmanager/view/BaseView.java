@@ -1,10 +1,10 @@
 package com.ucv.investigationcasesmanager.view;
 
-import com.ucv.investigationcasesmanager.factory.InicioClient;
-import com.ucv.investigationcasesmanager.model.Sesion;
-import com.ucv.investigationcasesmanager.model.Usuario;
-import com.ucv.investigationcasesmanager.ui.factory.PantallaAbstractFactory;
-import com.ucv.investigationcasesmanager.ui.factory.PantallaConcreteFactory;
+import com.ucv.investigationcasesmanager.factory.StartupViewFactory;
+import com.ucv.investigationcasesmanager.model.Session;
+import com.ucv.investigationcasesmanager.model.User;
+import com.ucv.investigationcasesmanager.ui.factory.ScreenAbstractFactory;
+import com.ucv.investigationcasesmanager.ui.factory.ScreenConcreteFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -13,142 +13,140 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /*
- * Vista base con estructura compartida y helpers para construir pantallas wireframe con FlatLaf.
+ * Vista base con estructura compartida y métodos auxiliares para construir pantallas con FlatLaf.
  */
 public abstract class BaseView extends JFrame {
-    protected Usuario usuarioActual;
-    protected JPanel panelContenido;
-    protected JPanel menuLateral;
-    protected JPanel cabecera;
-    protected DefaultTableModel modeloTabla;
-    protected JTable tabla;
-    protected JPanel panelFormulario;
-    protected JScrollPane scrollFormulario;
-    protected final PantallaAbstractFactory uiFactory;
-    private int filaActual = 0;
+    protected User currentUser;
+    protected JPanel contentPanel;
+    protected JPanel sideMenu;
+    protected JPanel header;
+    protected DefaultTableModel tableModel;
+    protected JTable table;
+    protected JPanel formPanel;
+    protected JScrollPane formScroll;
+    protected final ScreenAbstractFactory uiFactory;
+    private int currentRow = 0;
 
-    public BaseView(String titulo, Boolean mostrarMenu) {
-        this(titulo, mostrarMenu, true);
+    public BaseView(String title, Boolean showMenu) {
+        this(title, showMenu, true);
     }
 
-    public BaseView(String titulo, Boolean mostrarMenu, boolean inicializar) {
-        this.usuarioActual = Sesion.getUsuario();
-        this.uiFactory = new PantallaConcreteFactory();
+    public BaseView(String title, Boolean showMenu, boolean initialize) {
+        this.currentUser = Session.getUser();
+        this.uiFactory = new ScreenConcreteFactory();
 
-        setTitle(titulo);
+        setTitle(title);
         setSize(1100, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(242, 242, 242));
 
-        configurarCabecera();
-        if (mostrarMenu) {
-            configurarMenuLateral();
+        setupHeader();
+        if (showMenu) {
+            setupSideMenu();
         }
-        configurarPanelCentral();
+        setupContentPanel();
 
         setLocationRelativeTo(null);
 
-        if (inicializar) {
-            inicializarComponentesEspecificos();
+        if (initialize) {
+            initComponents();
         }
     }
 
-    private void configurarCabecera() {
-        cabecera = new JPanel(new BorderLayout());
-        cabecera.setBackground(uiFactory.obtenerColorPrimario());
-        cabecera.setPreferredSize(new Dimension(1100, 50));
+    private void setupHeader() {
+        header = new JPanel(new BorderLayout());
+        header.setBackground(uiFactory.getPrimaryColor());
+        header.setPreferredSize(new Dimension(1100, 50));
 
-        String infoUser = (usuarioActual != null)
-                ? usuarioActual.getNombre() + " " + usuarioActual.getApellido()
-                : "Usuario 1";
+        String userInfo =
+                (currentUser != null) ? currentUser.getFirstName() + " " + currentUser.getLastName()
+                        : "Usuario 1";
 
-        JLabel lblUser = new JLabel(infoUser + "  ");
+        JLabel lblUser = new JLabel(userInfo + "  ");
         lblUser.setForeground(Color.WHITE);
         lblUser.setFont(new Font("Arial", Font.BOLD, 13));
         lblUser.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 16));
 
-        cabecera.add(lblUser, BorderLayout.EAST);
-        add(cabecera, BorderLayout.NORTH);
+        header.add(lblUser, BorderLayout.EAST);
+        add(header, BorderLayout.NORTH);
     }
 
-    private void configurarMenuLateral() {
-        menuLateral = new JPanel();
-        menuLateral.setLayout(new BoxLayout(menuLateral, BoxLayout.Y_AXIS));
-        menuLateral.setBackground(Color.WHITE);
-        menuLateral.setPreferredSize(new Dimension(160, 0));
-        menuLateral
-                .setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(230, 230, 230)));
+    private void setupSideMenu() {
+        sideMenu = new JPanel();
+        sideMenu.setLayout(new BoxLayout(sideMenu, BoxLayout.Y_AXIS));
+        sideMenu.setBackground(Color.WHITE);
+        sideMenu.setPreferredSize(new Dimension(160, 0));
+        sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(230, 230, 230)));
 
-        menuLateral.add(Box.createVerticalStrut(12));
-        agregarBotonMenu("⌂  Inicio", e -> irAInicio());
-        agregarBotonMenu("⚑  Bandeja", e -> irAInicio());
-        agregarBotonMenu("↺  Reportes", e -> irAReportes());
-        agregarBotonMenu("⚙  Entidades", e -> irAInicio());
-        agregarBotonMenu("◌  Auditoría", e -> irAInicio());
-        menuLateral.add(Box.createVerticalGlue());
-        agregarBotonMenu("⇦  Cerrar sesión", e -> ejecutarCerrarSesion());
-        menuLateral.add(Box.createVerticalStrut(14));
+        sideMenu.add(Box.createVerticalStrut(12));
+        addMenuButton("⌂  Inicio", e -> goHome());
+        addMenuButton("⚑  Bandeja", e -> goHome());
+        addMenuButton("↺  Reportes", e -> goToReports());
+        addMenuButton("⚙  Entidades", e -> goHome());
+        addMenuButton("◌  Auditoría", e -> goHome());
+        sideMenu.add(Box.createVerticalGlue());
+        addMenuButton("⇦  Cerrar sesión", e -> handleLogout());
+        sideMenu.add(Box.createVerticalStrut(14));
 
-        add(menuLateral, BorderLayout.WEST);
+        add(sideMenu, BorderLayout.WEST);
     }
 
-    private void agregarBotonMenu(String texto, ActionListener accion) {
-        JButton btn = uiFactory.crearBotonMenu(texto, accion);
+    private void addMenuButton(String text, ActionListener action) {
+        JButton btn = uiFactory.createMenuButton(text, action);
         btn.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 0));
-        menuLateral.add(btn);
-        menuLateral.add(Box.createVerticalStrut(2));
+        sideMenu.add(btn);
+        sideMenu.add(Box.createVerticalStrut(2));
     }
 
-    private void irAInicio() {
-        configurarVista(this, InicioClient.obtenerInicio(usuarioActual.getRol()));
+    private void goHome() {
+        navigate(this, StartupViewFactory.getStartView(currentUser.getRole()));
     }
 
-    private void irAReportes() {
-        configurarVista(this, new ReportesView());
+    private void goToReports() {
+        navigate(this, new ReportsView());
     }
 
-    private void ejecutarCerrarSesion() {
+    private void handleLogout() {
         int confirm = JOptionPane.showConfirmDialog(this, "¿Desea cerrar la sesión actual?",
                 "Salir", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            Sesion.cerrarSesion();
-            configurarVista(this, new InicioSesionView());
+            Session.logout();
+            navigate(this, new LoginView());
         }
     }
 
-    private void configurarPanelCentral() {
-        panelContenido = new JPanel(new BorderLayout(12, 12));
-        panelContenido.setBackground(Color.WHITE);
-        panelContenido.setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
-        add(panelContenido, BorderLayout.CENTER);
+    private void setupContentPanel() {
+        contentPanel = new JPanel(new BorderLayout(12, 12));
+        contentPanel.setBackground(Color.WHITE);
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
+        add(contentPanel, BorderLayout.CENTER);
     }
 
-    protected void configurarTituloSuperior(String tituloSeccion, String textoBoton,
-            ActionListener accion) {
-        JPanel panelSuperior = new JPanel(new BorderLayout());
-        panelSuperior.setOpaque(false);
+    protected void setupTitle(String sectionTitle, String buttonText, ActionListener action) {
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setOpaque(false);
 
-        JLabel lblTitulo = new JLabel(tituloSeccion);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
-        panelSuperior.add(lblTitulo, BorderLayout.WEST);
+        JLabel lblTitle = new JLabel(sectionTitle);
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        topPanel.add(lblTitle, BorderLayout.WEST);
 
-        if (textoBoton != null && accion != null) {
-            panelSuperior.add(crearBotonEncabezado(textoBoton, accion), BorderLayout.EAST);
+        if (buttonText != null && action != null) {
+            topPanel.add(createHeaderButton(buttonText, action), BorderLayout.EAST);
         }
 
-        panelContenido.add(panelSuperior, BorderLayout.NORTH);
+        contentPanel.add(topPanel, BorderLayout.NORTH);
     }
 
-    protected JButton crearBotonEncabezado(String texto, ActionListener accion) {
-        return uiFactory.crearBotonEncabezado(texto, accion);
+    protected JButton createHeaderButton(String text, ActionListener action) {
+        return uiFactory.createHeaderButton(text, action);
     }
 
-    protected JButton crearBotonPrimario(String texto, ActionListener accion) {
-        return uiFactory.crearBotonPrimario(texto, accion);
+    protected JButton createPrimaryButton(String text, ActionListener action) {
+        return uiFactory.createPrimaryButton(text, action);
     }
 
-    protected JPanel crearTarjeta() {
+    protected JPanel createCard() {
         JPanel card = new JPanel(new BorderLayout(0, 10));
         card.setBackground(Color.WHITE);
         card.setBorder(BorderFactory.createCompoundBorder(
@@ -157,211 +155,208 @@ public abstract class BaseView extends JFrame {
         return card;
     }
 
-    protected JPanel crearBarraAcciones(String textoInfo, JButton botonDerecha) {
-        JPanel barra = new JPanel(new BorderLayout());
-        barra.setOpaque(false);
+    protected JPanel createActionBar(String infoText, JButton rightButton) {
+        JPanel bar = new JPanel(new BorderLayout());
+        bar.setOpaque(false);
 
-        if (textoInfo != null && !textoInfo.isBlank()) {
-            JLabel lblInfo = new JLabel(textoInfo);
+        if (infoText != null && !infoText.isBlank()) {
+            JLabel lblInfo = new JLabel(infoText);
             lblInfo.setFont(new Font("Arial", Font.PLAIN, 12));
             lblInfo.setForeground(new Color(95, 95, 95));
-            barra.add(lblInfo, BorderLayout.WEST);
+            bar.add(lblInfo, BorderLayout.WEST);
         }
 
-        if (botonDerecha != null) {
-            barra.add(botonDerecha, BorderLayout.EAST);
+        if (rightButton != null) {
+            bar.add(rightButton, BorderLayout.EAST);
         }
 
-        return barra;
+        return bar;
     }
 
-    protected JScrollPane crearTabla(String[] columnas) {
-        modeloTabla = new DefaultTableModel(columnas, 0) {
+    protected JScrollPane createTable(String[] columns) {
+        tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
 
-        tabla = new JTable(modeloTabla);
-        tabla.setRowHeight(34);
-        tabla.getTableHeader().setReorderingAllowed(false);
-        uiFactory.estilizarTabla(tabla);
+        table = new JTable(tableModel);
+        table.setRowHeight(34);
+        table.getTableHeader().setReorderingAllowed(false);
+        uiFactory.styleTable(table);
 
-        if (columnas.length > 2 && "Status".equalsIgnoreCase(columnas[2])) {
-            tabla.getColumnModel().getColumn(2).setCellRenderer(new StatusBadgeRenderer());
+        if (columns.length > 2 && "Status".equalsIgnoreCase(columns[2])) {
+            table.getColumnModel().getColumn(2).setCellRenderer(new StatusBadgeRenderer());
         }
 
-        JScrollPane scroll = new JScrollPane(tabla);
+        JScrollPane scroll = new JScrollPane(table);
         scroll.setBorder(BorderFactory.createLineBorder(new Color(236, 236, 236)));
         scroll.getViewport().setBackground(Color.WHITE);
         return scroll;
     }
 
-    protected void configurarTabla(String[] columnas) {
-        panelContenido.add(crearTabla(columnas), BorderLayout.CENTER);
+    protected void setupTable(String[] columns) {
+        contentPanel.add(createTable(columns), BorderLayout.CENTER);
     }
 
-    protected JPanel crearFormularioEtiquetado() {
+    protected JPanel createForm() {
         JPanel form = new JPanel(new GridBagLayout());
         form.setOpaque(false);
         return form;
     }
 
-    protected int agregarCampoEtiquetado(JPanel form, int fila, String etiqueta, JComponent campo) {
+    protected int addField(JPanel form, int row, String label, JComponent field) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = fila;
-        gbc.insets = new Insets(6, 4, 6, 12);
-        gbc.anchor = GridBagConstraints.WEST;
-
-        JLabel label = new JLabel(etiqueta + ":");
-        label.setFont(new Font("Arial", Font.PLAIN, 12));
-        form.add(label, gbc);
-
-        gbc.gridx = 1;
+        gbc.gridy = row;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
-        form.add(campo, gbc);
-        return fila + 1;
+        gbc.insets = new Insets(8, 4, 2, 4);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        JLabel lbl = new JLabel(label + ":");
+        lbl.setFont(new Font("Arial", Font.PLAIN, 12));
+        form.add(lbl, gbc);
+
+        gbc.gridy = row + 1;
+        gbc.insets = new Insets(0, 4, 8, 4);
+        form.add(field, gbc);
+        return row + 2;
     }
 
-    protected JTextArea crearAreaTextoEstilizada(int filas, int columnas, int altoPreferido) {
-        JTextArea area = new JTextArea(filas, columnas);
+    protected JTextArea createTextArea(int rows, int cols, int preferredHeight) {
+        JTextArea area = new JTextArea(rows, cols);
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
         area.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
         area.setBackground(new Color(237, 237, 237));
-        area.setPreferredSize(new Dimension(420, altoPreferido));
+        area.setPreferredSize(new Dimension(420, preferredHeight));
         area.setFont(new Font("Arial", Font.PLAIN, 12));
         return area;
     }
 
-    protected JScrollPane envolverEnScroll(JComponent componente) {
-        JScrollPane scroll = new JScrollPane(componente);
+    protected JScrollPane wrapInScroll(JComponent component) {
+        JScrollPane scroll = new JScrollPane(component);
         scroll.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 230)));
         scroll.getViewport().setBackground(Color.WHITE);
         return scroll;
     }
 
-    protected void estilizarEntrada(JComponent component) {
-        uiFactory.estilizarTexto(component);
+    protected void styleInput(JComponent component) {
+        uiFactory.styleInput(component);
     }
 
-    protected JPanel crearPanelAccionesInferior(JButton... botones) {
+    protected JPanel createBottomPanel(JButton... buttons) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 8));
         panel.setOpaque(false);
-        for (JButton boton : botones) {
-            if (boton != null) {
-                panel.add(boton);
+        for (JButton btn : buttons) {
+            if (btn != null) {
+                panel.add(btn);
             }
         }
         return panel;
     }
 
-    protected void configurarFormulario() {
-        panelFormulario = new JPanel(new GridBagLayout());
-        panelFormulario.setOpaque(false);
-        filaActual = 0;
+    protected void setupFormPanel() {
+        formPanel = new JPanel(new GridBagLayout());
+        formPanel.setOpaque(false);
+        currentRow = 0;
 
-        scrollFormulario = new JScrollPane(panelFormulario);
-        scrollFormulario.setBorder(null);
-        scrollFormulario.getViewport().setBackground(Color.WHITE);
-        scrollFormulario.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollFormulario.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollFormulario.getVerticalScrollBar().setUnitIncrement(16);
+        formScroll = new JScrollPane(formPanel);
+        formScroll.setBorder(null);
+        formScroll.getViewport().setBackground(Color.WHITE);
+        formScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        formScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        formScroll.getVerticalScrollBar().setUnitIncrement(16);
 
-        panelContenido.add(scrollFormulario, BorderLayout.CENTER);
+        contentPanel.add(formScroll, BorderLayout.CENTER);
     }
 
-    protected void configurarVista(JFrame vistaActual, JFrame vistaNueva) {
-        vistaActual.dispose();
-        vistaNueva.setVisible(true);
+    protected void navigate(JFrame current, JFrame next) {
+        current.dispose();
+        next.setVisible(true);
     }
 
-    protected void agregarCampoFormulario(JComponent componente) {
+    protected void addFormField(JComponent component) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = filaActual++;
+        gbc.gridy = currentRow++;
         gbc.insets = new Insets(6, 10, 6, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
 
-        if (componente instanceof JTextField || componente instanceof JTextArea
-                || componente instanceof JComboBox<?>) {
-            configurarEstiloYPlaceholder(componente);
+        if (component instanceof JTextField || component instanceof JTextArea
+                || component instanceof JComboBox<?>) {
+            stylePlaceholder(component);
         }
 
-        panelFormulario.add(componente, gbc);
-        panelFormulario.revalidate();
+        formPanel.add(component, gbc);
+        formPanel.revalidate();
     }
 
-    private void configurarEstiloYPlaceholder(JComponent componente) {
-        uiFactory.estilizarTexto(componente);
+    private void stylePlaceholder(JComponent component) {
+        uiFactory.styleInput(component);
 
-        if (!(componente instanceof JTextField || componente instanceof JTextArea)) {
+        if (!(component instanceof JTextField || component instanceof JTextArea)) {
             return;
         }
 
-        componente.setForeground(Color.GRAY);
-        String placeholder =
-                (componente instanceof JTextField) ? ((JTextField) componente).getText()
-                        : ((JTextArea) componente).getText();
+        component.setForeground(Color.GRAY);
+        String placeholder = (component instanceof JTextField) ? ((JTextField) component).getText()
+                : ((JTextArea) component).getText();
 
-        componente.addFocusListener(new java.awt.event.FocusAdapter() {
+        component.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
-                String textoActual =
-                        (componente instanceof JTextField) ? ((JTextField) componente).getText()
-                                : ((JTextArea) componente).getText();
-
-                if (textoActual.equals(placeholder)) {
-                    if (componente instanceof JTextField) {
-                        ((JTextField) componente).setText("");
+                String current =
+                        (component instanceof JTextField) ? ((JTextField) component).getText()
+                                : ((JTextArea) component).getText();
+                if (current.equals(placeholder)) {
+                    if (component instanceof JTextField) {
+                        ((JTextField) component).setText("");
                     } else {
-                        ((JTextArea) componente).setText("");
+                        ((JTextArea) component).setText("");
                     }
-                    componente.setForeground(Color.BLACK);
+                    component.setForeground(Color.BLACK);
                 }
             }
 
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
-                String textoActual =
-                        (componente instanceof JTextField) ? ((JTextField) componente).getText()
-                                : ((JTextArea) componente).getText();
-
-                if (textoActual.isEmpty()) {
-                    if (componente instanceof JTextField) {
-                        ((JTextField) componente).setText(placeholder);
+                String current =
+                        (component instanceof JTextField) ? ((JTextField) component).getText()
+                                : ((JTextArea) component).getText();
+                if (current.isEmpty()) {
+                    if (component instanceof JTextField) {
+                        ((JTextField) component).setText(placeholder);
                     } else {
-                        ((JTextArea) componente).setText(placeholder);
+                        ((JTextArea) component).setText(placeholder);
                     }
-                    componente.setForeground(Color.GRAY);
+                    component.setForeground(Color.GRAY);
                 }
             }
         });
     }
 
-    protected void agregarBotonAccionPrincipal(String texto, ActionListener accion) {
-        panelContenido.add(crearPanelAccionesInferior(crearBotonPrimario(texto, accion)),
-                BorderLayout.SOUTH);
+    protected void addPrimaryButton(String text, ActionListener action) {
+        contentPanel.add(createBottomPanel(createPrimaryButton(text, action)), BorderLayout.SOUTH);
     }
 
-    protected JButton crearBotonRedondeado(String texto, Color colorFondo, ActionListener accion) {
-        JButton boton = uiFactory.crearBotonEncabezado(texto, accion);
-        boton.setBackground(colorFondo);
-        return boton;
+    protected JButton createRoundedButton(String text, Color bgColor, ActionListener action) {
+        JButton btn = uiFactory.createHeaderButton(text, action);
+        btn.setBackground(bgColor);
+        return btn;
     }
 
-    protected abstract void inicializarComponentesEspecificos();
+    protected abstract void initComponents();
 
     private class StatusBadgeRenderer implements TableCellRenderer {
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-            JLabel badge = uiFactory.crearEstatusIcono(String.valueOf(value));
+        public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
+                boolean hasFocus, int row, int column) {
+            JLabel badge = uiFactory.createStatusBadge(String.valueOf(value));
             if (isSelected) {
                 badge.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(new Color(185, 170, 212)),
