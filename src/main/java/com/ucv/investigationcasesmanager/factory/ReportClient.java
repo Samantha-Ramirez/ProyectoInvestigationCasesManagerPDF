@@ -1,7 +1,8 @@
 package com.ucv.investigationcasesmanager.factory;
 
 /**
- * PDyF: Client that uses the Factory Method to obtain the appropriate report.
+ * PDyF: Cliente que utiliza el Factory Method para obtener el reporte correspondiente al tipo
+ * solicitado por el usuario.
  */
 public class ReportClient {
     private ReportClient() {}

@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.List;
 
 /*
- * Reports view.
+ * Vista de reportes - permite seleccionar y generar reportes estadísticos del sistema.
  */
 public class ReportsView extends BaseView {
     private final ReportController reportController;

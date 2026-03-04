@@ -5,7 +5,7 @@ import com.ucv.investigationcasesmanager.model.User;
 import com.ucv.investigationcasesmanager.service.ServiceLocator;
 
 /*
- * Controller for login operations.
+ * Controlador para las operaciones de inicio de sesión.
  */
 public class LoginController {
     private final LoginDAO loginDAO;

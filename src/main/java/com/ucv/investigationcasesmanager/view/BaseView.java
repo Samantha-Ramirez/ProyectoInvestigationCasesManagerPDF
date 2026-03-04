@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /*
- * Base view with shared structure and helpers for building screens with FlatLaf.
+ * Vista base con estructura compartida y métodos auxiliares para construir pantallas con FlatLaf.
  */
 public abstract class BaseView extends JFrame {
     protected User currentUser;

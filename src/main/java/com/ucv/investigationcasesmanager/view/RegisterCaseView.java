@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.List;
 
 /*
- * Case registration view - collects form data and delegates to CaseController.
+ * Vista de registro de casos - recopila datos del formulario y delega al CaseController.
  */
 public class RegisterCaseView extends BaseView {
     private final CaseController caseController;

@@ -5,15 +5,18 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /*
- * PDyF: DAO for CaseFollowUp entity operations.
+ * PDyF: DAO que maneja las operaciones de acceso a datos relacionadas con los
+ * seguimientos de casos, incluyendo registro, consulta y actualización de estatus.
  */
 public class CaseFollowUpDAO extends BaseDAO<CaseFollowUp> {
 
+    // Obtener todos los seguimientos de un caso ordenados del más reciente al más antiguo
     public List<CaseFollowUp> findByCaseId(int caseId) {
         String sql = "SELECT * FROM seguimiento WHERE id_caso = ? ORDER BY fecha_registro DESC";
         return queryList(sql, this::mapFollowUp, caseId);
     }
 
+    // Guardar un nuevo seguimiento en la base de datos
     public boolean save(CaseFollowUp followUp) {
         String sql = "INSERT INTO seguimiento ("
                 + "id_caso, id_investigador, fecha_registro, actividades_realizadas, "
@@ -28,11 +31,13 @@ public class CaseFollowUpDAO extends BaseDAO<CaseFollowUp> {
                 followUp.getConclusions()) > 0;
     }
 
+    // Actualizar el estatus del caso al registrar un nuevo seguimiento
     public boolean updateCaseStatus(int caseId, String status) {
         String sql = "UPDATE caso SET estatus = ? WHERE id = ?";
         return execute(sql, status, caseId) > 0;
     }
 
+    // Mapear una fila del ResultSet a un objeto CaseFollowUp
     private CaseFollowUp mapFollowUp(java.sql.ResultSet rs) throws java.sql.SQLException {
         CaseFollowUp f = new CaseFollowUp();
         f.setId(rs.getInt("id"));

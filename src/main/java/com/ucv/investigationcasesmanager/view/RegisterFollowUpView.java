@@ -11,7 +11,8 @@ import java.awt.*;
 import java.time.LocalDateTime;
 
 /*
- * Follow-up registration view - collects form data and delegates all logic to CaseFollowUpController.
+ * Vista de registro de seguimiento - recopila datos del formulario y delega al
+ * CaseFollowUpController toda la validación y persistencia.
  */
 public class RegisterFollowUpView extends BaseView {
     private final Case currentCase;

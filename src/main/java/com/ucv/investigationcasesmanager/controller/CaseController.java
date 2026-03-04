@@ -11,7 +11,8 @@ import com.ucv.investigationcasesmanager.service.ServiceLocator;
 import java.util.List;
 
 /*
- * Controller for Case operations. Contains all validation and business logic.
+ * Controlador para las operaciones sobre casos. Contiene toda la validación y lógica de negocio
+ * relacionada con el registro y consulta de casos.
  */
 public class CaseController {
     private final CaseDAO caseDAO;
@@ -35,8 +36,8 @@ public class CaseController {
     }
 
     /**
-     * Builds a Case from form data, validates via mediator, and saves it.
-     * @return null on success, or an error message string on failure
+     * Construye un objeto Case a partir del formulario, lo valida mediante el mediador y lo guarda.
+     * @return null si el registro fue exitoso, o un mensaje de error en caso de fallo
      */
     public String registerCase(CaseFormData data, User currentUser) {
         if (data.investigatorId <= 0) {

@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * PDyF: Concrete factory that implements consistent UI component styling.
+ * PDyF: Fábrica concreta que implementa el estilo visual definido en los wireframes del sistema.
  */
 public class ScreenConcreteFactory extends ScreenAbstractFactory {
     private static final Color PRIMARY = new Color(125, 21, 175);

@@ -6,7 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /*
- * PDyF: Singleton that manages the database connection.
+ * PDyF: Singleton que gestiona la conexión a la base de datos SQLite.
+ * Se reutiliza la misma instancia mientras la conexión esté activa.
  */
 public class DatabaseConnection {
     private static Connection instance = null;
@@ -20,14 +21,15 @@ public class DatabaseConnection {
                 Class.forName("org.sqlite.JDBC");
                 instance = DriverManager.getConnection(URL);
                 configurePragmas(instance);
-                System.out.println("Database connection established.");
+                System.out.println("Conexión a la base de datos establecida.");
             } catch (ClassNotFoundException e) {
-                throw new SQLException("SQLite driver not found in Maven classpath.", e);
+                throw new SQLException("No se encontró el driver de SQLite en el classpath de Maven.", e);
             }
         }
         return instance;
     }
 
+    // Activar claves foráneas en SQLite (desactivadas por defecto)
     private static void configurePragmas(Connection conn) throws SQLException {
         try (Statement stmt = conn.createStatement()) {
             stmt.execute("PRAGMA foreign_keys = ON;");
@@ -38,9 +40,9 @@ public class DatabaseConnection {
         if (instance != null) {
             try {
                 instance.close();
-                System.out.println("Database connection closed.");
+                System.out.println("Conexión a la base de datos cerrada.");
             } catch (SQLException e) {
-                System.err.println("Error closing connection: " + e.getMessage());
+                System.err.println("Error al cerrar la conexión: " + e.getMessage());
             }
         }
     }

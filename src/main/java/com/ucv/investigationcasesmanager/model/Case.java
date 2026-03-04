@@ -1,5 +1,8 @@
 package com.ucv.investigationcasesmanager.model;
 
+/*
+ * Modelo que representa un caso de investigación.
+ */
 public class Case {
     private int id;
     private String caseNumber;

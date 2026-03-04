@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * PDyF: Service Locator pattern - centralizes service creation and access.
+ * PDyF: Service Locator - centraliza la creación y acceso a los servicios (DAOs) del sistema.
+ * Evita instanciar múltiples veces los mismos objetos de acceso a datos.
  */
 public final class ServiceLocator {
     private static final Map<Class<?>, Object> SERVICES = new HashMap<>();
@@ -16,11 +17,12 @@ public final class ServiceLocator {
         return type.cast(service);
     }
 
+    // Por qué: Se usa reflexión para evitar dependencias directas entre ServiceLocator y cada DAO
     private static Object newInstance(Class<?> type) {
         try {
             return type.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            throw new IllegalStateException("Could not create service: " + type.getName(), e);
+            throw new IllegalStateException("No se pudo crear el servicio: " + type.getName(), e);
         }
     }
 }

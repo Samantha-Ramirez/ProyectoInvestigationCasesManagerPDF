@@ -5,7 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * PDyF: Abstract Factory pattern - creates UI components with a consistent visual style.
+ * PDyF: Patrón Abstract Factory - define la interfaz para crear componentes visuales con un
+ * estilo consistente en toda la aplicación.
  */
 public abstract class ScreenAbstractFactory {
     public abstract JButton createHeaderButton(String text, ActionListener action);

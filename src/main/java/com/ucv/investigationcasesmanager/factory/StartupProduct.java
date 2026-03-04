@@ -3,16 +3,16 @@ package com.ucv.investigationcasesmanager.factory;
 import com.ucv.investigationcasesmanager.view.BaseView;
 
 /**
- * PDyF: Factory Method pattern - decides which startup view to show based on user role.
+ * PDyF: Patrón Factory Method - decide qué vista de inicio mostrar según el rol del usuario.
  */
 
-// Abstract product
+// Producto abstracto
 public abstract class StartupProduct {
     public abstract BaseView getView();
 }
 
 
-// Concrete product for Investigator role
+// Producto concreto para el rol Investigador
 class InboxStartupProduct extends StartupProduct {
     @Override
     public BaseView getView() {
@@ -21,7 +21,7 @@ class InboxStartupProduct extends StartupProduct {
 }
 
 
-// Concrete product for Administrator role
+// Producto concreto para el rol Administrador
 class BoardStartupProduct extends StartupProduct {
     @Override
     public BaseView getView() {

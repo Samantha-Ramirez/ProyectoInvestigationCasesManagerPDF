@@ -8,7 +8,7 @@ import com.ucv.investigationcasesmanager.service.ServiceLocator;
 import java.util.List;
 
 /*
- * Controller for report operations.
+ * Controlador para las operaciones de generación de reportes estadísticos.
  */
 public class ReportController {
     private final ReportDAO reportDAO;

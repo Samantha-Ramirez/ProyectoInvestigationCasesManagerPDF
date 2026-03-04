@@ -1,5 +1,9 @@
 package com.ucv.investigationcasesmanager.dto;
 
+/*
+ * DTO que contiene los datos del formulario de registro de caso.
+ * La vista lo completa y el controlador lo utiliza para construir y guardar el objeto Case.
+ */
 public class CaseFormData {
     public String caseNumber;
     public String mobileAffected;

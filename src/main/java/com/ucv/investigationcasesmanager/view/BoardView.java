@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 /*
- * Board view for administrators - shows all cases.
+ * Vista de cartelera para administradores - muestra todos los casos del sistema.
  */
 public class BoardView extends BaseView {
     private static final int ACTION_COLUMN = 3;

@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 /*
- * Inbox view for investigators - shows cases assigned to the current user.
+ * Vista de bandeja para investigadores - muestra los casos asignados al usuario actual.
  */
 public class InboxView extends BaseView {
     private static final int ACTION_COLUMN = 3;

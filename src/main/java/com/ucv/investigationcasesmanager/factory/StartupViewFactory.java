@@ -3,7 +3,8 @@ package com.ucv.investigationcasesmanager.factory;
 import com.ucv.investigationcasesmanager.view.BaseView;
 
 /**
- * PDyF: Client that uses the Factory Method to obtain the startup view based on user role.
+ * PDyF: Cliente que utiliza el Factory Method para obtener la vista de inicio según el rol del
+ * usuario autenticado.
  */
 public class StartupViewFactory {
     private StartupViewFactory() {}

@@ -4,10 +4,10 @@ import com.ucv.investigationcasesmanager.dao.ReportDAO;
 import java.util.List;
 
 /**
- * PDyF: Factory Method pattern - resolves which report to generate based on requested type.
+ * PDyF: Patrón Factory Method - resuelve qué tipo de reporte generar según el tipo solicitado.
  */
 
-// Abstract product
+// Producto abstracto
 public abstract class ReportProduct {
     public abstract String getName();
     public abstract String[] getColumns();
@@ -15,7 +15,7 @@ public abstract class ReportProduct {
 }
 
 
-// Concrete product for companies with most cases
+// Producto concreto: empresas con mayor cantidad de casos
 class CompaniesReportProduct extends ReportProduct {
     @Override
     public String getName() { return "Empresas con mayores casos"; }
@@ -30,7 +30,7 @@ class CompaniesReportProduct extends ReportProduct {
 }
 
 
-// Concrete product for investigators with most cases
+// Producto concreto: investigadores con mayor cantidad de casos
 class InvestigatorsReportProduct extends ReportProduct {
     @Override
     public String getName() { return "Investigadores con mayores casos"; }
@@ -45,7 +45,7 @@ class InvestigatorsReportProduct extends ReportProduct {
 }
 
 
-// Concrete product for cases with more than 3 related cases
+// Producto concreto: casos con más de 3 casos relacionados
 class RelatedCasesReportProduct extends ReportProduct {
     @Override
     public String getName() { return "Casos con más de 3 casos relacionados"; }

@@ -3,7 +3,7 @@ package com.ucv.investigationcasesmanager.mediator;
 import com.ucv.investigationcasesmanager.model.User;
 
 /**
- * PDyF: Mediator pattern - concrete colleague for user data.
+ * PDyF: Patrón Mediator - colega concreto que porta los datos del usuario que realiza el registro.
  */
 public class UserRegistrationColleague extends RegistrationColleague {
     private final User user;

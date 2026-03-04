@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.List;
 
 /*
- * Case detail view - shows case info and follow-up history.
+ * Vista de detalle de caso - muestra la información del caso y el historial de seguimientos.
  */
 public class CaseDetailView extends BaseView {
     private final Case currentCase;

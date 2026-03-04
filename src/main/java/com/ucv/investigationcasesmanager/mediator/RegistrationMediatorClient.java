@@ -4,7 +4,8 @@ import com.ucv.investigationcasesmanager.model.Case;
 import com.ucv.investigationcasesmanager.model.User;
 
 /**
- * PDyF: Mediator pattern - client that orchestrates validation and preparation of a case.
+ * PDyF: Patrón Mediator - cliente que orquesta la validación y preparación de un caso
+ * antes de su persistencia, desacoplando la lógica del controlador.
  */
 public final class RegistrationMediatorClient {
     private RegistrationMediatorClient() {}

@@ -1,10 +1,10 @@
 package com.ucv.investigationcasesmanager.factory;
 
 /**
- * PDyF: Factory Method pattern - creators for report products.
+ * PDyF: Patrón Factory Method - creadores concretos para cada tipo de producto de reporte.
  */
 
-// Abstract creator
+// Creador abstracto
 public abstract class ReportCreator {
     public abstract ReportProduct factoryMethod();
 }

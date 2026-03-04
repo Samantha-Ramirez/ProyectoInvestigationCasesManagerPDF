@@ -3,7 +3,7 @@ package com.ucv.investigationcasesmanager.ui;
 import javax.swing.*;
 
 /*
- * Configures FlatLaf look and feel.
+ * Configura el Look and Feel de la aplicación usando FlatLaf.
  */
 public final class ThemeConfig {
     private ThemeConfig() {}
@@ -18,7 +18,7 @@ public final class ThemeConfig {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception ex) {
-                // ignore
+                // ignorar: si FlatLaf no está disponible se usa el look nativo del sistema
             }
         }
     }

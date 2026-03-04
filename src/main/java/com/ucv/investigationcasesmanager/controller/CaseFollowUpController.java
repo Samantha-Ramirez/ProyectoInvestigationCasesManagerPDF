@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /*
- * Controller for CaseFollowUp operations. Contains all validation and business logic.
+ * Controlador para las operaciones sobre seguimientos de casos. Contiene toda la validación
+ * y lógica de negocio relacionada con el registro de seguimientos.
  */
 public class CaseFollowUpController {
     private final CaseFollowUpDAO followUpDAO;
@@ -32,8 +33,8 @@ public class CaseFollowUpController {
     }
 
     /**
-     * Validates, builds, and saves a follow-up record, then updates case status.
-     * @return null on success, or an error message string on failure
+     * Valida, construye y guarda un seguimiento, luego actualiza el estatus del caso.
+     * @return null si el registro fue exitoso, o un mensaje de error en caso de fallo
      */
     public String registerFollowUp(FollowUpFormData data) {
         if (data.activities == null || data.activities.trim().isEmpty()) {

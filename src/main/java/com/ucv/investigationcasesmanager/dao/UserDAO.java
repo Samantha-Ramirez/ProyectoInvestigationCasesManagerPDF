@@ -4,15 +4,17 @@ import com.ucv.investigationcasesmanager.model.User;
 import java.util.List;
 
 /*
- * DAO for user-related operations.
+ * PDyF: DAO para operaciones de acceso a datos de usuarios del sistema.
  */
 public class UserDAO extends BaseDAO<User> {
 
+    // Obtener todos los investigadores registrados en el sistema
     public List<User> findInvestigators() {
         String sql = "SELECT id, nombre, apellido FROM usuario WHERE rol = 'Investigador'";
         return queryList(sql, this::mapUser);
     }
 
+    // Mapear una fila del ResultSet a un objeto User
     private User mapUser(java.sql.ResultSet rs) throws java.sql.SQLException {
         User u = new User();
         u.setId(rs.getInt("id"));

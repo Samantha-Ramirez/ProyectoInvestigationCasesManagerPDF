@@ -5,7 +5,7 @@ import com.ucv.investigationcasesmanager.view.LoginView;
 import javax.swing.SwingUtilities;
 
 /*
- * Application entry point.
+ * Punto de entrada de la aplicación.
  */
 public class App {
     public static void main(String[] args) {

@@ -2,6 +2,9 @@ package com.ucv.investigationcasesmanager.model;
 
 import java.time.LocalDateTime;
 
+/*
+ * Modelo que representa un seguimiento registrado sobre un caso de investigación.
+ */
 public class CaseFollowUp {
     private int id;
     private int caseId;

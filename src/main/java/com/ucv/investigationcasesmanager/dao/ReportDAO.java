@@ -3,10 +3,12 @@ package com.ucv.investigationcasesmanager.dao;
 import java.util.List;
 
 /*
- * PDyF: DAO for report-related queries.
+ * PDyF: DAO que maneja las consultas para la generación de reportes estadísticos
+ * sobre casos, investigadores y empresas.
  */
 public class ReportDAO extends BaseDAO<Object[]> {
 
+    // Obtener las empresas con mayor cantidad de casos registrados
     public List<Object[]> findTopCompaniesByCase() {
         String sql = "SELECT COALESCE(objetivo_agraviado, 'No especificada') AS empresa, "
                 + "COUNT(*) AS total_casos "
@@ -16,6 +18,7 @@ public class ReportDAO extends BaseDAO<Object[]> {
         return queryList(sql, rs -> new Object[]{rs.getString("empresa"), rs.getInt("total_casos")});
     }
 
+    // Obtener los investigadores con mayor cantidad de casos asignados
     public List<Object[]> findTopInvestigatorsByCase() {
         String sql = "SELECT u.nombre || ' ' || u.apellido AS investigador, u.cedula, "
                 + "COUNT(c.id) AS total_casos "
@@ -28,6 +31,7 @@ public class ReportDAO extends BaseDAO<Object[]> {
                 rs.getString("investigador"), rs.getString("cedula"), rs.getInt("total_casos")});
     }
 
+    // Obtener los casos que tienen más de 3 casos relacionados por subtipo de irregularidad
     public List<Object[]> findCasesWithMoreThanThreeRelated() {
         String sql = "SELECT c.nro_expediente, "
                 + "COALESCE(CAST(c.id_subtipo_irregularidad AS TEXT), 'Sin subtipo') "

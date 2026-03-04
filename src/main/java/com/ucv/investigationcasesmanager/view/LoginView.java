@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /*
- * Login view.
+ * Vista de inicio de sesión.
  */
 public class LoginView extends BaseView {
     private final LoginController loginController;

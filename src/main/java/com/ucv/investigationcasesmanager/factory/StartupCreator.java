@@ -1,10 +1,10 @@
 package com.ucv.investigationcasesmanager.factory;
 
 /**
- * PDyF: Factory Method pattern - creators for startup view products.
+ * PDyF: Patrón Factory Method - creadores concretos para cada vista de inicio según el rol.
  */
 
-// Abstract creator
+// Creador abstracto
 public abstract class StartupCreator {
     public abstract StartupProduct factoryMethod();
 }
