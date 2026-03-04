@@ -1,15 +1,15 @@
 package com.ucv.investigationcasesmanager;
 
-import com.ucv.investigationcasesmanager.ui.ConfiguradorTema;
-import com.ucv.investigationcasesmanager.view.InicioSesionView;
+import com.ucv.investigationcasesmanager.ui.ThemeConfig;
+import com.ucv.investigationcasesmanager.view.LoginView;
 import javax.swing.SwingUtilities;
 
 /*
- * Iniciar la aplicación.
+ * Application entry point.
  */
 public class App {
     public static void main(String[] args) {
-        ConfiguradorTema.setup();
-        SwingUtilities.invokeLater(() -> new InicioSesionView().setVisible(true));
+        ThemeConfig.setup();
+        SwingUtilities.invokeLater(() -> new LoginView().setVisible(true));
     }
 }
