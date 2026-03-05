@@ -1,0 +1,12 @@
+{
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "redhat.java",
+    "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/master/eclipse-java-google-style.xml",
+    "java.format.settings.profile": "GoogleStyle",
+    "[java]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
+    },
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.dependency.syncWithFolderExplorer": true,
+}
