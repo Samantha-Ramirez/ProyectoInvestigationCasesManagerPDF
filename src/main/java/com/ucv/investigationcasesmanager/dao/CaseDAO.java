@@ -20,10 +20,13 @@ public class CaseDAO extends BaseDAO<Case> {
 
     // Obtener todos los casos del sistema (para administradores)
     public List<Case> findAll() {
-        String sql = "SELECT case_number, status, "
-                + "CAST(CAST((julianday('now') - julianday(start_date)) AS INTEGER) AS TEXT)"
-                + " || ' días sin atención' AS time_without_attention " + "FROM investigation_case";
-        return queryList(sql, this::mapSummary);
+        String sql = "SELECT ic.case_number, ic.status, "
+                + "CAST(CAST((julianday('now') - julianday(ic.start_date)) AS INTEGER) AS TEXT)"
+                + " || ' días sin atención' AS time_without_attention, "
+                + "COALESCE(u.first_name || ' ' || u.last_name, 'Sin asignar') AS investigator_name "
+                + "FROM investigation_case ic "
+                + "LEFT JOIN user u ON u.id = ic.investigator_id";
+        return queryList(sql, this::mapSummaryWithInvestigator);
     }
 
     // Obtener el detalle completo de un caso por número de expediente
@@ -65,6 +68,13 @@ public class CaseDAO extends BaseDAO<Case> {
         c.setCaseNumber(rs.getString("case_number"));
         c.setStatus(rs.getString("status"));
         c.setTimeWithoutAttention(rs.getString("time_without_attention"));
+        return c;
+    }
+
+    // Mapear una fila del ResultSet a un objeto Case (resumen con nombre de investigador)
+    private Case mapSummaryWithInvestigator(java.sql.ResultSet rs) throws java.sql.SQLException {
+        Case c = mapSummary(rs);
+        c.setInvestigatorName(rs.getString("investigator_name"));
         return c;
     }
 

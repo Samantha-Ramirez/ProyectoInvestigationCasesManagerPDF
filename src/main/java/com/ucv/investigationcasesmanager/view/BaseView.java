@@ -216,11 +216,11 @@ public abstract class BaseView extends JFrame {
             table.getColumnModel().getColumn(2).setCellRenderer(new StatusBadgeRenderer());
         }
 
-        // Por qué: la columna "Acción" muestra un ícono de vista (ojo) en lugar del texto "Ver",
-        // para que sea coherente con el ícono de edición en EntityListView.
+        // Por qué: la columna "Acción" muestra un ícono de edición en lugar del texto "Ver",
+        // coherente con el ícono de edición de EntityListView.
         for (int i = 0; i < columns.length; i++) {
             if ("Acción".equalsIgnoreCase(columns[i])) {
-                table.getColumnModel().getColumn(i).setCellRenderer(new ViewIconRenderer(uiFactory.getPrimaryColor()));
+                table.getColumnModel().getColumn(i).setCellRenderer(new EditIconRenderer(uiFactory.getPrimaryColor()));
                 table.getColumnModel().getColumn(i).setMaxWidth(52);
                 table.getColumnModel().getColumn(i).setMinWidth(52);
                 break;
@@ -419,22 +419,24 @@ public abstract class BaseView extends JFrame {
         }
     }
 
-    // Por qué: renderizador de la celda "Acción" con ícono de ojo (Java2D) para indicar "Ver
-    // detalle". Se evita \u29BF porque Arial no lo incluye y se vería como cuadrado vacío.
-    private static class ViewIconRenderer implements TableCellRenderer {
+    // Por qué: renderizador de la celda "Acción" con ícono de edición (✎) para indicar
+    // "Editar/Ver detalle", coherente con el ícono en EntityListView.
+    private static class EditIconRenderer implements TableCellRenderer {
         private final Color primaryColor;
 
-        ViewIconRenderer(Color primaryColor) {
+        EditIconRenderer(Color primaryColor) {
             this.primaryColor = primaryColor;
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
                 boolean hasFocus, int row, int col) {
-            JLabel lbl = new JLabel(SideMenuIcon.eye(), SwingConstants.CENTER);
+            JLabel lbl = new JLabel("✎", SwingConstants.CENTER);
+            lbl.setFont(new Font("Arial", Font.PLAIN, 16));
+            lbl.setForeground(primaryColor);
+            lbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
             lbl.setOpaque(true);
             lbl.setBackground(isSelected ? new Color(242, 236, 247) : Color.WHITE);
-            lbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
             return lbl;
         }
     }

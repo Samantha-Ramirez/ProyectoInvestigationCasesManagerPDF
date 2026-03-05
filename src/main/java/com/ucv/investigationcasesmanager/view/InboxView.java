@@ -61,7 +61,7 @@ public class InboxView extends BaseView {
         List<Case> cases = caseController.getCasesForInvestigator(userId);
         for (Case c : cases) {
             tableModel.addRow(new Object[] {c.getCaseNumber(), c.getTimeWithoutAttention(),
-                    c.getStatus(), "Ver"});
+                    c.getStatus(), "✎"});
         }
     }
 }

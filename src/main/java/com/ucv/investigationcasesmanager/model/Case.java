@@ -24,6 +24,7 @@ public class Case {
     private String observations;
     private String support;
     private int investigatorId;
+    private String investigatorName;
     private int caseTypeId;
     private int irregularityTypeId;
     private int irregularitySubtypeId;
@@ -189,6 +190,14 @@ public class Case {
 
     public void setInvestigatorId(int investigatorId) {
         this.investigatorId = investigatorId;
+    }
+
+    public String getInvestigatorName() {
+        return investigatorName;
+    }
+
+    public void setInvestigatorName(String investigatorName) {
+        this.investigatorName = investigatorName;
     }
 
     public int getCaseTypeId() {
