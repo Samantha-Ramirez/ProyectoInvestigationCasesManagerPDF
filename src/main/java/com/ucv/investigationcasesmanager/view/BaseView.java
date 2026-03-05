@@ -419,9 +419,9 @@ public abstract class BaseView extends JFrame {
         }
     }
 
-    // Por qué: renderizador de la celda "Acción" con ícono de ojo para indicar "Ver detalle",
-    // coherente con EditIconRenderer de EntityListView (misma familia de íconos Unicode).
-    private static class ViewIconRenderer extends javax.swing.table.DefaultTableCellRenderer {
+    // Por qué: renderizador de la celda "Acción" con ícono de ojo (Java2D) para indicar "Ver
+    // detalle". Se evita \u29BF porque Arial no lo incluye y se vería como cuadrado vacío.
+    private static class ViewIconRenderer implements TableCellRenderer {
         private final Color primaryColor;
 
         ViewIconRenderer(Color primaryColor) {
@@ -431,12 +431,10 @@ public abstract class BaseView extends JFrame {
         @Override
         public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
                 boolean hasFocus, int row, int col) {
-            JLabel lbl = new JLabel("\u29BF", SwingConstants.CENTER);
-            lbl.setFont(new Font("Arial", Font.PLAIN, 16));
-            lbl.setForeground(primaryColor);
-            lbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            JLabel lbl = new JLabel(SideMenuIcon.eye(), SwingConstants.CENTER);
             lbl.setOpaque(true);
             lbl.setBackground(isSelected ? new Color(242, 236, 247) : Color.WHITE);
+            lbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
             return lbl;
         }
     }

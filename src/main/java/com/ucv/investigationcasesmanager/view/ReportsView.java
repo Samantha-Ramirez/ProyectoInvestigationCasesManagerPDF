@@ -15,12 +15,13 @@ public class ReportsView extends BaseView {
     private final ReportController reportController;
     private final String reportType;
 
-    // Por qué: el tipo de reporte se elige en el popup del menú (BaseView.showReportsPopup)
-    // para cumplir con el flujo UC08 que indica selección desde el menú, no desde la pantalla.
+    // Por qué: se usa initialize=false para que initComponents() no se dispare dentro de super()
+    // antes de que reportController esté asignado, evitando el NullPointerException en generateReport().
     public ReportsView(String reportType) {
-        super("Reportes", true);
+        super("Reportes", true, false);
         this.reportController = new ReportController();
         this.reportType = reportType;
+        initComponents();
     }
 
     @Override

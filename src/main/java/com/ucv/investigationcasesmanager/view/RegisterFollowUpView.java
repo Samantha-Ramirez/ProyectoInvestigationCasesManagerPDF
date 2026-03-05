@@ -1,13 +1,18 @@
 package com.ucv.investigationcasesmanager.view;
 
 import com.ucv.investigationcasesmanager.controller.CaseFollowUpController;
+import com.ucv.investigationcasesmanager.controller.EntityController;
 import com.ucv.investigationcasesmanager.dto.FollowUpFormData;
 import com.ucv.investigationcasesmanager.factory.StartupViewFactory;
+import com.ucv.investigationcasesmanager.iterator.EntityIterator;
 import com.ucv.investigationcasesmanager.model.Case;
+import com.ucv.investigationcasesmanager.model.EntityType;
+import com.ucv.investigationcasesmanager.model.SystemEntity;
 import com.ucv.investigationcasesmanager.model.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -17,8 +22,10 @@ import java.util.List;
 public class RegisterFollowUpView extends BaseView {
     private final Case currentCase;
     private final CaseFollowUpController followUpController;
+    private final EntityController entityController;
 
-    private JTextArea txtActivities;
+    private JComboBox<String> cbActivities;
+    private List<SystemEntity> activityTypes;
     private JTextField txtInvolvedPersons;
     private JTextField txtAmount;
     private JComboBox<String> cbStatus;
@@ -29,6 +36,7 @@ public class RegisterFollowUpView extends BaseView {
         super("Cargando...", true, false);
         this.currentCase = caseObj;
         this.followUpController = new CaseFollowUpController();
+        this.entityController = new EntityController();
 
         if (currentCase == null) {
             JOptionPane.showMessageDialog(this, "Error: Caso no válido.", "Error",
@@ -62,19 +70,21 @@ public class RegisterFollowUpView extends BaseView {
         JPanel card = createCard();
         JPanel form = createForm();
 
+        activityTypes = new ArrayList<>();
+        cbActivities = loadActivityCombo();
         cbStatus = new JComboBox<>(new String[] {"Seguimiento", "Cerrado", "Reabierto"});
         cbInvestigator = loadInvestigatorsCombo();
-        txtActivities = createTextArea(4, 30, 90);
         txtInvolvedPersons = new JTextField();
         txtAmount = new JTextField("0.00");
 
+        styleInput(cbActivities);
         styleInput(cbStatus);
         styleInput(cbInvestigator);
         styleInput(txtInvolvedPersons);
         styleInput(txtAmount);
 
         int row = 0;
-        row = addField(form, row, "Actividades Realizadas", wrapInScroll(txtActivities));
+        row = addField(form, row, "Actuaciones / Actividades Realizadas", cbActivities);
         row = addField(form, row, "Personas Involucradas", txtInvolvedPersons);
         row = addField(form, row, "Monto Expuesto", txtAmount);
         row = addField(form, row, "Status", cbStatus);
@@ -82,6 +92,22 @@ public class RegisterFollowUpView extends BaseView {
 
         card.add(wrapInScroll(form), BorderLayout.CENTER);
         return card;
+    }
+
+    // PDyF: Iterator – puebla el combo de actividades usando EntityIterator para recorrer
+    // las entidades sin exponer cómo están almacenadas internamente (UC09/UC05).
+    private JComboBox<String> loadActivityCombo() {
+        JComboBox<String> combo = new JComboBox<>();
+        EntityIterator<SystemEntity> it = entityController.getIterator(EntityType.PERFORMED_ACTIVITY);
+        while (it.hasNext()) {
+            SystemEntity entity = it.next();
+            activityTypes.add(entity);
+            combo.addItem(entity.getName());
+        }
+        if (activityTypes.isEmpty()) {
+            combo.addItem("Sin registros");
+        }
+        return combo;
     }
 
     private JComboBox<String> loadInvestigatorsCombo() {
@@ -113,7 +139,18 @@ public class RegisterFollowUpView extends BaseView {
 
     private void handleRegister() {
         FollowUpFormData data = new FollowUpFormData();
-        data.activities = txtActivities.getText();
+
+        // Por qué: si hay actividades registradas se usa el nombre de la entidad seleccionada;
+        // si la lista está vacía se avisa al usuario para que registre actividades primero.
+        int actIdx = cbActivities.getSelectedIndex();
+        if (activityTypes.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "No hay Actividades Realizadas disponibles. Registre al menos una en Entidades.",
+                    "Datos incompletos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        data.activities = activityTypes.get(actIdx).getName();
+
         data.involvedPersons = txtInvolvedPersons.getText();
         data.amountText = txtAmount.getText();
         data.status = (String) cbStatus.getSelectedItem();

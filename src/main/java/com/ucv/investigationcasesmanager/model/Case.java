@@ -19,7 +19,8 @@ public class Case {
     private String supportArea;
     private String detectionOrigin;
     private String fraudDiagnosis;
-    private String conclusionsRecommendations;
+    private String conclusions;
+    private String recommendations;
     private String observations;
     private String support;
     private int investigatorId;
@@ -150,12 +151,20 @@ public class Case {
         this.fraudDiagnosis = fraudDiagnosis;
     }
 
-    public String getConclusionsRecommendations() {
-        return conclusionsRecommendations;
+    public String getConclusions() {
+        return conclusions;
     }
 
-    public void setConclusionsRecommendations(String conclusionsRecommendations) {
-        this.conclusionsRecommendations = conclusionsRecommendations;
+    public void setConclusions(String conclusions) {
+        this.conclusions = conclusions;
+    }
+
+    public String getRecommendations() {
+        return recommendations;
+    }
+
+    public void setRecommendations(String recommendations) {
+        this.recommendations = recommendations;
     }
 
     public String getObservations() {

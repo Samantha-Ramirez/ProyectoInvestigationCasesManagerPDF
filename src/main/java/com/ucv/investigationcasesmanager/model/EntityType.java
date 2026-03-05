@@ -12,10 +12,12 @@ public enum EntityType {
     PERFORMED_PROCESS("Procesos Realizados", "performed_process"),
     INVESTIGATOR("Investigadores", null),
     COMPANY("Empresas", "company"),
-    RECORD_SUBTYPE("Subtipo de Ficha", "record_subtype"),
+    CASE_TYPE("Tipos de Casos", "case_type"),
+    CASE_SUBTYPE("Subtipo de Casos", "record_subtype"),
     IRREGULARITY_TYPE("Tipo de Irregularidad", "irregularity_type"),
     IRREGULARITY_SUBTYPE("Subtipo de Irregularidad", "irregularity_subtype"),
-    CASE_ORIGIN("Procedencia Casos", "case_origin");
+    CASE_ORIGIN("Procedencia Casos", "case_origin"),
+    PERFORMED_ACTIVITY("Actividades Realizadas", "performed_activity");
 
     private final String label;
     private final String tableName;

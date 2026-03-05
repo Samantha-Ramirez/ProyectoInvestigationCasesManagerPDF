@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS investigation_case (
     detection_origin            TEXT,
     fraud_diagnosis             TEXT,
     conclusions_recommendations TEXT,
+    recommendations             TEXT,
     observations                TEXT,
     support                     TEXT,
     investigator_id             INTEGER,
@@ -93,7 +94,7 @@ CREATE TABLE IF NOT EXISTS company (
 
 CREATE TABLE IF NOT EXISTS record_subtype (
     id   INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT NOT NULL  -- Por qué: renombrado a "Subtipo de Casos" en EntityType (UC09)
 );
 
 CREATE TABLE IF NOT EXISTS irregularity_type (
@@ -109,6 +110,16 @@ CREATE TABLE IF NOT EXISTS irregularity_subtype (
 );
 
 CREATE TABLE IF NOT EXISTS case_origin (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS case_type (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS performed_activity (
     id   INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL
 );

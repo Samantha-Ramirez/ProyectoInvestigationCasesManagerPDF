@@ -34,6 +34,9 @@ public final class SideMenuIcon {
     /** Ícono de flecha de salida para "Cerrar sesión". */
     public static Icon logout() { return new LogoutIcon(); }
 
+    /** Ícono de ojo para la columna "Acción" de las tablas. */
+    public static Icon eye() { return new EyeIcon(); }
+
     // ─────────────────────────────────────────────────────────────────────────
     // Base
     // ─────────────────────────────────────────────────────────────────────────
@@ -196,6 +199,30 @@ public final class SideMenuIcon {
             g2.drawLine(11, 2, 16, 2);    // borde superior
             g2.drawLine(16, 2, 16, 16);   // borde derecho (vertical)
             g2.drawLine(11, 16, 16, 16);  // borde inferior
+
+            g2.dispose();
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Eye (ojo abierto: arco superior + arco inferior + pupila)
+    // ─────────────────────────────────────────────────────────────────────────
+    private static final class EyeIcon extends BaseIcon {
+        @Override
+        public void paintIcon(Component c, Graphics g, int x, int y) {
+            Graphics2D g2 = setup(g, x, y);
+            g2.setStroke(new BasicStroke(1.8f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
+            // Por qué: el ojo se dibuja como dos arcos curvos que forman una almendra,
+            // más una pupila rellena en el centro, sin depender de fuentes Unicode.
+            GeneralPath lid = new GeneralPath();
+            lid.moveTo(1, 9);
+            lid.quadTo(9, 2, 17, 9);   // arco superior
+            lid.quadTo(9, 16, 1, 9);   // arco inferior
+            g2.draw(lid);
+
+            // Pupila
+            g2.fillOval(6, 6, 6, 6);
 
             g2.dispose();
         }

@@ -48,9 +48,15 @@ public class RegistrationConcreteMediator extends RegistrationMediator {
             c.setStatus("Abierto");
         }
 
+        // Por qué: solo se auto-completa la fecha de inicio y el mes si el usuario
+        // no los ingresó en el formulario, para respetar valores explícitos del operador.
         Calendar cal = Calendar.getInstance();
-        c.setStartDate(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
-        c.setMonth(cal.get(Calendar.MONTH) + 1);
+        if (c.getStartDate() == null || c.getStartDate().isBlank()) {
+            c.setStartDate(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+        }
+        if (c.getMonth() == 0) {
+            c.setMonth(cal.get(Calendar.MONTH) + 1);
+        }
 
         return true;
     }
