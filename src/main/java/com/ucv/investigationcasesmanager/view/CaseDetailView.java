@@ -45,6 +45,22 @@ public class CaseDetailView extends BaseView {
             });
             contentPanel.add(createBottomPanel(btnNewFollowUp), BorderLayout.SOUTH);
         }
+
+        // Botón de reabrir caso (solo para administradores)
+        if ("Administrador".equals(currentUser.getRole())
+                && "Cerrado".equals(currentCase.getStatus())) {
+            JButton btnReopen = createPrimaryButton("Reabrir Caso", e -> {
+                new ReopenCaseView().setVisible(true);
+                dispose();
+            });
+            // btnReopen.setBackground(new Color(242, 242, 242));
+            contentPanel.add(createBottomPanel(btnReopen), BorderLayout.SOUTH);
+
+            // bottomPanel.add(btnReopen);
+        }
+
+        // contentPanel.add(bottomPanel, BorderLayout.SOUTH);
+
     }
 
     private void goBack() {
