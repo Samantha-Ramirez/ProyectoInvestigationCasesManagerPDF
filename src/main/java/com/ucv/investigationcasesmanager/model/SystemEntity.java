@@ -1,7 +1,7 @@
 package com.ucv.investigationcasesmanager.model;
 
 /*
- * Modelo genérico para los catálogos del sistema (entidades simples con id y nombre).
+ * Modelo para los catálogos del sistema.
  */
 public class SystemEntity {
     private int id;

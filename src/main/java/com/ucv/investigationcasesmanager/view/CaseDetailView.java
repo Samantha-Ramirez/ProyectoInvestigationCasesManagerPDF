@@ -121,6 +121,7 @@ public class CaseDetailView extends BaseView {
         followUpTable.getTableHeader().setReorderingAllowed(false);
         uiFactory.styleTable(followUpTable);
 
+        followUpTable.getColumnModel().getColumn(1).setCellRenderer(createStatusBadgeRenderer());
         followUpTable.getColumnModel().getColumn(2).setMaxWidth(100);
         followUpTable.getColumnModel().getColumn(2).setMinWidth(80);
 

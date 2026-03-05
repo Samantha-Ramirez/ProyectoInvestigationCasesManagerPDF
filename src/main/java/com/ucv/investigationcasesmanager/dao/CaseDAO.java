@@ -11,7 +11,7 @@ public class CaseDAO extends BaseDAO<Case> {
 
     // Obtener los casos asignados a un investigador específico
     public List<Case> findByInvestigator(int userId) {
-        String sql = "SELECT case_number, status, "
+        String sql = "SELECT case_number, status, start_date, "
                 + "CAST(CAST((julianday('now') - julianday(start_date)) AS INTEGER) AS TEXT)"
                 + " || ' días sin atención' AS time_without_attention "
                 + "FROM investigation_case WHERE investigator_id = ?";
@@ -20,7 +20,7 @@ public class CaseDAO extends BaseDAO<Case> {
 
     // Obtener todos los casos del sistema (para administradores)
     public List<Case> findAll() {
-        String sql = "SELECT ic.case_number, ic.status, "
+        String sql = "SELECT ic.case_number, ic.status, ic.start_date, "
                 + "CAST(CAST((julianday('now') - julianday(ic.start_date)) AS INTEGER) AS TEXT)"
                 + " || ' días sin atención' AS time_without_attention, "
                 + "COALESCE(u.first_name || ' ' || u.last_name, 'Sin asignar') AS investigator_name "
@@ -61,6 +61,7 @@ public class CaseDAO extends BaseDAO<Case> {
         Case c = new Case();
         c.setCaseNumber(rs.getString("case_number"));
         c.setStatus(rs.getString("status"));
+        c.setStartDate(rs.getString("start_date"));
         c.setTimeWithoutAttention(rs.getString("time_without_attention"));
         return c;
     }

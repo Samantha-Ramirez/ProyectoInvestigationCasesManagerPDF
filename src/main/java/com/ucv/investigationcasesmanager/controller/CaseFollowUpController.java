@@ -41,7 +41,7 @@ public class CaseFollowUpController {
     }
 
     /**
-     * Valida, construye y guarda un seguimiento, luego actualiza el estatus del caso.
+     * Validar construir y guardar un seguimiento, luego actualizar el estatus del caso.
      *
      * @return null si el registro fue exitoso, o un mensaje de error en caso de fallo
      */

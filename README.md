@@ -54,4 +54,12 @@ Proyecto realizado para la asignatura "Patrones de Diseño y Frameworks" (Semest
 *   **María Miranda**
 *   **Samantha Ramírez**
 
+## 📑 Documentación
+
+*   **Prototipo de interfaz:** ![Prototipo de interfaz](./docs/Prototipo%20de%20interfaz.pdf)
+*   **Requisitos funcionales, Requisitos no funcionales, Diagrama de casos de uso, Diagramas de secuencia, Soporte de la metodología, Diagrama de clases:** ![Documento inicial de respaldo](./docs/Documento%20inicial%20de%20respaldo.pdf)
+*   **Base de Datos:** SQLite
+
+---
+
 --------------------------------------------------------------------------------

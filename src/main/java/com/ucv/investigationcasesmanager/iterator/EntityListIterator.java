@@ -14,14 +14,14 @@ public class EntityListIterator<T> extends EntityIterator<T> {
         this.items = items;
     }
 
-    // Regresa el primer elemento y posiciona el cursor al inicio
+    // Regresar el primer elemento y posiciona el cursor al inicio
     @Override
     public T first() {
         current = 0;
         return items.isEmpty() ? null : items.get(0);
     }
 
-    // Avanza al siguiente elemento; retorna null si la colección se ha agotado
+    // Avanzar al siguiente elemento; retorna null si la colección se ha agotado
     @Override
     public T next() {
         current++;

@@ -85,10 +85,14 @@ public abstract class BaseView extends JFrame {
         addMenuButton(SideMenuIcon.home(), "Inicio", e -> goHome());
         addMenuButton(SideMenuIcon.download(), "Reportes",
                 e -> showReportsPopup((JButton) e.getSource()));
-        addMenuButton(SideMenuIcon.tag(), "Auditoría", e -> goHome());
+        // Solo el Administrador puede acceder a las trazas de auditoría
+        if (currentUser != null && !"Investigador".equalsIgnoreCase(currentUser.getRole())) {
+            addMenuButton(SideMenuIcon.tag(), "Auditoría", e -> navigate(this, new AuditView()));
+        }
         addMenuButton(SideMenuIcon.plusCircle(), "Entidades",
                 e -> showEntitiesPopup((JButton) e.getSource()));
-        addMenuButton(SideMenuIcon.trash(), "Archivos Negados", e -> goHome());
+        addMenuButton(SideMenuIcon.trash(), "Archivos Negados",
+                e -> showDeniedFilesPopup((JButton) e.getSource()));
         sideMenu.add(Box.createVerticalGlue());
         addMenuButton(SideMenuIcon.logout(), "Cerrar sesión", e -> handleLogout());
         sideMenu.add(Box.createVerticalStrut(14));
@@ -128,6 +132,22 @@ public abstract class BaseView extends JFrame {
             item.addActionListener(e -> navigate(this, new EntityListView(type)));
             popup.add(item);
         }
+        popup.show(source, source.getWidth(), 0);
+    }
+
+    private void showDeniedFilesPopup(JButton source) {
+        JPopupMenu popup = new JPopupMenu();
+
+        JMenuItem itemPersons = new JMenuItem("Personal Amonestado-Desincorporado");
+        itemPersons.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 13));
+        itemPersons.addActionListener(e -> navigate(this, new DeniedPersonListView()));
+        popup.add(itemPersons);
+
+        JMenuItem itemEquipments = new JMenuItem("Seriales de Equipos Robados");
+        itemEquipments.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 13));
+        itemEquipments.addActionListener(e -> navigate(this, new StolenEquipmentListView()));
+        popup.add(itemEquipments);
+
         popup.show(source, source.getWidth(), 0);
     }
 
@@ -210,8 +230,10 @@ public abstract class BaseView extends JFrame {
         table.getTableHeader().setReorderingAllowed(false);
         uiFactory.styleTable(table);
 
-        if (columns.length > 2 && "Status".equalsIgnoreCase(columns[2])) {
-            table.getColumnModel().getColumn(2).setCellRenderer(new StatusBadgeRenderer());
+        for (int i = 0; i < columns.length; i++) {
+            if ("Status".equalsIgnoreCase(columns[i]) || "Estatus".equalsIgnoreCase(columns[i])) {
+                table.getColumnModel().getColumn(i).setCellRenderer(new StatusBadgeRenderer());
+            }
         }
 
         for (int i = 0; i < columns.length; i++) {
@@ -384,6 +406,21 @@ public abstract class BaseView extends JFrame {
     }
 
     protected abstract void initComponents();
+
+    protected javax.swing.table.TableCellRenderer createStatusBadgeRenderer() {
+        return new StatusBadgeRenderer();
+    }
+
+    // Extraer el número de días del texto "N días sin atención"
+    protected int extractDays(String timeWithoutAttention) {
+        if (timeWithoutAttention == null)
+            return 0;
+        try {
+            return Integer.parseInt(timeWithoutAttention.split(" ")[0]);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
 
     private class StatusBadgeRenderer implements TableCellRenderer {
         @Override

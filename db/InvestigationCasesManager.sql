@@ -109,6 +109,30 @@ CREATE TABLE IF NOT EXISTS performed_activity (
     name TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS audit_log (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    username    TEXT    NOT NULL,
+    action      TEXT    NOT NULL,
+    action_date TEXT    NOT NULL DEFAULT (datetime('now', 'localtime'))
+);
+
+CREATE TABLE IF NOT EXISTS denied_person (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    ci         TEXT    NOT NULL,
+    first_name TEXT    NOT NULL,
+    last_name  TEXT    NOT NULL,
+    company    TEXT
+);
+
+CREATE TABLE IF NOT EXISTS stolen_equipment (
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    serial         TEXT NOT NULL,
+    equipment_type TEXT,
+    brand          TEXT,
+    model          TEXT,
+    observations   TEXT
+);
+
 INSERT INTO user (first_name, last_name, id_number, email, role)
 VALUES ('Samantha', 'Ramirez', '31307714', 'samantha@gmail.com', 'Administrador'),
        ('María',    'Miranda', '30243278', 'maria@gmail.com',    'Investigador');
