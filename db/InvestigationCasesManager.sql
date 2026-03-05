@@ -16,10 +16,9 @@ CREATE TABLE IF NOT EXISTS user (
 );
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Tabla: case  (reemplaza a: investigation_case)
--- ADVERTENCIA: "case" es palabra reservada en SQL; usar siempre entre comillas dobles.
+-- Tabla: investigation_case  (reemplaza a: caso)
 -- ─────────────────────────────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS "case" (
+CREATE TABLE IF NOT EXISTS investigation_case (
     id                          INTEGER PRIMARY KEY AUTOINCREMENT,
     case_number                 TEXT,
     start_date                  TEXT NOT NULL,
@@ -60,7 +59,7 @@ CREATE TABLE IF NOT EXISTS case_follow_up (
     observations         TEXT,
     recommendations      TEXT,
     conclusions          TEXT,
-    FOREIGN KEY (case_id)         REFERENCES "case"(id),
+    FOREIGN KEY (case_id)         REFERENCES investigation_case(id),
     FOREIGN KEY (investigator_id) REFERENCES user(id)
 );
 

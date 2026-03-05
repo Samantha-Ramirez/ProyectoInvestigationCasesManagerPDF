@@ -4,6 +4,7 @@ import com.ucv.investigationcasesmanager.factory.StartupViewFactory;
 import com.ucv.investigationcasesmanager.model.EntityType;
 import com.ucv.investigationcasesmanager.model.Session;
 import com.ucv.investigationcasesmanager.model.User;
+import com.ucv.investigationcasesmanager.ui.SideMenuIcon;
 import com.ucv.investigationcasesmanager.ui.factory.ScreenAbstractFactory;
 import com.ucv.investigationcasesmanager.ui.factory.ScreenConcreteFactory;
 
@@ -81,21 +82,21 @@ public abstract class BaseView extends JFrame {
         sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(230, 230, 230)));
 
         sideMenu.add(Box.createVerticalStrut(12));
-        addMenuButton("\u2302  Inicio", e -> goHome());
-        addMenuButton("\u2B07  Reportes", e -> showReportsPopup((JButton) e.getSource()));
-        addMenuButton("\u25C8  Auditoría", e -> goHome());
-        addMenuButton("\u2295  Entidades", e -> showEntitiesPopup((JButton) e.getSource()));
-        addMenuButton("\u29C1  Archivos Negados", e -> goHome());
+        addMenuButton(SideMenuIcon.home(),        "Inicio",           e -> goHome());
+        addMenuButton(SideMenuIcon.download(),    "Reportes",         e -> showReportsPopup((JButton) e.getSource()));
+        addMenuButton(SideMenuIcon.tag(),         "Auditoría",        e -> goHome());
+        addMenuButton(SideMenuIcon.plusCircle(),  "Entidades",        e -> showEntitiesPopup((JButton) e.getSource()));
+        addMenuButton(SideMenuIcon.trash(),       "Archivos Negados", e -> goHome());
         sideMenu.add(Box.createVerticalGlue());
-        addMenuButton("\u21A6  Cerrar sesión", e -> handleLogout());
+        addMenuButton(SideMenuIcon.logout(),      "Cerrar sesión",    e -> handleLogout());
         sideMenu.add(Box.createVerticalStrut(14));
 
         add(sideMenu, BorderLayout.WEST);
     }
 
-    private void addMenuButton(String text, ActionListener action) {
-        JButton btn = uiFactory.createMenuButton(text, action);
-        btn.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 0));
+    private void addMenuButton(Icon icon, String text, ActionListener action) {
+        JButton btn = uiFactory.createMenuButton(icon, text, action);
+        btn.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 0));
         sideMenu.add(btn);
         sideMenu.add(Box.createVerticalStrut(2));
     }

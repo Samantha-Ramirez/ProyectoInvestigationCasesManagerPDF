@@ -11,7 +11,7 @@ public class ReportDAO extends BaseDAO<Object[]> {
     // Obtener las empresas con mayor cantidad de casos registrados
     public List<Object[]> findTopCompaniesByCase() {
         String sql = "SELECT COALESCE(objective_victim, 'No especificada') AS empresa, "
-                + "COUNT(*) AS total_casos " + "FROM \"case\" "
+                + "COUNT(*) AS total_casos " + "FROM investigation_case "
                 + "GROUP BY COALESCE(objective_victim, 'No especificada') "
                 + "ORDER BY total_casos DESC, empresa ASC";
         return queryList(sql,
@@ -22,7 +22,7 @@ public class ReportDAO extends BaseDAO<Object[]> {
     public List<Object[]> findTopInvestigatorsByCase() {
         String sql = "SELECT u.first_name || ' ' || u.last_name AS investigador, u.id_number, "
                 + "COUNT(c.id) AS total_casos " + "FROM user u "
-                + "LEFT JOIN \"case\" c ON c.investigator_id = u.id "
+                + "LEFT JOIN investigation_case c ON c.investigator_id = u.id "
                 + "WHERE u.role = 'Investigador' " + "GROUP BY u.id, investigador, u.id_number "
                 + "ORDER BY total_casos DESC, investigador ASC";
         return queryList(sql, rs -> new Object[] {rs.getString("investigador"),
@@ -33,9 +33,9 @@ public class ReportDAO extends BaseDAO<Object[]> {
     public List<Object[]> findCasesWithMoreThanThreeRelated() {
         String sql = "SELECT c.case_number, "
                 + "COALESCE(CAST(c.irregularity_subtype_id AS TEXT), 'Sin subtipo') "
-                + "AS subtipo_relacion, r.total_relacionados " + "FROM \"case\" c "
+                + "AS subtipo_relacion, r.total_relacionados " + "FROM investigation_case c "
                 + "JOIN ( " + "SELECT irregularity_subtype_id, COUNT(*) AS total_relacionados "
-                + "FROM \"case\" GROUP BY irregularity_subtype_id HAVING COUNT(*) > 3 "
+                + "FROM investigation_case GROUP BY irregularity_subtype_id HAVING COUNT(*) > 3 "
                 + ") r ON c.irregularity_subtype_id = r.irregularity_subtype_id "
                 + "ORDER BY r.total_relacionados DESC, c.case_number ASC";
         return queryList(sql, rs -> new Object[] {rs.getString("case_number"),

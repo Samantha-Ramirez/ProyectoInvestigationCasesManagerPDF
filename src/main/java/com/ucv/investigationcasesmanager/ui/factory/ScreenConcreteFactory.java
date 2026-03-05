@@ -32,13 +32,26 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
 
     @Override
     public JButton createMenuButton(String text, ActionListener action) {
-        JButton btn = new JButton(text);
+        return buildMenuButton(null, text, action);
+    }
+
+    // Por qué: sobrecarga con ícono para que el menú lateral muestre íconos vectoriales
+    // alineados a la izquierda del texto, tal como muestran los wireframes del sistema.
+    @Override
+    public JButton createMenuButton(Icon icon, String text, ActionListener action) {
+        return buildMenuButton(icon, text, action);
+    }
+
+    private JButton buildMenuButton(Icon icon, String text, ActionListener action) {
+        JButton btn = new JButton(text, icon);
         btn.setAlignmentX(Component.LEFT_ALIGNMENT);
         btn.setBorderPainted(false);
         btn.setContentAreaFilled(false);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btn.setHorizontalAlignment(SwingConstants.LEFT);
+        btn.setHorizontalTextPosition(SwingConstants.RIGHT);
+        btn.setIconTextGap(8);
         btn.setFont(new Font("Arial", Font.PLAIN, 13));
         btn.setMaximumSize(new Dimension(170, 36));
         btn.setForeground(new Color(67, 67, 67));
