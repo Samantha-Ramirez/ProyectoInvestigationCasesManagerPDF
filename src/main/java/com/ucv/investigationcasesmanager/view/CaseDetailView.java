@@ -72,7 +72,6 @@ public class CaseDetailView extends BaseView {
                 new JLabel(currentCase.getObjectiveVictim() != null
                         ? currentCase.getObjectiveVictim()
                         : "N/A"));
-
         card.add(form, BorderLayout.CENTER);
         return card;
     }

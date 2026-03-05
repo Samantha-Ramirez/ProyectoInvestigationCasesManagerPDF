@@ -4,6 +4,7 @@ import com.ucv.investigationcasesmanager.controller.ReportController;
 import com.ucv.investigationcasesmanager.factory.ReportProduct;
 
 import javax.swing.*;
+import java.awt.BorderLayout;
 import java.util.List;
 
 /*
@@ -27,8 +28,8 @@ public class ReportsView extends BaseView {
         setupTitle("Reporte: " + reportType, null, null);
 
         JPanel card = createCard();
-        card.add(createTable(new String[] {"Reporte", "Resultado"}), java.awt.BorderLayout.CENTER);
-        contentPanel.add(card, java.awt.BorderLayout.CENTER);
+        card.add(createTable(new String[] {"Reporte", "Resultado"}), BorderLayout.CENTER);
+        contentPanel.add(card, BorderLayout.CENTER);
 
         generateReport();
     }

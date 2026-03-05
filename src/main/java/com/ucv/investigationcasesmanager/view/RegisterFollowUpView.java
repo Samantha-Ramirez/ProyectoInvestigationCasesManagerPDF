@@ -13,7 +13,6 @@ import java.util.List;
 /*
  * Vista de registro de seguimiento de casos (UC05) - diseño alineado con el wireframe:
  * campos Actividades Realizadas, Personas Involucradas, Monto Expuesto, Status e Investigador.
- * PDyF: Iterator – usa EntityIterator para poblar el combo de actividades realizadas (UC13).
  */
 public class RegisterFollowUpView extends BaseView {
     private final Case currentCase;
