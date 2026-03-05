@@ -8,29 +8,27 @@ import com.ucv.investigationcasesmanager.model.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDateTime;
+import java.util.List;
 
 /*
- * Vista de registro de seguimiento - recopila datos del formulario y delega al
- * CaseFollowUpController toda la validación y persistencia.
+ * Vista de registro de seguimiento de casos (UC05) - diseño alineado con el wireframe:
+ * campos Actividades Realizadas, Personas Involucradas, Monto Expuesto, Status e Investigador.
+ * PDyF: Iterator – usa EntityIterator para poblar el combo de actividades realizadas (UC13).
  */
 public class RegisterFollowUpView extends BaseView {
     private final Case currentCase;
-    private final User currentInvestigator;
     private final CaseFollowUpController followUpController;
 
     private JTextArea txtActivities;
-    private JTextArea txtInvolvedPersons;
+    private JTextField txtInvolvedPersons;
     private JTextField txtAmount;
     private JComboBox<String> cbStatus;
-    private JTextArea txtObservations;
-    private JTextArea txtRecommendations;
-    private JTextArea txtConclusions;
+    private JComboBox<String> cbInvestigator;
+    private List<User> investigators;
 
     public RegisterFollowUpView(Case caseObj, User investigator) {
         super("Cargando...", true, false);
         this.currentCase = caseObj;
-        this.currentInvestigator = investigator;
         this.followUpController = new CaseFollowUpController();
 
         if (currentCase == null) {
@@ -48,76 +46,70 @@ public class RegisterFollowUpView extends BaseView {
             return;
         }
 
-        setTitle("Registrar Seguimiento - Expediente: " + caseObj.getCaseNumber());
+        setTitle("Seguimiento de casos - Expediente: " + caseObj.getCaseNumber());
         initComponents();
     }
 
     @Override
     protected void initComponents() {
-        setupTitle("Seguimiento de caso", null, null);
-
-        // Por qué: se agrupa el panel de info y el formulario en un panel
-        // central para no solaparse con el título en BorderLayout.NORTH.
-        JPanel centerPanel = new JPanel(new BorderLayout(0, 12));
-        centerPanel.setOpaque(false);
-        centerPanel.add(createCaseInfoPanel(), BorderLayout.NORTH);
-        centerPanel.add(createFollowUpFormPanel(), BorderLayout.CENTER);
-
-        contentPanel.add(centerPanel, BorderLayout.CENTER);
-        contentPanel.add(createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
+        setupTitle("Seguimiento de casos", null, null);
+        contentPanel.add(createFollowUpFormPanel(), BorderLayout.CENTER);
+        contentPanel.add(
+                createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
                 BorderLayout.SOUTH);
-    }
-
-    private JPanel createCaseInfoPanel() {
-        JPanel panel = createCard();
-        panel.setLayout(new GridLayout(2, 4, 10, 6));
-
-        panel.add(new JLabel("Expediente:"));
-        panel.add(new JLabel(currentCase.getCaseNumber()));
-        panel.add(new JLabel("Estatus actual:"));
-
-        JLabel lblStatus = new JLabel(currentCase.getStatus());
-        if ("Cerrado".equals(currentCase.getStatus())) {
-            lblStatus.setForeground(Color.RED);
-            lblStatus.setFont(new Font("Arial", Font.BOLD, 12));
-        }
-        panel.add(lblStatus);
-
-        panel.add(new JLabel("Investigador:"));
-        panel.add(new JLabel(
-                currentInvestigator.getFirstName() + " " + currentInvestigator.getLastName()));
-        panel.add(new JLabel("Fecha:"));
-        panel.add(new JLabel(LocalDateTime.now().toString().substring(0, 10)));
-
-        return panel;
     }
 
     private JComponent createFollowUpFormPanel() {
         JPanel card = createCard();
         JPanel form = createForm();
 
-        txtActivities = createTextArea(4, 30, 80);
-        txtInvolvedPersons = createTextArea(3, 30, 60);
-        txtAmount = new JTextField("0.00", 20);
-        cbStatus = new JComboBox<>(new String[] {"En Seguimiento", "Cerrado", "Reabierto"});
-        txtObservations = createTextArea(2, 30, 50);
-        txtRecommendations = createTextArea(3, 30, 60);
-        txtConclusions = createTextArea(3, 30, 60);
+        cbStatus = new JComboBox<>(new String[] {"Seguimiento", "Cerrado", "Reabierto"});
+        cbInvestigator = loadInvestigatorsCombo();
+        txtActivities = createTextArea(4, 30, 90);
+        txtInvolvedPersons = new JTextField();
+        txtAmount = new JTextField("0.00");
 
-        styleInput(txtAmount);
         styleInput(cbStatus);
+        styleInput(cbInvestigator);
+        styleInput(txtInvolvedPersons);
+        styleInput(txtAmount);
 
         int row = 0;
-        row = addField(form, row, "Actividades realizadas", wrapInScroll(txtActivities));
-        row = addField(form, row, "Personas involucradas", wrapInScroll(txtInvolvedPersons));
-        row = addField(form, row, "Monto expuesto ($)", txtAmount);
-        row = addField(form, row, "Cambiar estatus a", cbStatus);
-        row = addField(form, row, "Observaciones", wrapInScroll(txtObservations));
-        row = addField(form, row, "Recomendaciones", wrapInScroll(txtRecommendations));
-        addField(form, row, "Conclusiones", wrapInScroll(txtConclusions));
+        row = addField(form, row, "Actividades Realizadas", wrapInScroll(txtActivities));
+        row = addField(form, row, "Personas Involucradas", txtInvolvedPersons);
+        row = addField(form, row, "Monto Expuesto", txtAmount);
+        row = addField(form, row, "Status", cbStatus);
+        addField(form, row, "Investigador", cbInvestigator);
 
         card.add(wrapInScroll(form), BorderLayout.CENTER);
         return card;
+    }
+
+    private JComboBox<String> loadInvestigatorsCombo() {
+        investigators = followUpController.getInvestigators();
+        JComboBox<String> combo = new JComboBox<>();
+
+        if (investigators.isEmpty()) {
+            combo.addItem("Sin investigadores");
+        } else {
+            for (User inv : investigators) {
+                combo.addItem(inv.getFirstName() + " " + inv.getLastName());
+            }
+        }
+
+        // Por qué: si el usuario activo es Investigador, se preselecciona su propio registro
+        // y se deshabilita el combo para que no pueda asignarse a otro.
+        if ("Investigador".equalsIgnoreCase(currentUser.getRole())) {
+            for (int i = 0; i < investigators.size(); i++) {
+                if (investigators.get(i).getId() == currentUser.getId()) {
+                    combo.setSelectedIndex(i);
+                    break;
+                }
+            }
+            combo.setEnabled(false);
+        }
+
+        return combo;
     }
 
     private void handleRegister() {
@@ -126,11 +118,12 @@ public class RegisterFollowUpView extends BaseView {
         data.involvedPersons = txtInvolvedPersons.getText();
         data.amountText = txtAmount.getText();
         data.status = (String) cbStatus.getSelectedItem();
-        data.observations = txtObservations.getText();
-        data.recommendations = txtRecommendations.getText();
-        data.conclusions = txtConclusions.getText();
         data.caseNumber = currentCase.getCaseNumber();
-        data.investigatorId = currentInvestigator.getId();
+
+        int selectedIdx = cbInvestigator.getSelectedIndex();
+        data.investigatorId = (selectedIdx >= 0 && selectedIdx < investigators.size())
+                ? investigators.get(selectedIdx).getId()
+                : currentUser.getId();
 
         String error = followUpController.registerFollowUp(data);
         if (error != null) {

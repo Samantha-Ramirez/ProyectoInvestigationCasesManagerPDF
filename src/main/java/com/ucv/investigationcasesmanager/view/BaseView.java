@@ -81,13 +81,13 @@ public abstract class BaseView extends JFrame {
         sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(230, 230, 230)));
 
         sideMenu.add(Box.createVerticalStrut(12));
-        addMenuButton("⌂  Inicio", e -> goHome());
-        addMenuButton("⚑  Bandeja", e -> goHome());
-        addMenuButton("↺  Reportes", e -> goToReports());
-        addMenuButton("⊞  Entidades", e -> showEntitiesPopup((JButton) e.getSource()));
-        addMenuButton("◌  Auditoría", e -> goHome());
+        addMenuButton("\u2302  Inicio", e -> goHome());
+        addMenuButton("\u2B07  Reportes", e -> showReportsPopup((JButton) e.getSource()));
+        addMenuButton("\u25C8  Auditoría", e -> goHome());
+        addMenuButton("\u2295  Entidades", e -> showEntitiesPopup((JButton) e.getSource()));
+        addMenuButton("\u29C1  Archivos Negados", e -> goHome());
         sideMenu.add(Box.createVerticalGlue());
-        addMenuButton("⇦  Cerrar sesión", e -> handleLogout());
+        addMenuButton("\u21A6  Cerrar sesión", e -> handleLogout());
         sideMenu.add(Box.createVerticalStrut(14));
 
         add(sideMenu, BorderLayout.WEST);
@@ -104,8 +104,19 @@ public abstract class BaseView extends JFrame {
         navigate(this, StartupViewFactory.getStartView(currentUser.getRole()));
     }
 
-    private void goToReports() {
-        navigate(this, new ReportsView());
+    // Por qué: muestra un JPopupMenu con los tipos de reporte para que el usuario
+    // seleccione cuál generar desde el menú lateral, tal como indica el wireframe UC08.
+    private void showReportsPopup(JButton source) {
+        JPopupMenu popup = new JPopupMenu();
+        String[] reportTypes = {"Empresas con mayores casos", "Investigadores con mayores casos",
+                "Casos con más de 3 casos relacionados"};
+        for (String type : reportTypes) {
+            JMenuItem item = new JMenuItem(type);
+            item.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 13));
+            item.addActionListener(e -> navigate(this, new ReportsView(type)));
+            popup.add(item);
+        }
+        popup.show(source, source.getWidth(), 0);
     }
 
     // Por qué: muestra un JPopupMenu con todos los tipos de entidad para que el usuario
@@ -202,6 +213,17 @@ public abstract class BaseView extends JFrame {
 
         if (columns.length > 2 && "Status".equalsIgnoreCase(columns[2])) {
             table.getColumnModel().getColumn(2).setCellRenderer(new StatusBadgeRenderer());
+        }
+
+        // Por qué: la columna "Acción" muestra un ícono de vista (ojo) en lugar del texto "Ver",
+        // para que sea coherente con el ícono de edición en EntityListView.
+        for (int i = 0; i < columns.length; i++) {
+            if ("Acción".equalsIgnoreCase(columns[i])) {
+                table.getColumnModel().getColumn(i).setCellRenderer(new ViewIconRenderer(uiFactory.getPrimaryColor()));
+                table.getColumnModel().getColumn(i).setMaxWidth(52);
+                table.getColumnModel().getColumn(i).setMinWidth(52);
+                break;
+            }
         }
 
         JScrollPane scroll = new JScrollPane(table);
@@ -366,17 +388,55 @@ public abstract class BaseView extends JFrame {
 
     protected abstract void initComponents();
 
+    // Por qué: muestra el estatus del caso como un indicador de color con punto y texto,
+    // diferenciando visualmente cada estado posible tal como muestran los wireframes.
     private class StatusBadgeRenderer implements TableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
                 boolean hasFocus, int row, int column) {
-            JLabel badge = uiFactory.createStatusBadge(String.valueOf(value));
-            if (isSelected) {
-                badge.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(185, 170, 212)),
-                        BorderFactory.createEmptyBorder(2, 8, 2, 8)));
-            }
+            String status = String.valueOf(value);
+            Color bg = resolveStatusColor(status);
+            JLabel badge = new JLabel("\u25CF " + status, SwingConstants.CENTER);
+            badge.setOpaque(true);
+            badge.setBackground(isSelected ? new Color(242, 236, 247) : Color.WHITE);
+            badge.setForeground(bg);
+            badge.setFont(new Font("Arial", Font.BOLD, 11));
+            badge.setBorder(BorderFactory.createEmptyBorder(2, 6, 2, 6));
             return badge;
+        }
+
+        private Color resolveStatusColor(String status) {
+            if (status == null) return new Color(100, 100, 100);
+            return switch (status) {
+                case "Abierto"        -> new Color(0, 153, 76);
+                case "Asignado"       -> new Color(230, 130, 0);
+                case "En Seguimiento", "Seguimiento" -> new Color(0, 120, 200);
+                case "Cerrado"        -> new Color(180, 30, 30);
+                case "Reabierto"      -> new Color(125, 21, 175);
+                default               -> new Color(100, 100, 100);
+            };
+        }
+    }
+
+    // Por qué: renderizador de la celda "Acción" con ícono de ojo para indicar "Ver detalle",
+    // coherente con EditIconRenderer de EntityListView (misma familia de íconos Unicode).
+    private static class ViewIconRenderer extends javax.swing.table.DefaultTableCellRenderer {
+        private final Color primaryColor;
+
+        ViewIconRenderer(Color primaryColor) {
+            this.primaryColor = primaryColor;
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
+                boolean hasFocus, int row, int col) {
+            JLabel lbl = new JLabel("\u29BF", SwingConstants.CENTER);
+            lbl.setFont(new Font("Arial", Font.PLAIN, 16));
+            lbl.setForeground(primaryColor);
+            lbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            lbl.setOpaque(true);
+            lbl.setBackground(isSelected ? new Color(242, 236, 247) : Color.WHITE);
+            return lbl;
         }
     }
 }

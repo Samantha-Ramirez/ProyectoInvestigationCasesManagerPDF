@@ -14,7 +14,7 @@ public class CaseDAO extends BaseDAO<Case> {
         String sql = "SELECT case_number, status, "
                 + "CAST(CAST((julianday('now') - julianday(start_date)) AS INTEGER) AS TEXT)"
                 + " || ' días sin atención' AS time_without_attention "
-                + "FROM investigation_case WHERE investigator_id = ?";
+                + "FROM \"case\" WHERE investigator_id = ?";
         return queryList(sql, this::mapSummary, userId);
     }
 
@@ -22,7 +22,7 @@ public class CaseDAO extends BaseDAO<Case> {
     public List<Case> findAll() {
         String sql = "SELECT case_number, status, "
                 + "CAST(CAST((julianday('now') - julianday(start_date)) AS INTEGER) AS TEXT)"
-                + " || ' días sin atención' AS time_without_attention " + "FROM investigation_case";
+                + " || ' días sin atención' AS time_without_attention " + "FROM \"case\"";
         return queryList(sql, this::mapSummary);
     }
 
@@ -32,13 +32,13 @@ public class CaseDAO extends BaseDAO<Case> {
                 + "start_date, duration_days, mobile_affected, objective_victim, incident, "
                 + "modus_operandi_description, support_area, detection_origin, "
                 + "fraud_diagnosis, conclusions_recommendations, observations, support "
-                + "FROM investigation_case WHERE case_number = ?";
+                + "FROM \"case\" WHERE case_number = ?";
         return queryOne(sql, this::mapDetail, caseNumber);
     }
 
     // Registrar un nuevo caso en la base de datos
     public boolean save(Case c) {
-        String sql = "INSERT INTO investigation_case ("
+        String sql = "INSERT INTO \"case\" ("
                 + "case_number, start_date, days_elapsed, registration_month, status, "
                 + "mobile_affected, objective_victim, incident, duration_days, "
                 + "modus_operandi_description, support_area, detection_origin, "

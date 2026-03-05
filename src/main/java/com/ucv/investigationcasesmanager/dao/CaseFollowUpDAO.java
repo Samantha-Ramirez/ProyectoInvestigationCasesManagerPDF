@@ -32,7 +32,7 @@ public class CaseFollowUpDAO extends BaseDAO<CaseFollowUp> {
 
     // Actualizar el estatus del caso al registrar un nuevo seguimiento
     public boolean updateCaseStatus(int caseId, String status) {
-        String sql = "UPDATE investigation_case SET status = ? WHERE id = ?";
+        String sql = "UPDATE \"case\" SET status = ? WHERE id = ?";
         return execute(sql, status, caseId) > 0;
     }
 

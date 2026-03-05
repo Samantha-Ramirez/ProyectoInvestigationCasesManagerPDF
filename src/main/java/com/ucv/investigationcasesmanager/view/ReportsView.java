@@ -2,63 +2,39 @@ package com.ucv.investigationcasesmanager.view;
 
 import com.ucv.investigationcasesmanager.controller.ReportController;
 import com.ucv.investigationcasesmanager.factory.ReportProduct;
-import com.ucv.investigationcasesmanager.view.decorator.PanelBorderDecorator;
-import com.ucv.investigationcasesmanager.view.decorator.PanelComponent;
-import com.ucv.investigationcasesmanager.view.decorator.PanelConcreteComponent;
-import com.ucv.investigationcasesmanager.view.decorator.PanelTitleDecorator;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.List;
 
 /*
- * Vista de reportes - permite seleccionar y generar reportes estadísticos del sistema.
+ * Vista de reportes - recibe el tipo de reporte seleccionado desde el menú lateral y lo genera
+ * automáticamente, sin combo de selección en pantalla (UC08).
  */
 public class ReportsView extends BaseView {
     private final ReportController reportController;
-    private JComboBox<String> cmbReportType;
+    private final String reportType;
 
-    public ReportsView() {
+    // Por qué: el tipo de reporte se elige en el popup del menú (BaseView.showReportsPopup)
+    // para cumplir con el flujo UC08 que indica selección desde el menú, no desde la pantalla.
+    public ReportsView(String reportType) {
         super("Reportes", true);
         this.reportController = new ReportController();
+        this.reportType = reportType;
     }
 
     @Override
     protected void initComponents() {
-        setupTitle("Generar reporte", null, null);
+        setupTitle("Reporte: " + reportType, null, null);
 
         JPanel card = createCard();
-        JPanel selectionPanel = createReportSelectionPanel();
+        card.add(createTable(new String[] {"Reporte", "Resultado"}), java.awt.BorderLayout.CENTER);
+        contentPanel.add(card, java.awt.BorderLayout.CENTER);
 
-        PanelComponent decorated = new PanelBorderDecorator(
-                new PanelTitleDecorator(new PanelConcreteComponent(selectionPanel), "Filtros"), 6,
-                8, 6, 8);
-
-        card.add(decorated.build(), BorderLayout.NORTH);
-        card.add(createTable(new String[] {"Reporte", "Resultado"}), BorderLayout.CENTER);
-
-        contentPanel.add(card, BorderLayout.CENTER);
-    }
-
-    private JPanel createReportSelectionPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        panel.setOpaque(false);
-
-        panel.add(new JLabel("Tipo de reporte:"));
-        cmbReportType = new JComboBox<>(new String[] {"Empresas con mayores casos",
-                "Investigadores con mayores casos", "Casos con más de 3 casos relacionados"});
-        cmbReportType.setPreferredSize(new Dimension(330, 34));
-        panel.add(cmbReportType);
-
-        JButton btnGenerate = createPrimaryButton("Generar reporte", e -> generateReport());
-        panel.add(btnGenerate);
-
-        return panel;
+        generateReport();
     }
 
     private void generateReport() {
-        String type = String.valueOf(cmbReportType.getSelectedItem());
-        ReportProduct report = reportController.resolveReport(type);
+        ReportProduct report = reportController.resolveReport(reportType);
 
         tableModel.setColumnIdentifiers(report.getColumns());
         tableModel.setRowCount(0);
