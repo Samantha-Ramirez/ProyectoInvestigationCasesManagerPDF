@@ -109,7 +109,6 @@ CREATE TABLE IF NOT EXISTS performed_activity (
     name TEXT NOT NULL
 );
 
--- UC12: trazas de auditoría
 CREATE TABLE IF NOT EXISTS audit_log (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     username    TEXT    NOT NULL,
@@ -117,7 +116,6 @@ CREATE TABLE IF NOT EXISTS audit_log (
     action_date TEXT    NOT NULL DEFAULT (datetime('now', 'localtime'))
 );
 
--- UC10: personal amonestado-desincorporado
 CREATE TABLE IF NOT EXISTS denied_person (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
     ci         TEXT    NOT NULL,
@@ -126,7 +124,6 @@ CREATE TABLE IF NOT EXISTS denied_person (
     company    TEXT
 );
 
--- UC10: seriales de equipos reportados robados
 CREATE TABLE IF NOT EXISTS stolen_equipment (
     id             INTEGER PRIMARY KEY AUTOINCREMENT,
     serial         TEXT NOT NULL,

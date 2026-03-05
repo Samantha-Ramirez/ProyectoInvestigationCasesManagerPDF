@@ -408,7 +408,7 @@ public abstract class BaseView extends JFrame {
         return new StatusBadgeRenderer();
     }
 
-    // UC11: extrae el número de días del texto "N días sin atención"
+    // Extraer el número de días del texto "N días sin atención"
     protected int extractDays(String timeWithoutAttention) {
         if (timeWithoutAttention == null)
             return 0;

@@ -7,8 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /*
- * UC10 – Formulario de registro y edición de seriales de equipos reportados robados. Campos:
- * Serial, Tipo de equipo, Marca, Modelo, Observaciones.
+ * Formulario de registro y edición de seriales de equipos reportados robados. Campos: Serial, Tipo
+ * de equipo, Marca, Modelo, Observaciones.
  */
 public class StolenEquipmentFormView extends BaseView {
     private final DeniedFilesController controller;
@@ -20,8 +20,8 @@ public class StolenEquipmentFormView extends BaseView {
     private JTextArea txtObservations;
 
     public StolenEquipmentFormView(StolenEquipment existing) {
-        super((existing == null ? "Registro" : "Edición")
-                + " de serial de equipo reportado robado", true, false);
+        super((existing == null ? "Registro" : "Edición") + " de serial de equipo reportado robado",
+                true, false);
         this.controller = new DeniedFilesController();
         this.existing = existing;
         initComponents();
@@ -36,19 +36,19 @@ public class StolenEquipmentFormView extends BaseView {
         JPanel card = createCard();
         JPanel form = createForm();
 
-        txtSerial = new JTextField(existing != null ? existing.getSerial() : "Serial");
-        txtType = new JTextField(
-                existing != null && existing.getEquipmentType() != null ? existing.getEquipmentType()
-                        : "Tipo de equipo");
+        txtSerial = new JTextField(existing != null ? existing.getSerial() : "");
+        txtType = new JTextField(existing != null && existing.getEquipmentType() != null
+                ? existing.getEquipmentType()
+                : "Tipo de equipo");
         txtBrand = new JTextField(
-                existing != null && existing.getBrand() != null ? existing.getBrand() : "Marca");
+                existing != null && existing.getBrand() != null ? existing.getBrand() : "");
         txtModel = new JTextField(
-                existing != null && existing.getModel() != null ? existing.getModel() : "Modelo");
+                existing != null && existing.getModel() != null ? existing.getModel() : "");
         txtObservations = createTextArea(3, 30, 80);
         if (existing != null && existing.getObservations() != null) {
             txtObservations.setText(existing.getObservations());
         } else {
-            txtObservations.setText("Observaciones");
+            txtObservations.setText("");
         }
 
         styleInput(txtSerial);

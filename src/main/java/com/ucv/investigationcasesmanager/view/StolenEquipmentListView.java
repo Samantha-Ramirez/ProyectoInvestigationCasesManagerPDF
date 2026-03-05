@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * UC10 – Vista de lista de seriales de equipos reportados robados con botón Agregar y acciones de
- * edición por fila.
+ * Vista de lista de seriales de equipos reportados robados con botón Agregar y acciones de edición
+ * por fila.
  */
 public class StolenEquipmentListView extends BaseView {
     private static final int EDIT_COLUMN = 1;
@@ -63,11 +63,9 @@ public class StolenEquipmentListView extends BaseView {
             String type = e.getEquipmentType() != null ? e.getEquipmentType() : "";
             String brand = e.getBrand() != null ? e.getBrand() : "";
             String model = e.getModel() != null ? e.getModel() : "";
-            tableModel.addRow(new Object[] {
-                    e.getSerial() + (type.isBlank() ? "" : " – " + type)
-                            + (brand.isBlank() ? "" : " – " + brand)
-                            + (model.isBlank() ? "" : " – " + model),
-                    "✎"});
+            tableModel.addRow(new Object[] {e.getSerial() + (type.isBlank() ? "" : " – " + type)
+                    + (brand.isBlank() ? "" : " – " + brand)
+                    + (model.isBlank() ? "" : " – " + model), "✎"});
         }
     }
 

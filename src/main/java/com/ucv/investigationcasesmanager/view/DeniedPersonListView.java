@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * UC10 – Vista de lista de personal amonestado-desincorporado con botón Agregar y acciones de
- * edición por fila.
+ * Vista de lista de personal amonestado-desincorporado con botón Agregar y acciones de edición por
+ * fila.
  */
 public class DeniedPersonListView extends BaseView {
     private static final int EDIT_COLUMN = 1;

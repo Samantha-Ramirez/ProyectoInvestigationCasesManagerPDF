@@ -7,8 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /*
- * UC10 – Formulario de registro y edición de personal amonestado-desincorporado. Campos: CI,
- * Nombre, Apellido, Empresa.
+ * Formulario de registro y edición de personal amonestado-desincorporado. Campos: CI, Nombre,
+ * Apellido, Empresa.
  */
 public class DeniedPersonFormView extends BaseView {
     private final DeniedFilesController controller;
@@ -19,8 +19,8 @@ public class DeniedPersonFormView extends BaseView {
     private JTextField txtCompany;
 
     public DeniedPersonFormView(DeniedPerson existing) {
-        super((existing == null ? "Registro" : "Edición") + " de personal amonestado-desincorporado",
-                true, false);
+        super((existing == null ? "Registro" : "Edición")
+                + " de personal amonestado-desincorporado", true, false);
         this.controller = new DeniedFilesController();
         this.existing = existing;
         initComponents();
@@ -35,12 +35,11 @@ public class DeniedPersonFormView extends BaseView {
         JPanel card = createCard();
         JPanel form = createForm();
 
-        txtCi = new JTextField(existing != null ? existing.getCi() : "CI");
-        txtFirstName = new JTextField(existing != null ? existing.getFirstName() : "Nombre");
-        txtLastName = new JTextField(existing != null ? existing.getLastName() : "Apellido");
+        txtCi = new JTextField(existing != null ? existing.getCi() : "");
+        txtFirstName = new JTextField(existing != null ? existing.getFirstName() : "");
+        txtLastName = new JTextField(existing != null ? existing.getLastName() : "");
         txtCompany = new JTextField(
-                existing != null && existing.getCompany() != null ? existing.getCompany()
-                        : "Empresa");
+                existing != null && existing.getCompany() != null ? existing.getCompany() : "");
 
         styleInput(txtCi);
         styleInput(txtFirstName);

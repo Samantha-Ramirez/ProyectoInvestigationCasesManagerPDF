@@ -31,11 +31,9 @@ public class InboxView extends BaseView {
 
         JPanel card = createCard();
 
-        // UC11: botones de ordenamiento
-        JButton btnNewest = createHeaderButton("Más reciente → Más antiguo",
-                e -> sortTable(false));
-        JButton btnOldest = createHeaderButton("Más antiguo → Más reciente",
-                e -> sortTable(true));
+        // Botones de ordenamiento
+        JButton btnNewest = createHeaderButton("Más reciente → Más antiguo", e -> sortTable(false));
+        JButton btnOldest = createHeaderButton("Más antiguo → Más reciente", e -> sortTable(true));
         JPanel sortBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         sortBar.setOpaque(false);
         sortBar.add(btnOldest);
@@ -77,10 +75,11 @@ public class InboxView extends BaseView {
         populateTable(allCases);
     }
 
-    // UC11: ordena la tabla por días sin atención (ascendente = más antiguo primero)
+    // Ordenar la tabla por días sin atención (ascendente = más antiguo primero)
     private void sortTable(boolean ascending) {
         List<Case> sorted = new ArrayList<>(allCases);
-        Comparator<Case> byDays = Comparator.comparingInt(c -> extractDays(c.getTimeWithoutAttention()));
+        Comparator<Case> byDays =
+                Comparator.comparingInt(c -> extractDays(c.getTimeWithoutAttention()));
         sorted.sort(ascending ? byDays : byDays.reversed());
         populateTable(sorted);
     }

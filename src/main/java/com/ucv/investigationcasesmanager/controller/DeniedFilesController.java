@@ -12,7 +12,7 @@ import com.ucv.investigationcasesmanager.service.ServiceLocator;
 import java.util.List;
 
 /*
- * Controlador para UC10 - Marcar Archivos como Negados. Gestiona el CRUD de personal
+ * Controlador para Marcar Archivos como Negados. Gestiona el CRUD de personal
  * amonestado-desincorporado y seriales de equipos robados. PDyF: Decorator – envuelve cada
  * operación de guardado con AuditSaveDecorator para registrar automáticamente la traza de
  * auditoría.
@@ -42,7 +42,8 @@ public class DeniedFilesController {
 
         final boolean[] ok = {false};
         String user = currentUsername();
-        ConcreteSaveOperation base = new ConcreteSaveOperation(() -> ok[0] = deniedPersonDAO.save(p));
+        ConcreteSaveOperation base =
+                new ConcreteSaveOperation(() -> ok[0] = deniedPersonDAO.save(p));
         AuditSaveDecorator decorated =
                 new AuditSaveDecorator(user, "Registro de personal amonestado: " + p.getFullName());
         decorated.setComponent(base);
