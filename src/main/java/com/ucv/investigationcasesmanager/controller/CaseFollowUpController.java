@@ -36,8 +36,6 @@ public class CaseFollowUpController {
         return c != null ? c.getId() : -1;
     }
 
-    // Por qué: la vista de seguimiento requiere poblar el combo de investigadores igual que el
-    // formulario de registro de casos, delegando a UserDAO para no duplicar lógica.
     public List<User> getInvestigators() {
         return userDAO.findInvestigators();
     }

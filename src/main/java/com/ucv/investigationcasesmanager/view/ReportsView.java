@@ -9,14 +9,12 @@ import java.util.List;
 
 /*
  * Vista de reportes - recibe el tipo de reporte seleccionado desde el menú lateral y lo genera
- * automáticamente, sin combo de selección en pantalla (UC08).
+ * automáticamente, sin combo de selección en pantalla.
  */
 public class ReportsView extends BaseView {
     private final ReportController reportController;
     private final String reportType;
 
-    // Por qué: se usa initialize=false para que initComponents() no se dispare dentro de super()
-    // antes de que reportController esté asignado, evitando el NullPointerException en generateReport().
     public ReportsView(String reportType) {
         super("Reportes", true, false);
         this.reportController = new ReportController();

@@ -14,8 +14,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /*
- * Controlador para UC09 – Gestionar Entidades del Sistema. Centraliza el CRUD de los catálogos y
- * provee iteradores para UC13 – Seleccionar Entidad por Código.
+ * Controlador para Gestionar Entidades del Sistema. Centraliza el CRUD de los catálogos y provee
+ * iteradores para Seleccionar Entidad por Código.
  */
 public class EntityController {
     private final SystemEntityDAO entityDAO;
@@ -30,8 +30,7 @@ public class EntityController {
     public List<SystemEntity> getAll(EntityType type) {
         if (type == EntityType.INVESTIGATOR) {
             return userDAO.findInvestigators().stream()
-                    .map(u -> new SystemEntity(u.getId(),
-                            u.getFirstName() + " " + u.getLastName()))
+                    .map(u -> new SystemEntity(u.getId(), u.getFirstName() + " " + u.getLastName()))
                     .collect(Collectors.toList());
         }
         return entityDAO.findAll(type.getTableName());
@@ -39,7 +38,7 @@ public class EntityController {
 
     /**
      * PDyF: Iterator – crea un agregador concreto con la colección de entidades y retorna su
-     * iterador, desacoplando la colección del mecanismo de recorrido (UC13).
+     * iterador, desacoplando la colección del mecanismo de recorrido.
      */
     public EntityIterator<SystemEntity> getIterator(EntityType type) {
         EntityAggregate<SystemEntity> aggregate = new EntityListAggregate<>(getAll(type));
@@ -78,9 +77,6 @@ public class EntityController {
         return entityDAO.delete(type.getTableName(), id) ? null : "Error al eliminar el registro.";
     }
 
-    // Por qué: auto-genera id_number y email únicos mediante UUID para satisfacer las
-    // restricciones UNIQUE de la tabla user al registrar un investigador desde la gestión de
-    // entidades.
     private String saveInvestigator(String fullName) {
         String[] names = splitFullName(fullName);
         String uid = UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase();

@@ -24,21 +24,16 @@ public class CaseDAO extends BaseDAO<Case> {
                 + "CAST(CAST((julianday('now') - julianday(ic.start_date)) AS INTEGER) AS TEXT)"
                 + " || ' días sin atención' AS time_without_attention, "
                 + "COALESCE(u.first_name || ' ' || u.last_name, 'Sin asignar') AS investigator_name "
-                + "FROM investigation_case ic "
-                + "LEFT JOIN user u ON u.id = ic.investigator_id";
+                + "FROM investigation_case ic " + "LEFT JOIN user u ON u.id = ic.investigator_id";
         return queryList(sql, this::mapSummaryWithInvestigator);
     }
 
-    // Obtener el detalle completo de un caso por número de expediente
-    // Por qué: se selecciona conclusions_recommendations (columna histórica que almacena
-    // las conclusiones) y recommendations (columna nueva para recomendaciones separadas).
     public Case findByCaseNumber(String caseNumber) {
         String sql = "SELECT id, case_number, status, investigator_id, "
                 + "start_date, duration_days, mobile_affected, objective_victim, incident, "
                 + "modus_operandi_description, support_area, detection_origin, "
                 + "fraud_diagnosis, conclusions_recommendations, recommendations, "
-                + "observations, support "
-                + "FROM investigation_case WHERE case_number = ?";
+                + "observations, support " + "FROM investigation_case WHERE case_number = ?";
         return queryOne(sql, this::mapDetail, caseNumber);
     }
 
@@ -57,9 +52,8 @@ public class CaseDAO extends BaseDAO<Case> {
                 c.getStatus(), c.getMobileAffected(), c.getObjectiveVictim(), c.getIncident(),
                 c.getDurationDays(), c.getModusOperandiDescription(), c.getSupportArea(),
                 c.getDetectionOrigin(), c.getFraudDiagnosis(), c.getConclusions(),
-                c.getRecommendations(), c.getObservations(), c.getSupport(),
-                c.getInvestigatorId(), c.getCaseTypeId(),
-                c.getIrregularityTypeId(), c.getIrregularitySubtypeId()) > 0;
+                c.getRecommendations(), c.getObservations(), c.getSupport(), c.getInvestigatorId(),
+                c.getCaseTypeId(), c.getIrregularityTypeId(), c.getIrregularitySubtypeId()) > 0;
     }
 
     // Mapear una fila del ResultSet a un objeto Case (resumen para la bandeja)

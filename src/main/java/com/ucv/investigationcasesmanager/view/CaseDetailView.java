@@ -12,9 +12,6 @@ import java.util.List;
 
 /*
  * Vista de detalle de caso - muestra información del caso e historial de seguimientos.
- * Diseño alineado con los wireframes UC05: sección "Historial de seguimientos" con botón
- * "Registrar" en la cabecera, seguida de tabla resumen con 3 columnas (Actividades, Estatus,
- * Fecha).
  */
 public class CaseDetailView extends BaseView {
     private final Case currentCase;
@@ -35,8 +32,6 @@ public class CaseDetailView extends BaseView {
     protected void initComponents() {
         setupTitle("Información de Caso", "Volver", e -> goBack());
 
-        // Por qué: se usa un JSplitPane vertical para mostrar info del caso arriba e historial
-        // abajo sin necesidad de tabs, tal como indican los wireframes adjuntos.
         JPanel centerPanel = new JPanel(new BorderLayout(0, 12));
         centerPanel.setOpaque(false);
         centerPanel.add(createCaseInfoPanel(), BorderLayout.NORTH);
@@ -60,8 +55,7 @@ public class CaseDetailView extends BaseView {
 
         int row = 0;
         row = addField(form, row, "Expediente", new JLabel(currentCase.getCaseNumber()));
-        row = addField(form, row, "Estatus",
-                buildStatusLabel(currentCase.getStatus()));
+        row = addField(form, row, "Estatus", buildStatusLabel(currentCase.getStatus()));
         row = addField(form, row, "Fecha de inicio", new JLabel(
                 currentCase.getStartDate() != null ? currentCase.getStartDate() : "N/A"));
         row = addField(form, row, "Duración (días)",
@@ -69,9 +63,9 @@ public class CaseDetailView extends BaseView {
         row = addField(form, row, "Móvil afectado", new JLabel(
                 currentCase.getMobileAffected() != null ? currentCase.getMobileAffected() : "N/A"));
         addField(form, row, "Objetivo / Agraviado",
-                new JLabel(currentCase.getObjectiveVictim() != null
-                        ? currentCase.getObjectiveVictim()
-                        : "N/A"));
+                new JLabel(
+                        currentCase.getObjectiveVictim() != null ? currentCase.getObjectiveVictim()
+                                : "N/A"));
         card.add(form, BorderLayout.CENTER);
         return card;
     }
@@ -89,8 +83,6 @@ public class CaseDetailView extends BaseView {
         return lbl;
     }
 
-    // Por qué: la sección de historial incluye el botón "Registrar" en la cabecera del card para
-    // que sea visible en la misma línea que el título, como muestra el wireframe UC05.
     private JComponent createFollowUpSection() {
         JPanel card = createCard();
 
@@ -101,8 +93,7 @@ public class CaseDetailView extends BaseView {
         header.add(lblTitle, BorderLayout.WEST);
 
         if ("Investigador".equals(currentUser.getRole())) {
-            JButton btnNew = createHeaderButton("Registrar",
-                    e -> openNewFollowUp());
+            JButton btnNew = createHeaderButton("Registrar", e -> openNewFollowUp());
             header.add(btnNew, BorderLayout.EAST);
         }
 
@@ -130,8 +121,6 @@ public class CaseDetailView extends BaseView {
         followUpTable.getTableHeader().setReorderingAllowed(false);
         uiFactory.styleTable(followUpTable);
 
-        // Por qué: la columna de fecha es estrecha (solo muestra dd/mm/aaaa) para ahorrar
-        // espacio horizontal y coincidir con el diseño del wireframe.
         followUpTable.getColumnModel().getColumn(2).setMaxWidth(100);
         followUpTable.getColumnModel().getColumn(2).setMinWidth(80);
 
@@ -154,9 +143,8 @@ public class CaseDetailView extends BaseView {
             String fecha = f.getRegistrationDate() != null
                     ? f.getRegistrationDate().toString().substring(0, 10)
                     : "";
-            String activities = f.getActivitiesPerformed() != null
-                    ? f.getActivitiesPerformed()
-                    : "";
+            String activities =
+                    f.getActivitiesPerformed() != null ? f.getActivitiesPerformed() : "";
             followUpTableModel.addRow(new Object[] {activities, f.getStatus(), fecha});
         }
     }

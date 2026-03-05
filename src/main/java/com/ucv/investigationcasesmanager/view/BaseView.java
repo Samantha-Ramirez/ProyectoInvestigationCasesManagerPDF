@@ -82,13 +82,15 @@ public abstract class BaseView extends JFrame {
         sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(230, 230, 230)));
 
         sideMenu.add(Box.createVerticalStrut(12));
-        addMenuButton(SideMenuIcon.home(),        "Inicio",           e -> goHome());
-        addMenuButton(SideMenuIcon.download(),    "Reportes",         e -> showReportsPopup((JButton) e.getSource()));
-        addMenuButton(SideMenuIcon.tag(),         "Auditoría",        e -> goHome());
-        addMenuButton(SideMenuIcon.plusCircle(),  "Entidades",        e -> showEntitiesPopup((JButton) e.getSource()));
-        addMenuButton(SideMenuIcon.trash(),       "Archivos Negados", e -> goHome());
+        addMenuButton(SideMenuIcon.home(), "Inicio", e -> goHome());
+        addMenuButton(SideMenuIcon.download(), "Reportes",
+                e -> showReportsPopup((JButton) e.getSource()));
+        addMenuButton(SideMenuIcon.tag(), "Auditoría", e -> goHome());
+        addMenuButton(SideMenuIcon.plusCircle(), "Entidades",
+                e -> showEntitiesPopup((JButton) e.getSource()));
+        addMenuButton(SideMenuIcon.trash(), "Archivos Negados", e -> goHome());
         sideMenu.add(Box.createVerticalGlue());
-        addMenuButton(SideMenuIcon.logout(),      "Cerrar sesión",    e -> handleLogout());
+        addMenuButton(SideMenuIcon.logout(), "Cerrar sesión", e -> handleLogout());
         sideMenu.add(Box.createVerticalStrut(14));
 
         add(sideMenu, BorderLayout.WEST);
@@ -105,8 +107,6 @@ public abstract class BaseView extends JFrame {
         navigate(this, StartupViewFactory.getStartView(currentUser.getRole()));
     }
 
-    // Por qué: muestra un JPopupMenu con los tipos de reporte para que el usuario
-    // seleccione cuál generar desde el menú lateral, tal como indica el wireframe UC08.
     private void showReportsPopup(JButton source) {
         JPopupMenu popup = new JPopupMenu();
         String[] reportTypes = {"Empresas con mayores casos", "Investigadores con mayores casos",
@@ -120,8 +120,6 @@ public abstract class BaseView extends JFrame {
         popup.show(source, source.getWidth(), 0);
     }
 
-    // Por qué: muestra un JPopupMenu con todos los tipos de entidad para que el usuario
-    // seleccione cuál gestionar, tal como indica el flujo del UC09.
     private void showEntitiesPopup(JButton source) {
         JPopupMenu popup = new JPopupMenu();
         for (EntityType type : EntityType.values()) {
@@ -216,8 +214,6 @@ public abstract class BaseView extends JFrame {
             table.getColumnModel().getColumn(2).setCellRenderer(new StatusBadgeRenderer());
         }
 
-        // Por qué: la columna "Acción" muestra un ícono de edición en lugar del texto "Ver",
-        // coherente con el ícono de edición de EntityListView.
         for (int i = 0; i < columns.length; i++) {
             if ("Acción".equalsIgnoreCase(columns[i])) {
                 table.getColumnModel().getColumn(i).setCellRenderer(new EditIconRenderer());
@@ -389,8 +385,6 @@ public abstract class BaseView extends JFrame {
 
     protected abstract void initComponents();
 
-    // Por qué: muestra el estatus del caso como un indicador de color con punto y texto,
-    // diferenciando visualmente cada estado posible tal como muestran los wireframes.
     private class StatusBadgeRenderer implements TableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
@@ -407,20 +401,19 @@ public abstract class BaseView extends JFrame {
         }
 
         private Color resolveStatusColor(String status) {
-            if (status == null) return new Color(100, 100, 100);
+            if (status == null)
+                return new Color(100, 100, 100);
             return switch (status) {
-                case "Abierto"        -> new Color(0, 153, 76);
-                case "Asignado"       -> new Color(230, 130, 0);
+                case "Abierto" -> new Color(0, 153, 76);
+                case "Asignado" -> new Color(230, 130, 0);
                 case "En Seguimiento", "Seguimiento" -> new Color(0, 120, 200);
-                case "Cerrado"        -> new Color(180, 30, 30);
-                case "Reabierto"      -> new Color(125, 21, 175);
-                default               -> new Color(100, 100, 100);
+                case "Cerrado" -> new Color(180, 30, 30);
+                case "Reabierto" -> new Color(125, 21, 175);
+                default -> new Color(100, 100, 100);
             };
         }
     }
 
-    // Por qué: renderizador de la celda "Acción" con ícono de edición dibujado en Java2D
-    // para garantizar visibilidad en cualquier JVM, sin depender de fuentes Unicode.
     private static class EditIconRenderer implements TableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,

@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * Vista de lista para UC09 – muestra los registros de una entidad con acciones de editar.
- * PDyF: Iterator – usa EntityIterator para poblar la tabla sin exponer la colección interna.
+ * Vista de lista para mostrar los registros de una entidad con acciones de editar. PDyF: Iterator –
+ * usa EntityIterator para poblar la tabla sin exponer la colección interna.
  */
 public class EntityListView extends BaseView {
     private static final int EDIT_COLUMN = 1;
@@ -40,11 +40,9 @@ public class EntityListView extends BaseView {
         JPanel card = createCard();
         card.add(createTable(new String[] {"Nombre", "Acción"}), java.awt.BorderLayout.CENTER);
 
-        // Por qué: la columna de acción muestra sólo el ícono de edición, sin encabezado de texto
         table.getColumnModel().getColumn(EDIT_COLUMN).setMaxWidth(52);
         table.getColumnModel().getColumn(EDIT_COLUMN).setMinWidth(52);
-        table.getColumnModel().getColumn(EDIT_COLUMN)
-                .setCellRenderer(new EditIconRenderer());
+        table.getColumnModel().getColumn(EDIT_COLUMN).setCellRenderer(new EditIconRenderer());
 
         table.addMouseListener(new MouseAdapter() {
             @Override

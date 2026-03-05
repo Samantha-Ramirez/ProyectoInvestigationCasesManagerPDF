@@ -16,14 +16,10 @@ public class CaseRegistrationColleague extends RegistrationColleague {
         this.durationText = durationText;
     }
 
-    // Por qué: send() es el método que el colega expone para iniciar la comunicación con el
-    // mediador, siguiendo el patrón del profesor donde cada colega llama mediator.send().
     public boolean send(String message) {
         return mediator.send(message, this);
     }
 
-    // Por qué: notify() permite al mediador informar al colega del resultado de la operación,
-    // completando el ciclo de comunicación bidireccional del patrón Mediator.
     public void notify(String message) {
         System.out.println("CaseRegistrationColleague notificado: " + message);
     }

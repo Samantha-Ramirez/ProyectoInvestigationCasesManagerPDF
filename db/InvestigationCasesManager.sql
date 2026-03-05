@@ -1,11 +1,5 @@
--- Script SQL para SQLite: crea las tablas en inglés (nombres basados en los atributos del modelo).
--- Ejecutar en SQLite para crear la base de datos desde cero o migrar desde el esquema en español.
-
 PRAGMA foreign_keys = ON;
 
--- ─────────────────────────────────────────────────────────────────────────────
--- Tabla: user  (reemplaza a: usuario)
--- ─────────────────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS user (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name TEXT NOT NULL,
@@ -15,9 +9,6 @@ CREATE TABLE IF NOT EXISTS user (
     role       TEXT NOT NULL
 );
 
--- ─────────────────────────────────────────────────────────────────────────────
--- Tabla: investigation_case  (reemplaza a: caso)
--- ─────────────────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS investigation_case (
     id                          INTEGER PRIMARY KEY AUTOINCREMENT,
     case_number                 TEXT,
@@ -45,9 +36,6 @@ CREATE TABLE IF NOT EXISTS investigation_case (
     FOREIGN KEY (investigator_id) REFERENCES user(id)
 );
 
--- ─────────────────────────────────────────────────────────────────────────────
--- Tabla: case_follow_up  (reemplaza a: seguimiento)
--- ─────────────────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS case_follow_up (
     id                   INTEGER PRIMARY KEY AUTOINCREMENT,
     case_id              INTEGER NOT NULL,
@@ -64,9 +52,6 @@ CREATE TABLE IF NOT EXISTS case_follow_up (
     FOREIGN KEY (investigator_id) REFERENCES user(id)
 );
 
--- ─────────────────────────────────────────────────────────────────────────────
--- Tablas de catálogos para UC09 – Gestionar Entidades del Sistema
--- ─────────────────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS gap_type (
     id   INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL
@@ -94,7 +79,7 @@ CREATE TABLE IF NOT EXISTS company (
 
 CREATE TABLE IF NOT EXISTS record_subtype (
     id   INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL  -- Por qué: renombrado a "Subtipo de Casos" en EntityType (UC09)
+    name TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS irregularity_type (
@@ -124,9 +109,6 @@ CREATE TABLE IF NOT EXISTS performed_activity (
     name TEXT NOT NULL
 );
 
--- ─────────────────────────────────────────────────────────────────────────────
--- Datos de ejemplo (usuarios de prueba)
--- ─────────────────────────────────────────────────────────────────────────────
 INSERT INTO user (first_name, last_name, id_number, email, role)
 VALUES ('Samantha', 'Ramirez', '31307714', 'samantha@gmail.com', 'Administrador'),
        ('María',    'Miranda', '30243278', 'maria@gmail.com',    'Investigador');

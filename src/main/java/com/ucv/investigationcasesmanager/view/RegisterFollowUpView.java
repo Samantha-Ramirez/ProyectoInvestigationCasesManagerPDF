@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * Vista de registro de seguimiento de casos (UC05) - diseño alineado con el wireframe:
- * campos Actividades Realizadas, Personas Involucradas, Monto Expuesto, Status e Investigador.
+ * Vista de registro de seguimiento de casos.
  */
 public class RegisterFollowUpView extends BaseView {
     private final Case currentCase;
@@ -62,8 +61,7 @@ public class RegisterFollowUpView extends BaseView {
         setupTitle("Seguimiento de casos", "Volver",
                 e -> navigate(this, new CaseDetailView(currentCase, currentUser)));
         contentPanel.add(createFollowUpFormPanel(), BorderLayout.CENTER);
-        contentPanel.add(
-                createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
+        contentPanel.add(createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
                 BorderLayout.SOUTH);
     }
 
@@ -96,10 +94,11 @@ public class RegisterFollowUpView extends BaseView {
     }
 
     // PDyF: Iterator – puebla el combo de actividades usando EntityIterator para recorrer
-    // las entidades sin exponer cómo están almacenadas internamente (UC09/UC05).
+    // las entidades sin exponer cómo están almacenadas internamente.
     private JComboBox<String> loadActivityCombo() {
         JComboBox<String> combo = new JComboBox<>();
-        EntityIterator<SystemEntity> it = entityController.getIterator(EntityType.PERFORMED_ACTIVITY);
+        EntityIterator<SystemEntity> it =
+                entityController.getIterator(EntityType.PERFORMED_ACTIVITY);
         SystemEntity entity = it.first();
         while (entity != null) {
             activityTypes.add(entity);
@@ -124,8 +123,6 @@ public class RegisterFollowUpView extends BaseView {
             }
         }
 
-        // Por qué: si el usuario activo es Investigador, se preselecciona su propio registro
-        // y se deshabilita el combo para que no pueda asignarse a otro.
         if ("Investigador".equalsIgnoreCase(currentUser.getRole())) {
             for (int i = 0; i < investigators.size(); i++) {
                 if (investigators.get(i).getId() == currentUser.getId()) {
@@ -142,8 +139,6 @@ public class RegisterFollowUpView extends BaseView {
     private void handleRegister() {
         FollowUpFormData data = new FollowUpFormData();
 
-        // Por qué: si hay actividades registradas se usa el nombre de la entidad seleccionada;
-        // si la lista está vacía se avisa al usuario para que registre actividades primero.
         int actIdx = cbActivities.getSelectedIndex();
         if (activityTypes.isEmpty()) {
             JOptionPane.showMessageDialog(this,

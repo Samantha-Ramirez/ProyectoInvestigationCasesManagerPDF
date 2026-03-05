@@ -61,8 +61,6 @@ public class CaseController {
         c.setIrregularitySubtypeId(data.irregularitySubtypeId);
         c.setInvestigatorId(data.investigatorId);
 
-        // Por qué: se aplican los valores del formulario antes del mediador para que éste
-        // solo auto-complete fecha y mes si el usuario no los ingresó.
         if (data.startDate != null && !data.startDate.isBlank()) {
             c.setStartDate(data.startDate);
         }

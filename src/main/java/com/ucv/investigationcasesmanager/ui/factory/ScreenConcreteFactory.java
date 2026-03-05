@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * PDyF: Fábrica concreta que implementa el estilo visual definido en los wireframes del sistema.
+ * PDyF: Fábrica concreta que implementa el estilo visual del sistema.
  */
 public class ScreenConcreteFactory extends ScreenAbstractFactory {
     private static final Color PRIMARY = new Color(125, 21, 175);
@@ -35,8 +35,6 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
         return buildMenuButton(null, text, action);
     }
 
-    // Por qué: sobrecarga con ícono para que el menú lateral muestre íconos vectoriales
-    // alineados a la izquierda del texto, tal como muestran los wireframes del sistema.
     @Override
     public JButton createMenuButton(Icon icon, String text, ActionListener action) {
         return buildMenuButton(icon, text, action);

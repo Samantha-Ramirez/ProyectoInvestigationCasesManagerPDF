@@ -16,17 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * Vista de registro de casos - recopila datos del formulario y delega al CaseController.
- * PDyF: Iterator – usa EntityIterator para poblar los combos de entidades sin exponer la lista
- * interna (UC13).
+ * Vista de registro de casos - recopila datos del formulario y delega al CaseController. PDyF:
+ * Iterator – usa EntityIterator para poblar los combos de entidades sin exponer la lista interna.
  */
 public class RegisterCaseView extends BaseView {
     private final CaseController caseController;
     private final EntityController entityController;
     private JTextField txtCaseNumber, txtStartDate, txtDays, txtMonth;
     private JTextField txtMobile, txtVictim, txtIncident, txtDuration;
-    private JTextArea txtModusOperandi, txtSupportArea, txtDetection, txtDiagnosis,
-            txtConclusions, txtRecommendations, txtObservations, txtSupport;
+    private JTextArea txtModusOperandi, txtSupportArea, txtDetection, txtDiagnosis, txtConclusions,
+            txtRecommendations, txtObservations, txtSupport;
     private JComboBox<String> cbCaseType, cbInvestigator, cbIrregularityType, cbSubtype;
     private List<User> investigators;
     private List<SystemEntity> caseTypes;
@@ -34,8 +33,6 @@ public class RegisterCaseView extends BaseView {
     private List<SystemEntity> irregularitySubtypes;
 
     public RegisterCaseView() {
-        // Por qué: se pospone initComponents() para que caseController esté
-        // asignado antes de que loadInvestigatorsCombo() lo invoque.
         super("Registro de casos", true, false);
         this.caseController = new CaseController();
         this.entityController = new EntityController();
@@ -56,7 +53,6 @@ public class RegisterCaseView extends BaseView {
         JPanel form = createForm();
 
         txtCaseNumber = new JTextField();
-        // Por qué: la fecha de inicio se precarga con el día de creación para facilitar el flujo
         txtStartDate = new JTextField(LocalDate.now().toString());
         txtDays = new JTextField();
         txtMonth = new JTextField();
@@ -149,7 +145,7 @@ public class RegisterCaseView extends BaseView {
     }
 
     // PDyF: Iterator – puebla un combo usando EntityIterator para recorrer las entidades
-    // sin exponer cómo están almacenadas internamente (UC13).
+    // sin exponer cómo están almacenadas internamente.
     private JComboBox<String> loadEntityCombo(EntityType type, List<SystemEntity> target) {
         JComboBox<String> combo = new JComboBox<>();
         EntityIterator<SystemEntity> it = entityController.getIterator(type);
@@ -182,8 +178,6 @@ public class RegisterCaseView extends BaseView {
         data.observations = txtObservations.getText();
         data.support = txtSupport.getText();
 
-        // Por qué: Días y Mes son opcionales; se usa 0 si el usuario los deja en blanco,
-        // y el mediador los auto-completa si es necesario.
         try {
             String daysText = txtDays.getText().trim();
             data.daysElapsed = daysText.isEmpty() ? 0 : Integer.parseInt(daysText);
@@ -198,8 +192,6 @@ public class RegisterCaseView extends BaseView {
         }
 
         int caseTypeIdx = cbCaseType.getSelectedIndex();
-        // Por qué: si no hay tipos de caso registrados se rechaza el formulario con mensaje claro,
-        // evitando guardar un caseTypeId de 0 que violaría la intención del campo.
         if (caseTypes.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "No hay Tipos de Casos disponibles. Registre al menos uno en Entidades.",

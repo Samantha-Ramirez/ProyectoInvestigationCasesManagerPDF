@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * PDyF: Iterator concreto que recorre una lista de entidades del sistema. Permite a las vistas
- * poblar combos (UC13) sin conocer la estructura interna de la colección (Array, List, etc.).
+ * poblar combos sin conocer la estructura interna de la colección (Array, List, etc.).
  */
 public class EntityListIterator<T> extends EntityIterator<T> {
     private final List<T> items;
@@ -31,8 +31,6 @@ public class EntityListIterator<T> extends EntityIterator<T> {
         return null;
     }
 
-    // Por qué: isDone() indica si el cursor ha pasado el último elemento, equivalente
-    // a la verificación de fin de colección en el ejemplo del profesor.
     @Override
     public boolean isDone() {
         return current >= items.size();
