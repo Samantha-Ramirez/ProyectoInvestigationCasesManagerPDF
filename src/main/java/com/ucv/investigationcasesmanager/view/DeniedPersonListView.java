@@ -17,7 +17,7 @@ import java.util.List;
  * fila.
  */
 public class DeniedPersonListView extends BaseView {
-    private static final int EDIT_COLUMN = 1;
+    private static final int EDIT_COLUMN = 4;
     private final DeniedFilesController controller;
     private final List<DeniedPerson> persons = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public class DeniedPersonListView extends BaseView {
                 e -> navigate(this, new DeniedPersonFormView(null)));
 
         JPanel card = createCard();
-        card.add(createTable(new String[] {"CI – Nombre – Apellido – Empresa", "Acción"}),
+        card.add(createTable(new String[] {"CI", "Nombre", "Apellido", "Empresa", "Acción"}),
                 java.awt.BorderLayout.CENTER);
 
         table.getColumnModel().getColumn(EDIT_COLUMN).setMaxWidth(52);
@@ -60,12 +60,12 @@ public class DeniedPersonListView extends BaseView {
         tableModel.setRowCount(0);
         for (DeniedPerson p : controller.getAllDeniedPersons()) {
             persons.add(p);
-            tableModel.addRow(
-                    new Object[] {p.getCi() + " – " + p.getFirstName() + " " + p.getLastName()
-                            + (p.getCompany() != null && !p.getCompany().isBlank()
-                                    ? " – " + p.getCompany()
-                                    : ""),
-                            "✎"});
+            tableModel.addRow(new Object[] {
+                    p.getCi(),
+                    p.getFirstName(),
+                    p.getLastName(),
+                    p.getCompany() != null ? p.getCompany() : "",
+                    "✎"});
         }
     }
 

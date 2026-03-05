@@ -17,7 +17,7 @@ import java.util.List;
  * por fila.
  */
 public class StolenEquipmentListView extends BaseView {
-    private static final int EDIT_COLUMN = 1;
+    private static final int EDIT_COLUMN = 4;
     private final DeniedFilesController controller;
     private final List<StolenEquipment> equipments = new ArrayList<>();
 
@@ -33,7 +33,8 @@ public class StolenEquipmentListView extends BaseView {
                 e -> navigate(this, new StolenEquipmentFormView(null)));
 
         JPanel card = createCard();
-        card.add(createTable(new String[] {"Serial – Tipo – Marca – Modelo", "Acción"}),
+        card.add(createTable(
+                new String[] {"Serial", "Tipo de equipo", "Marca", "Modelo", "Acción"}),
                 java.awt.BorderLayout.CENTER);
 
         table.getColumnModel().getColumn(EDIT_COLUMN).setMaxWidth(52);
@@ -60,12 +61,12 @@ public class StolenEquipmentListView extends BaseView {
         tableModel.setRowCount(0);
         for (StolenEquipment e : controller.getAllStolenEquipment()) {
             equipments.add(e);
-            String type = e.getEquipmentType() != null ? e.getEquipmentType() : "";
-            String brand = e.getBrand() != null ? e.getBrand() : "";
-            String model = e.getModel() != null ? e.getModel() : "";
-            tableModel.addRow(new Object[] {e.getSerial() + (type.isBlank() ? "" : " – " + type)
-                    + (brand.isBlank() ? "" : " – " + brand)
-                    + (model.isBlank() ? "" : " – " + model), "✎"});
+            tableModel.addRow(new Object[] {
+                    e.getSerial(),
+                    e.getEquipmentType() != null ? e.getEquipmentType() : "",
+                    e.getBrand() != null ? e.getBrand() : "",
+                    e.getModel() != null ? e.getModel() : "",
+                    "✎"});
         }
     }
 

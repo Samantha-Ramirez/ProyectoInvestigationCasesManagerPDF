@@ -2,9 +2,12 @@ package com.ucv.investigationcasesmanager.controller;
 
 import com.ucv.investigationcasesmanager.dao.CaseDAO;
 import com.ucv.investigationcasesmanager.dao.UserDAO;
+import com.ucv.investigationcasesmanager.decorator.AuditSaveDecorator;
+import com.ucv.investigationcasesmanager.decorator.ConcreteSaveOperation;
 import com.ucv.investigationcasesmanager.dto.CaseFormData;
 import com.ucv.investigationcasesmanager.mediator.RegistrationMediatorClient;
 import com.ucv.investigationcasesmanager.model.Case;
+import com.ucv.investigationcasesmanager.model.Session;
 import com.ucv.investigationcasesmanager.model.User;
 import com.ucv.investigationcasesmanager.service.ServiceLocator;
 
@@ -37,6 +40,7 @@ public class CaseController {
 
     /**
      * Construye un objeto Case a partir del formulario, lo valida mediante el mediador y lo guarda.
+     * PDyF: Decorator – envuelve el guardado con AuditSaveDecorator para registrar la traza.
      */
     public String registerCase(CaseFormData data, User currentUser) {
         if (data.investigatorId <= 0) {
@@ -73,7 +77,15 @@ public class CaseController {
             return "Datos inválidos. Verifique el campo de duración.";
         }
 
-        if (!caseDAO.save(c)) {
+        final boolean[] saved = {false};
+        String username = currentUsername();
+        ConcreteSaveOperation base = new ConcreteSaveOperation(() -> saved[0] = caseDAO.save(c));
+        AuditSaveDecorator decorated = new AuditSaveDecorator(username,
+                "Registro de caso: " + c.getCaseNumber());
+        decorated.setComponent(base);
+        decorated.guardar();
+
+        if (!saved[0]) {
             return "Error al guardar el caso en la base de datos.";
         }
 
@@ -82,5 +94,11 @@ public class CaseController {
 
     public List<User> getInvestigators() {
         return userDAO.findInvestigators();
+    }
+
+    private String currentUsername() {
+        return Session.getUser() != null
+                ? Session.getUser().getFirstName() + " " + Session.getUser().getLastName()
+                : "Sistema";
     }
 }

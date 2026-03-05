@@ -72,12 +72,13 @@ public class BoardView extends BaseView {
         populateTable(allCases);
     }
 
-    // Ordenar la tabla por días sin atención (ascendente = más antiguo primero)
+    // Ordenar la tabla por fecha de inicio (ascendente = más antiguo primero)
     private void sortTable(boolean ascending) {
         List<Case> sorted = new ArrayList<>(allCases);
-        Comparator<Case> byDays =
-                Comparator.comparingInt(c -> extractDays(c.getTimeWithoutAttention()));
-        sorted.sort(ascending ? byDays : byDays.reversed());
+        Comparator<Case> byDate = Comparator.comparing(
+                c -> c.getStartDate() != null ? c.getStartDate() : "",
+                String.CASE_INSENSITIVE_ORDER);
+        sorted.sort(ascending ? byDate : byDate.reversed());
         populateTable(sorted);
     }
 
