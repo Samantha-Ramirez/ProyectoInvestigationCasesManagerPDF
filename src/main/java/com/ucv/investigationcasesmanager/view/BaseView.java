@@ -1,6 +1,7 @@
 package com.ucv.investigationcasesmanager.view;
 
 import com.ucv.investigationcasesmanager.factory.StartupViewFactory;
+import com.ucv.investigationcasesmanager.model.EntityType;
 import com.ucv.investigationcasesmanager.model.Session;
 import com.ucv.investigationcasesmanager.model.User;
 import com.ucv.investigationcasesmanager.ui.factory.ScreenAbstractFactory;
@@ -83,7 +84,7 @@ public abstract class BaseView extends JFrame {
         addMenuButton("⌂  Inicio", e -> goHome());
         addMenuButton("⚑  Bandeja", e -> goHome());
         addMenuButton("↺  Reportes", e -> goToReports());
-        addMenuButton("⚙  Entidades", e -> goHome());
+        addMenuButton("⊞  Entidades", e -> showEntitiesPopup((JButton) e.getSource()));
         addMenuButton("◌  Auditoría", e -> goHome());
         sideMenu.add(Box.createVerticalGlue());
         addMenuButton("⇦  Cerrar sesión", e -> handleLogout());
@@ -105,6 +106,19 @@ public abstract class BaseView extends JFrame {
 
     private void goToReports() {
         navigate(this, new ReportsView());
+    }
+
+    // Por qué: muestra un JPopupMenu con todos los tipos de entidad para que el usuario
+    // seleccione cuál gestionar, tal como indica el flujo del UC09.
+    private void showEntitiesPopup(JButton source) {
+        JPopupMenu popup = new JPopupMenu();
+        for (EntityType type : EntityType.values()) {
+            JMenuItem item = new JMenuItem(type.getLabel());
+            item.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 13));
+            item.addActionListener(e -> navigate(this, new EntityListView(type)));
+            popup.add(item);
+        }
+        popup.show(source, source.getWidth(), 0);
     }
 
     private void handleLogout() {
