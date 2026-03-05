@@ -31,7 +31,7 @@ public class EntityFormView extends BaseView {
     protected void initComponents() {
         String viewTitle =
                 (existing == null ? "Registro" : "Edición") + " de " + entityType.getLabel();
-        setupTitle(viewTitle, null, null);
+        setupTitle(viewTitle, "Volver", e -> navigate(this, new EntityListView(entityType)));
 
         JPanel card = createCard();
         JPanel form = createForm();

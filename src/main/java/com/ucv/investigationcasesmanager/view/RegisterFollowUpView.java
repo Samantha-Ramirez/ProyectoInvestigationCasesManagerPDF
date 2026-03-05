@@ -59,7 +59,8 @@ public class RegisterFollowUpView extends BaseView {
 
     @Override
     protected void initComponents() {
-        setupTitle("Seguimiento de casos", null, null);
+        setupTitle("Seguimiento de casos", "Volver",
+                e -> navigate(this, new CaseDetailView(currentCase, currentUser)));
         contentPanel.add(createFollowUpFormPanel(), BorderLayout.CENTER);
         contentPanel.add(
                 createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),

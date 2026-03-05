@@ -34,8 +34,8 @@ public final class SideMenuIcon {
     /** Ícono de flecha de salida para "Cerrar sesión". */
     public static Icon logout() { return new LogoutIcon(); }
 
-    /** Ícono de ojo para la columna "Acción" de las tablas. */
-    public static Icon eye() { return new EyeIcon(); }
+    /** Ícono de lápiz-cuadro para la columna "Acción" (editar) de las tablas. */
+    public static Icon edit() { return new EditIcon(); }
 
     // ─────────────────────────────────────────────────────────────────────────
     // Base
@@ -205,26 +205,42 @@ public final class SideMenuIcon {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // Eye (ojo abierto: arco superior + arco inferior + pupila)
+    // Edit (lápiz diagonal sobre cuadro – ícono estándar de "editar")
     // ─────────────────────────────────────────────────────────────────────────
-    private static final class EyeIcon extends BaseIcon {
+    private static final class EditIcon extends BaseIcon {
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
             Graphics2D g2 = setup(g, x, y);
-            g2.setStroke(new BasicStroke(1.8f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            g2.setStroke(new BasicStroke(1.6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
-            // Por qué: el ojo se dibuja como dos arcos curvos que forman una almendra,
-            // más una pupila rellena en el centro, sin depender de fuentes Unicode.
-            GeneralPath lid = new GeneralPath();
-            lid.moveTo(1, 9);
-            lid.quadTo(9, 2, 17, 9);   // arco superior
-            lid.quadTo(9, 16, 1, 9);   // arco inferior
-            g2.draw(lid);
+            // Por qué: el ícono se dibuja con Java2D para garantizar visibilidad en cualquier JVM,
+            // sin depender de fuentes Unicode como Arial que no incluyen ✎ en todos los sistemas.
 
-            // Pupila
-            g2.fillOval(6, 6, 6, 6);
+            // Cuadro del documento (tres lados, esquina inferior-derecha abierta para el lápiz)
+            g2.drawLine(2, 14, 2, 2);   // lado izquierdo
+            g2.drawLine(2, 2, 12, 2);   // lado superior
+            g2.drawLine(12, 2, 12, 7);  // lado derecho (parcial)
+            g2.drawLine(2, 14, 7, 14);  // lado inferior (parcial)
+
+            // Cuerpo del lápiz: paralelogramo estrecho a 45°
+            GeneralPath pencil = new GeneralPath();
+            pencil.moveTo(7,  14);   // esquina inferior-izquierda
+            pencil.lineTo(15,  6);   // esquina superior-derecha
+            pencil.lineTo(13,  4);   // esquina superior-izquierda
+            pencil.lineTo(5,  12);   // esquina inferior-derecha del cuerpo
+            pencil.closePath();
+            g2.fill(pencil);
+
+            // Punta del lápiz (triángulo)
+            GeneralPath tip = new GeneralPath();
+            tip.moveTo(5,  12);
+            tip.lineTo(4,  15);   // vértice de la punta
+            tip.lineTo(7,  14);
+            tip.closePath();
+            g2.fill(tip);
 
             g2.dispose();
         }
     }
 }
+

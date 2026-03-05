@@ -12,7 +12,7 @@ import java.util.List;
  * Vista de cartelera para administradores - muestra todos los casos del sistema.
  */
 public class BoardView extends BaseView {
-    private static final int ACTION_COLUMN = 3;
+    private static final int ACTION_COLUMN = 4;
     private final CaseController caseController;
 
     public BoardView() {
@@ -28,7 +28,7 @@ public class BoardView extends BaseView {
         JPanel card = createCard();
         card.add(createActionBar("Vista general de casos por investigador", null),
                 java.awt.BorderLayout.NORTH);
-        card.add(createTable(new String[] {"Caso", "Tiempo", "Status", "Acción"}),
+        card.add(createTable(new String[] {"Caso", "Investigador", "Tiempo", "Status", "Acción"}),
                 java.awt.BorderLayout.CENTER);
 
         table.addMouseListener(new MouseAdapter() {
@@ -57,8 +57,9 @@ public class BoardView extends BaseView {
     private void loadData(int userId) {
         List<Case> cases = caseController.getAllCases();
         for (Case c : cases) {
-            tableModel.addRow(new Object[] {c.getCaseNumber(), c.getTimeWithoutAttention(),
-                    c.getStatus(), "Ver"});
+            tableModel.addRow(new Object[] {c.getCaseNumber(),
+                    c.getInvestigatorName() != null ? c.getInvestigatorName() : "",
+                    c.getTimeWithoutAttention(), c.getStatus(), "✎"});
         }
     }
 }

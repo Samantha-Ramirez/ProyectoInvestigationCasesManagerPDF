@@ -11,6 +11,7 @@ import com.ucv.investigationcasesmanager.model.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,8 @@ public class RegisterCaseView extends BaseView {
 
     @Override
     protected void initComponents() {
-        setupTitle("Registro de casos", null, null);
+        setupTitle("Registro de casos", "Volver",
+                e -> navigate(this, StartupViewFactory.getStartView(currentUser.getRole())));
         contentPanel.add(createFormPanel(), BorderLayout.CENTER);
         contentPanel.add(createBottomPanel(createPrimaryButton("Registrar", e -> handleRegister())),
                 BorderLayout.SOUTH);
@@ -54,7 +56,8 @@ public class RegisterCaseView extends BaseView {
         JPanel form = createForm();
 
         txtCaseNumber = new JTextField();
-        txtStartDate = new JTextField();
+        // Por qué: la fecha de inicio se precarga con el día de creación para facilitar el flujo
+        txtStartDate = new JTextField(LocalDate.now().toString());
         txtDays = new JTextField();
         txtMonth = new JTextField();
         txtMobile = new JTextField();

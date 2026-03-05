@@ -24,7 +24,7 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
 
     @Override
     public JButton createPrimaryButton(String text, ActionListener action) {
-        JButton btn = createRoundedButton(text, new Color(235, 235, 235), PRIMARY, 170, 34);
+        JButton btn = createRoundedButton(text, new Color(235, 235, 235), PRIMARY, 100, 30);
         btn.setFont(new Font("Arial", Font.BOLD, 12));
         btn.addActionListener(action);
         return btn;
