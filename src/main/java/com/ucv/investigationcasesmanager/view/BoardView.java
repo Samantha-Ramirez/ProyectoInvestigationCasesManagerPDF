@@ -4,8 +4,11 @@ import com.ucv.investigationcasesmanager.controller.CaseController;
 import com.ucv.investigationcasesmanager.model.Case;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /*
@@ -14,6 +17,7 @@ import java.util.List;
 public class BoardView extends BaseView {
     private static final int ACTION_COLUMN = 4;
     private final CaseController caseController;
+    private final List<Case> allCases = new ArrayList<>();
 
     public BoardView() {
         super("Cartelera de casos", true);
@@ -26,8 +30,18 @@ public class BoardView extends BaseView {
         setupTitle("Cartelera de casos", "Registrar", e -> navigate(this, new RegisterCaseView()));
 
         JPanel card = createCard();
-        card.add(createActionBar("Vista general de casos por investigador", null),
-                java.awt.BorderLayout.NORTH);
+
+        // UC11: botones de ordenamiento
+        JButton btnNewest = createHeaderButton("Más reciente → Más antiguo",
+                e -> sortTable(false));
+        JButton btnOldest = createHeaderButton("Más antiguo → Más reciente",
+                e -> sortTable(true));
+        JPanel sortBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
+        sortBar.setOpaque(false);
+        sortBar.add(btnOldest);
+        sortBar.add(btnNewest);
+        card.add(sortBar, java.awt.BorderLayout.NORTH);
+
         card.add(createTable(new String[] {"Caso", "Investigador", "Tiempo", "Status", "Acción"}),
                 java.awt.BorderLayout.CENTER);
 
@@ -55,7 +69,21 @@ public class BoardView extends BaseView {
     }
 
     private void loadData(int userId) {
-        List<Case> cases = caseController.getAllCases();
+        allCases.clear();
+        allCases.addAll(caseController.getAllCases());
+        populateTable(allCases);
+    }
+
+    // UC11: ordena la tabla por días sin atención (ascendente = más antiguo primero)
+    private void sortTable(boolean ascending) {
+        List<Case> sorted = new ArrayList<>(allCases);
+        Comparator<Case> byDays = Comparator.comparingInt(c -> extractDays(c.getTimeWithoutAttention()));
+        sorted.sort(ascending ? byDays : byDays.reversed());
+        populateTable(sorted);
+    }
+
+    private void populateTable(List<Case> cases) {
+        tableModel.setRowCount(0);
         for (Case c : cases) {
             tableModel.addRow(new Object[] {c.getCaseNumber(),
                     c.getInvestigatorName() != null ? c.getInvestigatorName() : "",
@@ -63,3 +91,4 @@ public class BoardView extends BaseView {
         }
     }
 }
+

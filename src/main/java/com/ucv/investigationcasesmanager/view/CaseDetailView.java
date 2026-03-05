@@ -121,6 +121,8 @@ public class CaseDetailView extends BaseView {
         followUpTable.getTableHeader().setReorderingAllowed(false);
         uiFactory.styleTable(followUpTable);
 
+        // Columna "Estatus" en índice 1 con badge de color igual que la bandeja/cartelera
+        followUpTable.getColumnModel().getColumn(1).setCellRenderer(createStatusBadgeRenderer());
         followUpTable.getColumnModel().getColumn(2).setMaxWidth(100);
         followUpTable.getColumnModel().getColumn(2).setMinWidth(80);
 
