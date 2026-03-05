@@ -2,8 +2,9 @@ package com.ucv.investigationcasesmanager.controller;
 
 import com.ucv.investigationcasesmanager.dao.SystemEntityDAO;
 import com.ucv.investigationcasesmanager.dao.UserDAO;
+import com.ucv.investigationcasesmanager.iterator.EntityAggregate;
 import com.ucv.investigationcasesmanager.iterator.EntityIterator;
-import com.ucv.investigationcasesmanager.iterator.EntityListIterator;
+import com.ucv.investigationcasesmanager.iterator.EntityListAggregate;
 import com.ucv.investigationcasesmanager.model.EntityType;
 import com.ucv.investigationcasesmanager.model.SystemEntity;
 import com.ucv.investigationcasesmanager.service.ServiceLocator;
@@ -37,11 +38,12 @@ public class EntityController {
     }
 
     /**
-     * PDyF: Iterator – retorna un iterador sobre la colección de entidades para que las vistas
-     * puedan poblar combos (UC13) sin conocer cómo está almacenada la colección internamente.
+     * PDyF: Iterator – crea un agregador concreto con la colección de entidades y retorna su
+     * iterador, desacoplando la colección del mecanismo de recorrido (UC13).
      */
     public EntityIterator<SystemEntity> getIterator(EntityType type) {
-        return new EntityListIterator<>(getAll(type));
+        EntityAggregate<SystemEntity> aggregate = new EntityListAggregate<>(getAll(type));
+        return aggregate.createIterator();
     }
 
     // Registrar un nuevo registro de la entidad dada

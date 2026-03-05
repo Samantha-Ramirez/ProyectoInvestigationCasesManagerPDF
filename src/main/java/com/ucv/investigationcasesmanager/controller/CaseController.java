@@ -52,14 +52,24 @@ public class CaseController {
         c.setSupportArea(data.supportArea);
         c.setDetectionOrigin(data.detectionOrigin);
         c.setFraudDiagnosis(data.fraudDiagnosis);
-        c.setConclusionsRecommendations(data.conclusionsRecommendations);
+        c.setConclusions(data.conclusions);
+        c.setRecommendations(data.recommendations);
         c.setObservations(data.observations);
         c.setSupport(data.support);
         c.setCaseTypeId(data.caseTypeId);
         c.setIrregularityTypeId(data.irregularityTypeId);
         c.setIrregularitySubtypeId(data.irregularitySubtypeId);
-        c.setActionPerformedId(data.actionPerformedId);
         c.setInvestigatorId(data.investigatorId);
+
+        // Por qué: se aplican los valores del formulario antes del mediador para que éste
+        // solo auto-complete fecha y mes si el usuario no los ingresó.
+        if (data.startDate != null && !data.startDate.isBlank()) {
+            c.setStartDate(data.startDate);
+        }
+        c.setDays(data.daysElapsed);
+        if (data.month > 0) {
+            c.setMonth(data.month);
+        }
 
         if (!RegistrationMediatorClient.validateAndPrepare(c, currentUser, data.duration)) {
             return "Datos inválidos. Verifique el campo de duración.";

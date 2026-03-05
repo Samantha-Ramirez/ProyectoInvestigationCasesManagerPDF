@@ -19,6 +19,6 @@ public final class RegistrationMediatorClient {
         mediator.setCaseColleague(caseColleague);
         mediator.setUserColleague(userColleague);
 
-        return caseColleague.requestValidationAndPreparation();
+        return caseColleague.send("VALIDATE_AND_PREPARE");
     }
 }

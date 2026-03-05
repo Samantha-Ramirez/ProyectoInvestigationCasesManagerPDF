@@ -66,10 +66,11 @@ public class EntityListView extends BaseView {
         entities.clear();
         tableModel.setRowCount(0);
         EntityIterator<SystemEntity> it = entityController.getIterator(entityType);
-        while (it.hasNext()) {
-            SystemEntity entity = it.next();
+        SystemEntity entity = it.first();
+        while (entity != null) {
             entities.add(entity);
             tableModel.addRow(new Object[] {entity.getName(), "✎"});
+            entity = it.next();
         }
     }
 

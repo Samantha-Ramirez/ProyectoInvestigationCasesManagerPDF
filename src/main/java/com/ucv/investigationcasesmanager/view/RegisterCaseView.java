@@ -22,14 +22,15 @@ import java.util.List;
 public class RegisterCaseView extends BaseView {
     private final CaseController caseController;
     private final EntityController entityController;
-    private JTextField txtCaseNumber, txtMobile, txtVictim, txtIncident, txtDuration;
-    private JTextArea txtModusOperandi, txtSupportArea, txtDetection, txtDiagnosis, txtConclusions,
-            txtObservations, txtSupport;
-    private JComboBox<String> cbCaseType, cbInvestigator, cbIrregularityType, cbSubtype, cbAction;
+    private JTextField txtCaseNumber, txtStartDate, txtDays, txtMonth;
+    private JTextField txtMobile, txtVictim, txtIncident, txtDuration;
+    private JTextArea txtModusOperandi, txtSupportArea, txtDetection, txtDiagnosis,
+            txtConclusions, txtRecommendations, txtObservations, txtSupport;
+    private JComboBox<String> cbCaseType, cbInvestigator, cbIrregularityType, cbSubtype;
     private List<User> investigators;
+    private List<SystemEntity> caseTypes;
     private List<SystemEntity> irregularityTypes;
     private List<SystemEntity> irregularitySubtypes;
-    private List<SystemEntity> performedProcesses;
 
     public RegisterCaseView() {
         // Por qué: se pospone initComponents() para que caseController esté
@@ -53,54 +54,66 @@ public class RegisterCaseView extends BaseView {
         JPanel form = createForm();
 
         txtCaseNumber = new JTextField();
-        cbCaseType = new JComboBox<>(new String[] {"Gestión", "Reclamo", "Caso"});
-        cbInvestigator = loadInvestigatorsCombo();
+        txtStartDate = new JTextField();
+        txtDays = new JTextField();
+        txtMonth = new JTextField();
         txtMobile = new JTextField();
         txtVictim = new JTextField();
         txtIncident = new JTextField();
         txtDuration = new JTextField();
+
+        investigators = new ArrayList<>();
+        caseTypes = new ArrayList<>();
         irregularityTypes = new ArrayList<>();
         irregularitySubtypes = new ArrayList<>();
-        performedProcesses = new ArrayList<>();
+
+        cbInvestigator = loadInvestigatorsCombo();
+        cbCaseType = loadEntityCombo(EntityType.CASE_TYPE, caseTypes);
         cbIrregularityType = loadEntityCombo(EntityType.IRREGULARITY_TYPE, irregularityTypes);
         cbSubtype = loadEntityCombo(EntityType.IRREGULARITY_SUBTYPE, irregularitySubtypes);
-        cbAction = loadEntityCombo(EntityType.PERFORMED_PROCESS, performedProcesses);
+
         txtModusOperandi = createTextArea(3, 20, 80);
         txtSupportArea = createTextArea(2, 20, 60);
         txtDetection = createTextArea(2, 20, 60);
         txtDiagnosis = createTextArea(3, 20, 80);
         txtConclusions = createTextArea(3, 20, 80);
+        txtRecommendations = createTextArea(3, 20, 80);
         txtObservations = createTextArea(2, 20, 60);
         txtSupport = createTextArea(2, 20, 60);
 
         styleInput(txtCaseNumber);
-        styleInput(cbCaseType);
+        styleInput(txtStartDate);
+        styleInput(txtDays);
+        styleInput(txtMonth);
         styleInput(cbInvestigator);
         styleInput(txtMobile);
+        styleInput(cbCaseType);
+        styleInput(cbIrregularityType);
+        styleInput(cbSubtype);
         styleInput(txtVictim);
         styleInput(txtIncident);
         styleInput(txtDuration);
-        styleInput(cbIrregularityType);
-        styleInput(cbSubtype);
-        styleInput(cbAction);
 
         int row = 0;
         row = addField(form, row, "Nro. expediente", txtCaseNumber);
-        row = addField(form, row, "Tipo de caso", cbCaseType);
         row = addField(form, row, "Investigador", cbInvestigator);
+        row = addField(form, row, "Fecha de inicio", txtStartDate);
+        row = addField(form, row, "Días", txtDays);
+        row = addField(form, row, "Mes", txtMonth);
         row = addField(form, row, "Móvil afectado", txtMobile);
+        row = addField(form, row, "Tipos de Casos", cbCaseType);
+        row = addField(form, row, "Tipo irregularidad", cbIrregularityType);
+        row = addField(form, row, "Subtipo irregularidad", cbSubtype);
         row = addField(form, row, "Objetivo/Agraviado", txtVictim);
         row = addField(form, row, "Incidencia", txtIncident);
         row = addField(form, row, "Duración (días)", txtDuration);
-        row = addField(form, row, "Tipo irregularidad", cbIrregularityType);
-        row = addField(form, row, "Subtipo", cbSubtype);
-        row = addField(form, row, "Acción realizada", cbAction);
-        row = addField(form, row, "Modus operandi", wrapInScroll(txtModusOperandi));
-        row = addField(form, row, "Área de apoyo", wrapInScroll(txtSupportArea));
-        row = addField(form, row, "Detección", wrapInScroll(txtDetection));
-        row = addField(form, row, "Diagnóstico", wrapInScroll(txtDiagnosis));
-        row = addField(form, row, "Conclusiones", wrapInScroll(txtConclusions));
+        row = addField(form, row, "Descripción Modus Operandi", wrapInScroll(txtModusOperandi));
+        row = addField(form, row, "Área Apoyo a Resolver", wrapInScroll(txtSupportArea));
+        row = addField(form, row, "Detección / Procedencia del Caso", wrapInScroll(txtDetection));
+        row = addField(form, row, "Diagnóstico / Detalle de Fraude", wrapInScroll(txtDiagnosis));
         row = addField(form, row, "Observaciones", wrapInScroll(txtObservations));
+        row = addField(form, row, "Conclusiones", wrapInScroll(txtConclusions));
+        row = addField(form, row, "Recomendaciones", wrapInScroll(txtRecommendations));
         addField(form, row, "Soporte", wrapInScroll(txtSupport));
 
         card.add(wrapInScroll(form), BorderLayout.CENTER);
@@ -137,10 +150,11 @@ public class RegisterCaseView extends BaseView {
     private JComboBox<String> loadEntityCombo(EntityType type, List<SystemEntity> target) {
         JComboBox<String> combo = new JComboBox<>();
         EntityIterator<SystemEntity> it = entityController.getIterator(type);
-        while (it.hasNext()) {
-            SystemEntity entity = it.next();
+        SystemEntity entity = it.first();
+        while (entity != null) {
             target.add(entity);
             combo.addItem(entity.getName());
+            entity = it.next();
         }
         if (target.isEmpty()) {
             combo.addItem("Sin registros");
@@ -151,6 +165,7 @@ public class RegisterCaseView extends BaseView {
     private void handleRegister() {
         CaseFormData data = new CaseFormData();
         data.caseNumber = txtCaseNumber.getText();
+        data.startDate = txtStartDate.getText().trim();
         data.mobileAffected = txtMobile.getText();
         data.objectiveVictim = txtVictim.getText();
         data.incident = txtIncident.getText();
@@ -159,10 +174,36 @@ public class RegisterCaseView extends BaseView {
         data.supportArea = txtSupportArea.getText();
         data.detectionOrigin = txtDetection.getText();
         data.fraudDiagnosis = txtDiagnosis.getText();
-        data.conclusionsRecommendations = txtConclusions.getText();
+        data.conclusions = txtConclusions.getText();
+        data.recommendations = txtRecommendations.getText();
         data.observations = txtObservations.getText();
         data.support = txtSupport.getText();
-        data.caseTypeId = cbCaseType.getSelectedIndex() + 1;
+
+        // Por qué: Días y Mes son opcionales; se usa 0 si el usuario los deja en blanco,
+        // y el mediador los auto-completa si es necesario.
+        try {
+            String daysText = txtDays.getText().trim();
+            data.daysElapsed = daysText.isEmpty() ? 0 : Integer.parseInt(daysText);
+        } catch (NumberFormatException e) {
+            data.daysElapsed = 0;
+        }
+        try {
+            String monthText = txtMonth.getText().trim();
+            data.month = monthText.isEmpty() ? 0 : Integer.parseInt(monthText);
+        } catch (NumberFormatException e) {
+            data.month = 0;
+        }
+
+        int caseTypeIdx = cbCaseType.getSelectedIndex();
+        // Por qué: si no hay tipos de caso registrados se rechaza el formulario con mensaje claro,
+        // evitando guardar un caseTypeId de 0 que violaría la intención del campo.
+        if (caseTypes.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "No hay Tipos de Casos disponibles. Registre al menos uno en Entidades.",
+                    "Datos incompletos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        data.caseTypeId = caseTypes.get(caseTypeIdx).getId();
 
         int irrTypeIdx = cbIrregularityType.getSelectedIndex();
         data.irregularityTypeId = (!irregularityTypes.isEmpty() && irrTypeIdx >= 0)
@@ -173,11 +214,6 @@ public class RegisterCaseView extends BaseView {
         data.irregularitySubtypeId = (!irregularitySubtypes.isEmpty() && irrSubIdx >= 0)
                 ? irregularitySubtypes.get(irrSubIdx).getId()
                 : irrSubIdx + 1;
-
-        int actionIdx = cbAction.getSelectedIndex();
-        data.actionPerformedId = (!performedProcesses.isEmpty() && actionIdx >= 0)
-                ? performedProcesses.get(actionIdx).getId()
-                : actionIdx + 1;
 
         int selectedIdx = cbInvestigator.getSelectedIndex();
         if (selectedIdx >= 0 && selectedIdx < investigators.size()) {
