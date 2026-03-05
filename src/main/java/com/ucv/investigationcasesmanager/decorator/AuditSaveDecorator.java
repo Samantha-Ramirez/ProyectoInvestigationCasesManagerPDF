@@ -5,7 +5,7 @@ import com.ucv.investigationcasesmanager.service.ServiceLocator;
 
 /**
  * PDyF: Decorator – ConcreteDecorator que añade el registro automático de auditoría tras ejecutar
- * la operación de guardado subyacente..
+ * la operación de guardado subyacente.
  */
 public class AuditSaveDecorator extends SaveDecorator {
     private final String username;

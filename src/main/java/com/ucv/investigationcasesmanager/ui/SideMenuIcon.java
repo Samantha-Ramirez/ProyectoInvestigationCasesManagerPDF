@@ -51,10 +51,6 @@ public final class SideMenuIcon {
         return new EditIcon();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Base
-    // ─────────────────────────────────────────────────────────────────────────
-
     private abstract static class BaseIcon implements Icon {
         @Override
         public int getIconWidth() {
@@ -77,9 +73,6 @@ public final class SideMenuIcon {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Home (casa sólida con puerta hueca)
-    // ─────────────────────────────────────────────────────────────────────────
     private static final class HomeIcon extends BaseIcon {
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
@@ -104,9 +97,6 @@ public final class SideMenuIcon {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Download (flecha hacia abajo + bandeja de tres lados)
-    // ─────────────────────────────────────────────────────────────────────────
     private static final class DownloadIcon extends BaseIcon {
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
@@ -128,9 +118,6 @@ public final class SideMenuIcon {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Tag / label (etiqueta de precio con orificio)
-    // ─────────────────────────────────────────────────────────────────────────
     private static final class TagIcon extends BaseIcon {
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
@@ -154,9 +141,6 @@ public final class SideMenuIcon {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Plus-circle (círculo + signo más)
-    // ─────────────────────────────────────────────────────────────────────────
     private static final class PlusCircleIcon extends BaseIcon {
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
@@ -175,9 +159,6 @@ public final class SideMenuIcon {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Trash (papelera con tapa y líneas internas)
-    // ─────────────────────────────────────────────────────────────────────────
     private static final class TrashIcon extends BaseIcon {
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
@@ -199,9 +180,6 @@ public final class SideMenuIcon {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Logout (flecha saliendo hacia la derecha + marco de puerta)
-    // ─────────────────────────────────────────────────────────────────────────
     private static final class LogoutIcon extends BaseIcon {
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
@@ -221,10 +199,6 @@ public final class SideMenuIcon {
             g2.dispose();
         }
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // Edit (lápiz diagonal sobre cuadro – ícono estándar de "editar")
-    // ─────────────────────────────────────────────────────────────────────────
     private static final class EditIcon extends BaseIcon {
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {

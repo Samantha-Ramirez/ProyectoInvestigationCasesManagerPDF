@@ -18,7 +18,6 @@ public final class ThemeConfig {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception ex) {
-                // ignorar: si FlatLaf no está disponible se usa el look nativo del sistema
             }
         }
     }

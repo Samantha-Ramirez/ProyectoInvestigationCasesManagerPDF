@@ -24,7 +24,7 @@ public class AuditView extends BaseView {
         setupTitle("Trazabilidad y auditoría", null, null);
 
         javax.swing.JPanel card = createCard();
-        card.add(createTable(new String[] {"Usuario", "Acción", "Detalle", "Fecha/Hora"}),
+        card.add(createTable(new String[] {"Usuario", "Detalle", "Fecha/Hora"}),
                 java.awt.BorderLayout.CENTER);
 
         contentPanel.add(card, java.awt.BorderLayout.CENTER);
@@ -33,12 +33,8 @@ public class AuditView extends BaseView {
     private void loadData() {
         List<AuditLog> logs = auditController.getAllLogs();
         for (AuditLog log : logs) {
-            // Separar "Tipo de acción: detalle" en dos columnas para mayor claridad
-            String[] parts = log.getAction().split(": ", 2);
-            String actionType = parts[0];
-            String detail = parts.length > 1 ? parts[1] : "";
-            tableModel.addRow(
-                    new Object[] {log.getUsername(), actionType, detail, log.getActionDate()});
+            String action = log.getAction();
+            tableModel.addRow(new Object[] {log.getUsername(), action, log.getActionDate()});
         }
     }
 }

@@ -39,7 +39,7 @@ public class CaseController {
     }
 
     /**
-     * Construye un objeto Case a partir del formulario, lo valida mediante el mediador y lo guarda.
+     * Construir un objeto Case a partir del formulario, lo valida mediante el mediador y lo guarda.
      * PDyF: Decorator – envuelve el guardado con AuditSaveDecorator para registrar la traza.
      */
     public String registerCase(CaseFormData data, User currentUser) {
@@ -80,8 +80,8 @@ public class CaseController {
         final boolean[] saved = {false};
         String username = currentUsername();
         ConcreteSaveOperation base = new ConcreteSaveOperation(() -> saved[0] = caseDAO.save(c));
-        AuditSaveDecorator decorated = new AuditSaveDecorator(username,
-                "Registro de caso: " + c.getCaseNumber());
+        AuditSaveDecorator decorated =
+                new AuditSaveDecorator(username, "Registro de caso: " + c.getCaseNumber());
         decorated.setComponent(base);
         decorated.guardar();
 
