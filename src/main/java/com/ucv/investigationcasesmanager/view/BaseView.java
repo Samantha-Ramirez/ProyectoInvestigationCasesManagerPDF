@@ -220,7 +220,7 @@ public abstract class BaseView extends JFrame {
         // coherente con el ícono de edición de EntityListView.
         for (int i = 0; i < columns.length; i++) {
             if ("Acción".equalsIgnoreCase(columns[i])) {
-                table.getColumnModel().getColumn(i).setCellRenderer(new EditIconRenderer(uiFactory.getPrimaryColor()));
+                table.getColumnModel().getColumn(i).setCellRenderer(new EditIconRenderer());
                 table.getColumnModel().getColumn(i).setMaxWidth(52);
                 table.getColumnModel().getColumn(i).setMinWidth(52);
                 break;
@@ -419,21 +419,13 @@ public abstract class BaseView extends JFrame {
         }
     }
 
-    // Por qué: renderizador de la celda "Acción" con ícono de edición (✎) para indicar
-    // "Editar/Ver detalle", coherente con el ícono en EntityListView.
+    // Por qué: renderizador de la celda "Acción" con ícono de edición dibujado en Java2D
+    // para garantizar visibilidad en cualquier JVM, sin depender de fuentes Unicode.
     private static class EditIconRenderer implements TableCellRenderer {
-        private final Color primaryColor;
-
-        EditIconRenderer(Color primaryColor) {
-            this.primaryColor = primaryColor;
-        }
-
         @Override
         public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
                 boolean hasFocus, int row, int col) {
-            JLabel lbl = new JLabel("✎", SwingConstants.CENTER);
-            lbl.setFont(new Font("Arial", Font.PLAIN, 16));
-            lbl.setForeground(primaryColor);
+            JLabel lbl = new JLabel(SideMenuIcon.edit(), SwingConstants.CENTER);
             lbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
             lbl.setOpaque(true);
             lbl.setBackground(isSelected ? new Color(242, 236, 247) : Color.WHITE);

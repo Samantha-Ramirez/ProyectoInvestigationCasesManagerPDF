@@ -4,6 +4,7 @@ import com.ucv.investigationcasesmanager.controller.EntityController;
 import com.ucv.investigationcasesmanager.iterator.EntityIterator;
 import com.ucv.investigationcasesmanager.model.EntityType;
 import com.ucv.investigationcasesmanager.model.SystemEntity;
+import com.ucv.investigationcasesmanager.ui.SideMenuIcon;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -43,7 +44,7 @@ public class EntityListView extends BaseView {
         table.getColumnModel().getColumn(EDIT_COLUMN).setMaxWidth(52);
         table.getColumnModel().getColumn(EDIT_COLUMN).setMinWidth(52);
         table.getColumnModel().getColumn(EDIT_COLUMN)
-                .setCellRenderer(new EditIconRenderer(uiFactory.getPrimaryColor()));
+                .setCellRenderer(new EditIconRenderer());
 
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -80,20 +81,12 @@ public class EntityListView extends BaseView {
         }
     }
 
-    // Renderizador de la celda de acción con ícono de edición en color primario
+    // Renderizador de la celda de acción con ícono de edición Java2D en color primario
     private static class EditIconRenderer extends DefaultTableCellRenderer {
-        private final Color primaryColor;
-
-        EditIconRenderer(Color primaryColor) {
-            this.primaryColor = primaryColor;
-        }
-
         @Override
         public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
                 boolean hasFocus, int row, int col) {
-            JLabel lbl = new JLabel("✎", SwingConstants.CENTER);
-            lbl.setFont(new Font("Arial", Font.PLAIN, 16));
-            lbl.setForeground(primaryColor);
+            JLabel lbl = new JLabel(SideMenuIcon.edit(), SwingConstants.CENTER);
             lbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
             lbl.setOpaque(true);
             lbl.setBackground(isSelected ? new Color(242, 236, 247) : Color.WHITE);
