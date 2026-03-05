@@ -17,7 +17,6 @@ public final class ServiceLocator {
         return type.cast(service);
     }
 
-    // Por qué: Se usa reflexión para evitar dependencias directas entre ServiceLocator y cada DAO
     private static Object newInstance(Class<?> type) {
         try {
             return type.getDeclaredConstructor().newInstance();

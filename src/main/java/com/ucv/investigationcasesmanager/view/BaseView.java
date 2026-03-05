@@ -4,6 +4,7 @@ import com.ucv.investigationcasesmanager.factory.StartupViewFactory;
 import com.ucv.investigationcasesmanager.model.EntityType;
 import com.ucv.investigationcasesmanager.model.Session;
 import com.ucv.investigationcasesmanager.model.User;
+import com.ucv.investigationcasesmanager.ui.SideMenuIcon;
 import com.ucv.investigationcasesmanager.ui.factory.ScreenAbstractFactory;
 import com.ucv.investigationcasesmanager.ui.factory.ScreenConcreteFactory;
 
@@ -81,21 +82,23 @@ public abstract class BaseView extends JFrame {
         sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(230, 230, 230)));
 
         sideMenu.add(Box.createVerticalStrut(12));
-        addMenuButton("⌂  Inicio", e -> goHome());
-        addMenuButton("⚑  Bandeja", e -> goHome());
-        addMenuButton("↺  Reportes", e -> goToReports());
-        addMenuButton("⊞  Entidades", e -> showEntitiesPopup((JButton) e.getSource()));
-        addMenuButton("◌  Auditoría", e -> goHome());
+        addMenuButton(SideMenuIcon.home(), "Inicio", e -> goHome());
+        addMenuButton(SideMenuIcon.download(), "Reportes",
+                e -> showReportsPopup((JButton) e.getSource()));
+        addMenuButton(SideMenuIcon.tag(), "Auditoría", e -> goHome());
+        addMenuButton(SideMenuIcon.plusCircle(), "Entidades",
+                e -> showEntitiesPopup((JButton) e.getSource()));
+        addMenuButton(SideMenuIcon.trash(), "Archivos Negados", e -> goHome());
         sideMenu.add(Box.createVerticalGlue());
-        addMenuButton("⇦  Cerrar sesión", e -> handleLogout());
+        addMenuButton(SideMenuIcon.logout(), "Cerrar sesión", e -> handleLogout());
         sideMenu.add(Box.createVerticalStrut(14));
 
         add(sideMenu, BorderLayout.WEST);
     }
 
-    private void addMenuButton(String text, ActionListener action) {
-        JButton btn = uiFactory.createMenuButton(text, action);
-        btn.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 0));
+    private void addMenuButton(Icon icon, String text, ActionListener action) {
+        JButton btn = uiFactory.createMenuButton(icon, text, action);
+        btn.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 0));
         sideMenu.add(btn);
         sideMenu.add(Box.createVerticalStrut(2));
     }
@@ -104,12 +107,19 @@ public abstract class BaseView extends JFrame {
         navigate(this, StartupViewFactory.getStartView(currentUser.getRole()));
     }
 
-    private void goToReports() {
-        navigate(this, new ReportsView());
+    private void showReportsPopup(JButton source) {
+        JPopupMenu popup = new JPopupMenu();
+        String[] reportTypes = {"Empresas con mayores casos", "Investigadores con mayores casos",
+                "Casos con más de 3 casos relacionados"};
+        for (String type : reportTypes) {
+            JMenuItem item = new JMenuItem(type);
+            item.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 13));
+            item.addActionListener(e -> navigate(this, new ReportsView(type)));
+            popup.add(item);
+        }
+        popup.show(source, source.getWidth(), 0);
     }
 
-    // Por qué: muestra un JPopupMenu con todos los tipos de entidad para que el usuario
-    // seleccione cuál gestionar, tal como indica el flujo del UC09.
     private void showEntitiesPopup(JButton source) {
         JPopupMenu popup = new JPopupMenu();
         for (EntityType type : EntityType.values()) {
@@ -202,6 +212,15 @@ public abstract class BaseView extends JFrame {
 
         if (columns.length > 2 && "Status".equalsIgnoreCase(columns[2])) {
             table.getColumnModel().getColumn(2).setCellRenderer(new StatusBadgeRenderer());
+        }
+
+        for (int i = 0; i < columns.length; i++) {
+            if ("Acción".equalsIgnoreCase(columns[i])) {
+                table.getColumnModel().getColumn(i).setCellRenderer(new EditIconRenderer());
+                table.getColumnModel().getColumn(i).setMaxWidth(52);
+                table.getColumnModel().getColumn(i).setMinWidth(52);
+                break;
+            }
         }
 
         JScrollPane scroll = new JScrollPane(table);
@@ -370,13 +389,40 @@ public abstract class BaseView extends JFrame {
         @Override
         public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
                 boolean hasFocus, int row, int column) {
-            JLabel badge = uiFactory.createStatusBadge(String.valueOf(value));
-            if (isSelected) {
-                badge.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(185, 170, 212)),
-                        BorderFactory.createEmptyBorder(2, 8, 2, 8)));
-            }
+            String status = String.valueOf(value);
+            Color bg = resolveStatusColor(status);
+            JLabel badge = new JLabel("\u25CF " + status, SwingConstants.CENTER);
+            badge.setOpaque(true);
+            badge.setBackground(isSelected ? new Color(242, 236, 247) : Color.WHITE);
+            badge.setForeground(bg);
+            badge.setFont(new Font("Arial", Font.BOLD, 11));
+            badge.setBorder(BorderFactory.createEmptyBorder(2, 6, 2, 6));
             return badge;
+        }
+
+        private Color resolveStatusColor(String status) {
+            if (status == null)
+                return new Color(100, 100, 100);
+            return switch (status) {
+                case "Abierto" -> new Color(0, 153, 76);
+                case "Asignado" -> new Color(230, 130, 0);
+                case "En Seguimiento", "Seguimiento" -> new Color(0, 120, 200);
+                case "Cerrado" -> new Color(180, 30, 30);
+                case "Reabierto" -> new Color(125, 21, 175);
+                default -> new Color(100, 100, 100);
+            };
+        }
+    }
+
+    private static class EditIconRenderer implements TableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected,
+                boolean hasFocus, int row, int col) {
+            JLabel lbl = new JLabel(SideMenuIcon.edit(), SwingConstants.CENTER);
+            lbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            lbl.setOpaque(true);
+            lbl.setBackground(isSelected ? new Color(242, 236, 247) : Color.WHITE);
+            return lbl;
         }
     }
 }

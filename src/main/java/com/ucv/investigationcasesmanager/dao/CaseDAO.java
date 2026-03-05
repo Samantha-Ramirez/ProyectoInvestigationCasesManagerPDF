@@ -20,19 +20,20 @@ public class CaseDAO extends BaseDAO<Case> {
 
     // Obtener todos los casos del sistema (para administradores)
     public List<Case> findAll() {
-        String sql = "SELECT case_number, status, "
-                + "CAST(CAST((julianday('now') - julianday(start_date)) AS INTEGER) AS TEXT)"
-                + " || ' días sin atención' AS time_without_attention " + "FROM investigation_case";
-        return queryList(sql, this::mapSummary);
+        String sql = "SELECT ic.case_number, ic.status, "
+                + "CAST(CAST((julianday('now') - julianday(ic.start_date)) AS INTEGER) AS TEXT)"
+                + " || ' días sin atención' AS time_without_attention, "
+                + "COALESCE(u.first_name || ' ' || u.last_name, 'Sin asignar') AS investigator_name "
+                + "FROM investigation_case ic " + "LEFT JOIN user u ON u.id = ic.investigator_id";
+        return queryList(sql, this::mapSummaryWithInvestigator);
     }
 
-    // Obtener el detalle completo de un caso por número de expediente
     public Case findByCaseNumber(String caseNumber) {
         String sql = "SELECT id, case_number, status, investigator_id, "
                 + "start_date, duration_days, mobile_affected, objective_victim, incident, "
                 + "modus_operandi_description, support_area, detection_origin, "
-                + "fraud_diagnosis, conclusions_recommendations, observations, support "
-                + "FROM investigation_case WHERE case_number = ?";
+                + "fraud_diagnosis, conclusions_recommendations, recommendations, "
+                + "observations, support " + "FROM investigation_case WHERE case_number = ?";
         return queryOne(sql, this::mapDetail, caseNumber);
     }
 
@@ -42,17 +43,17 @@ public class CaseDAO extends BaseDAO<Case> {
                 + "case_number, start_date, days_elapsed, registration_month, status, "
                 + "mobile_affected, objective_victim, incident, duration_days, "
                 + "modus_operandi_description, support_area, detection_origin, "
-                + "fraud_diagnosis, conclusions_recommendations, observations, support, "
+                + "fraud_diagnosis, conclusions_recommendations, recommendations, "
+                + "observations, support, "
                 + "investigator_id, case_type_id, irregularity_type_id, "
-                + "irregularity_subtype_id, action_performed_id) "
+                + "irregularity_subtype_id) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         return execute(sql, c.getCaseNumber(), c.getStartDate(), c.getDays(), c.getMonth(),
                 c.getStatus(), c.getMobileAffected(), c.getObjectiveVictim(), c.getIncident(),
                 c.getDurationDays(), c.getModusOperandiDescription(), c.getSupportArea(),
-                c.getDetectionOrigin(), c.getFraudDiagnosis(), c.getConclusionsRecommendations(),
-                c.getObservations(), c.getSupport(), c.getInvestigatorId(), c.getCaseTypeId(),
-                c.getIrregularityTypeId(), c.getIrregularitySubtypeId(),
-                c.getActionPerformedId()) > 0;
+                c.getDetectionOrigin(), c.getFraudDiagnosis(), c.getConclusions(),
+                c.getRecommendations(), c.getObservations(), c.getSupport(), c.getInvestigatorId(),
+                c.getCaseTypeId(), c.getIrregularityTypeId(), c.getIrregularitySubtypeId()) > 0;
     }
 
     // Mapear una fila del ResultSet a un objeto Case (resumen para la bandeja)
@@ -61,6 +62,13 @@ public class CaseDAO extends BaseDAO<Case> {
         c.setCaseNumber(rs.getString("case_number"));
         c.setStatus(rs.getString("status"));
         c.setTimeWithoutAttention(rs.getString("time_without_attention"));
+        return c;
+    }
+
+    // Mapear una fila del ResultSet a un objeto Case (resumen con nombre de investigador)
+    private Case mapSummaryWithInvestigator(java.sql.ResultSet rs) throws java.sql.SQLException {
+        Case c = mapSummary(rs);
+        c.setInvestigatorName(rs.getString("investigator_name"));
         return c;
     }
 
@@ -80,7 +88,8 @@ public class CaseDAO extends BaseDAO<Case> {
         c.setSupportArea(rs.getString("support_area"));
         c.setDetectionOrigin(rs.getString("detection_origin"));
         c.setFraudDiagnosis(rs.getString("fraud_diagnosis"));
-        c.setConclusionsRecommendations(rs.getString("conclusions_recommendations"));
+        c.setConclusions(rs.getString("conclusions_recommendations"));
+        c.setRecommendations(rs.getString("recommendations"));
         c.setObservations(rs.getString("observations"));
         c.setSupport(rs.getString("support"));
         return c;

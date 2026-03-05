@@ -43,11 +43,9 @@ public class SystemEntityDAO extends BaseDAO<SystemEntity> {
         return execute(sql, id) > 0;
     }
 
-    // Por qué: valida que el nombre de tabla provenga de la lista blanca (EntityType) para
-    // prevenir inyección SQL, ya que el nombre de tabla no puede parametrizarse en SQL estándar.
     private void validateTableName(String tableName) {
-        for (com.ucv.investigationcasesmanager.model.EntityType type :
-                com.ucv.investigationcasesmanager.model.EntityType.values()) {
+        for (com.ucv.investigationcasesmanager.model.EntityType type : com.ucv.investigationcasesmanager.model.EntityType
+                .values()) {
             if (tableName.equals(type.getTableName())) {
                 return;
             }

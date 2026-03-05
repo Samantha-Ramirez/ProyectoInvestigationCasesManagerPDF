@@ -8,8 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /*
- * Vista de formulario para UC09 – registrar o editar un registro de una entidad del sistema.
- * En modo edición también permite eliminar el registro.
+ * Vista de formulario para registrar o editar un registro de una entidad del sistema. En modo
+ * edición también permite eliminar el registro.
  */
 public class EntityFormView extends BaseView {
     private final EntityController entityController;
@@ -17,7 +17,6 @@ public class EntityFormView extends BaseView {
     private final SystemEntity existing;
     private JTextField txtTitle;
 
-    // Por qué: existing es null cuando se registra y no null cuando se edita
     public EntityFormView(EntityType entityType, SystemEntity existing) {
         super((existing == null ? "Registro" : "Edición") + " de " + entityType.getLabel(), true,
                 false);
@@ -31,7 +30,7 @@ public class EntityFormView extends BaseView {
     protected void initComponents() {
         String viewTitle =
                 (existing == null ? "Registro" : "Edición") + " de " + entityType.getLabel();
-        setupTitle(viewTitle, null, null);
+        setupTitle(viewTitle, "Volver", e -> navigate(this, new EntityListView(entityType)));
 
         JPanel card = createCard();
         JPanel form = createForm();
@@ -45,15 +44,12 @@ public class EntityFormView extends BaseView {
 
         if (existing != null) {
             // Modo edición: botones Guardar y Eliminar
-            JButton btnSave =
-                    createPrimaryButton("Guardar", e -> handleSave());
-            JButton btnDelete =
-                    createHeaderButton("Eliminar", e -> handleDelete());
+            JButton btnSave = createPrimaryButton("Guardar", e -> handleSave());
+            JButton btnDelete = createHeaderButton("Eliminar", e -> handleDelete());
             contentPanel.add(createBottomPanel(btnDelete, btnSave), BorderLayout.SOUTH);
         } else {
             // Modo registro: botón Registrar
-            contentPanel.add(
-                    createBottomPanel(createPrimaryButton("Registrar", e -> handleSave())),
+            contentPanel.add(createBottomPanel(createPrimaryButton("Registrar", e -> handleSave())),
                     BorderLayout.SOUTH);
         }
     }
@@ -77,9 +73,8 @@ public class EntityFormView extends BaseView {
     }
 
     private void handleDelete() {
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de eliminar este registro?", "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este registro?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }

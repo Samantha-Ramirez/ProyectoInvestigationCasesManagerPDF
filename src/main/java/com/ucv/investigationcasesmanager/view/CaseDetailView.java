@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.List;
 
 /*
- * Vista de detalle de caso - muestra la información del caso y el historial de seguimientos.
+ * Vista de detalle de caso - muestra información del caso e historial de seguimientos.
  */
 public class CaseDetailView extends BaseView {
     private final Case currentCase;
@@ -20,7 +20,7 @@ public class CaseDetailView extends BaseView {
     private DefaultTableModel followUpTableModel;
 
     public CaseDetailView(Case caseObj, User investigator) {
-        super("Detalle del Caso - Expediente: " + caseObj.getCaseNumber(), true, false);
+        super("Expediente: " + caseObj.getCaseNumber(), true, false);
         this.currentCase = caseObj;
         this.currentInvestigator = investigator;
         this.followUpController = new CaseFollowUpController();
@@ -30,21 +30,14 @@ public class CaseDetailView extends BaseView {
 
     @Override
     protected void initComponents() {
-        setupTitle("Información del caso", "Volver", e -> goBack());
+        setupTitle("Información de Caso", "Volver", e -> goBack());
 
-        JTabbedPane tabs = new JTabbedPane();
-        tabs.setFont(new Font("Arial", Font.PLAIN, 13));
-        tabs.addTab("Información general", createGeneralInfoPanel());
-        tabs.addTab("Historial de seguimientos", createFollowUpPanel());
-        contentPanel.add(tabs, BorderLayout.CENTER);
+        JPanel centerPanel = new JPanel(new BorderLayout(0, 12));
+        centerPanel.setOpaque(false);
+        centerPanel.add(createCaseInfoPanel(), BorderLayout.NORTH);
+        centerPanel.add(createFollowUpSection(), BorderLayout.CENTER);
 
-        if ("Investigador".equals(currentUser.getRole())) {
-            JButton btnNewFollowUp = createPrimaryButton("Nuevo seguimiento", e -> {
-                new RegisterFollowUpView(currentCase, currentInvestigator).setVisible(true);
-                dispose();
-            });
-            contentPanel.add(createBottomPanel(btnNewFollowUp), BorderLayout.SOUTH);
-        }
+        contentPanel.add(centerPanel, BorderLayout.CENTER);
     }
 
     private void goBack() {
@@ -55,48 +48,67 @@ public class CaseDetailView extends BaseView {
         }
     }
 
-    private JComponent createGeneralInfoPanel() {
+    private JComponent createCaseInfoPanel() {
         JPanel card = createCard();
-        JPanel form = createForm();
+        JPanel form = new JPanel(new GridBagLayout());
+        form.setOpaque(false);
 
         int row = 0;
         row = addField(form, row, "Expediente", new JLabel(currentCase.getCaseNumber()));
-        row = addField(form, row, "Estatus", new JLabel(currentCase.getStatus()));
+        row = addField(form, row, "Estatus", buildStatusLabel(currentCase.getStatus()));
         row = addField(form, row, "Fecha de inicio", new JLabel(
                 currentCase.getStartDate() != null ? currentCase.getStartDate() : "N/A"));
         row = addField(form, row, "Duración (días)",
                 new JLabel(String.valueOf(currentCase.getDurationDays())));
         row = addField(form, row, "Móvil afectado", new JLabel(
                 currentCase.getMobileAffected() != null ? currentCase.getMobileAffected() : "N/A"));
-        row = addField(form, row, "Objetivo/Agraviado",
+        addField(form, row, "Objetivo / Agraviado",
                 new JLabel(
                         currentCase.getObjectiveVictim() != null ? currentCase.getObjectiveVictim()
                                 : "N/A"));
-        row = addField(form, row, "Incidencia",
-                new JLabel(currentCase.getIncident() != null ? currentCase.getIncident() : "N/A"));
-
-        JTextArea txtModus = createTextArea(3, 30, 80);
-        txtModus.setEditable(false);
-        txtModus.setText(currentCase.getModusOperandiDescription() != null
-                ? currentCase.getModusOperandiDescription()
-                : "N/A");
-        row = addField(form, row, "Modus operandi", wrapInScroll(txtModus));
-
-        JTextArea txtObs = createTextArea(3, 30, 70);
-        txtObs.setEditable(false);
-        txtObs.setText(
-                currentCase.getObservations() != null ? currentCase.getObservations() : "N/A");
-        addField(form, row, "Observaciones", wrapInScroll(txtObs));
-
-        card.add(wrapInScroll(form), BorderLayout.CENTER);
+        card.add(form, BorderLayout.CENTER);
         return card;
     }
 
-    private JComponent createFollowUpPanel() {
+    private JLabel buildStatusLabel(String status) {
+        JLabel lbl = new JLabel(status != null ? status : "N/A");
+        lbl.setFont(new Font("Arial", Font.BOLD, 12));
+        if ("Cerrado".equals(status)) {
+            lbl.setForeground(new Color(180, 30, 30));
+        } else if ("Abierto".equals(status)) {
+            lbl.setForeground(new Color(0, 153, 76));
+        } else {
+            lbl.setForeground(new Color(125, 21, 175));
+        }
+        return lbl;
+    }
+
+    private JComponent createFollowUpSection() {
         JPanel card = createCard();
 
-        String[] columns =
-                {"Fecha", "Actividades", "Personas", "Monto", "Estatus", "Observaciones"};
+        JPanel header = new JPanel(new BorderLayout());
+        header.setOpaque(false);
+        JLabel lblTitle = new JLabel("Historial de seguimientos");
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 15));
+        header.add(lblTitle, BorderLayout.WEST);
+
+        if ("Investigador".equals(currentUser.getRole())) {
+            JButton btnNew = createHeaderButton("Registrar", e -> openNewFollowUp());
+            header.add(btnNew, BorderLayout.EAST);
+        }
+
+        card.add(header, BorderLayout.NORTH);
+        card.add(createFollowUpTable(), BorderLayout.CENTER);
+        return card;
+    }
+
+    private void openNewFollowUp() {
+        new RegisterFollowUpView(currentCase, currentInvestigator).setVisible(true);
+        dispose();
+    }
+
+    private JScrollPane createFollowUpTable() {
+        String[] columns = {"Actividades realizadas", "Estatus", "Fecha"};
         followUpTableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -105,12 +117,17 @@ public class CaseDetailView extends BaseView {
         };
 
         JTable followUpTable = new JTable(followUpTableModel);
-        followUpTable.setRowHeight(32);
+        followUpTable.setRowHeight(36);
         followUpTable.getTableHeader().setReorderingAllowed(false);
         uiFactory.styleTable(followUpTable);
 
-        card.add(new JScrollPane(followUpTable), BorderLayout.CENTER);
-        return card;
+        followUpTable.getColumnModel().getColumn(2).setMaxWidth(100);
+        followUpTable.getColumnModel().getColumn(2).setMinWidth(80);
+
+        JScrollPane scroll = new JScrollPane(followUpTable);
+        scroll.setBorder(BorderFactory.createLineBorder(new Color(236, 236, 236)));
+        scroll.getViewport().setBackground(Color.WHITE);
+        return scroll;
     }
 
     private void loadFollowUps() {
@@ -118,17 +135,17 @@ public class CaseDetailView extends BaseView {
         List<CaseFollowUp> followUps = followUpController.getFollowUps(currentCase.getId());
 
         if (followUps.isEmpty()) {
-            followUpTableModel
-                    .addRow(new Object[] {"No hay seguimientos registrados", "", "", "", "", ""});
+            followUpTableModel.addRow(new Object[] {"No hay seguimientos registrados.", "", ""});
             return;
         }
 
         for (CaseFollowUp f : followUps) {
-            followUpTableModel.addRow(new Object[] {
-                    f.getRegistrationDate().toString().substring(0, 10), f.getActivitiesPerformed(),
-                    f.getInvolvedPersons() != null ? f.getInvolvedPersons() : "",
-                    String.format("$%,.2f", f.getExposedAmount()), f.getStatus(),
-                    f.getObservations() != null ? f.getObservations() : ""});
+            String fecha = f.getRegistrationDate() != null
+                    ? f.getRegistrationDate().toString().substring(0, 10)
+                    : "";
+            String activities =
+                    f.getActivitiesPerformed() != null ? f.getActivitiesPerformed() : "";
+            followUpTableModel.addRow(new Object[] {activities, f.getStatus(), fecha});
         }
     }
 }
