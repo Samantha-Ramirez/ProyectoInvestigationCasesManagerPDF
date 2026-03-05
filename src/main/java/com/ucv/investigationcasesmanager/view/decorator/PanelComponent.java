@@ -9,6 +9,6 @@ import javax.swing.JPanel;
  */
 
 // Componente
-public interface PanelComponent {
-    JPanel build();
+public abstract class PanelComponent {
+    public abstract JPanel build();
 }

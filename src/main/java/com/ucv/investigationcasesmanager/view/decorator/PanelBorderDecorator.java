@@ -13,9 +13,7 @@ public class PanelBorderDecorator extends PanelDecorator {
     private final int bottom;
     private final int right;
 
-    public PanelBorderDecorator(PanelComponent component, int top, int left, int bottom,
-            int right) {
-        super(component);
+    public PanelBorderDecorator(int top, int left, int bottom, int right) {
         this.top = top;
         this.left = left;
         this.bottom = bottom;

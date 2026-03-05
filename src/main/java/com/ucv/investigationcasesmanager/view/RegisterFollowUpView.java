@@ -99,10 +99,11 @@ public class RegisterFollowUpView extends BaseView {
     private JComboBox<String> loadActivityCombo() {
         JComboBox<String> combo = new JComboBox<>();
         EntityIterator<SystemEntity> it = entityController.getIterator(EntityType.PERFORMED_ACTIVITY);
-        while (it.hasNext()) {
-            SystemEntity entity = it.next();
+        SystemEntity entity = it.first();
+        while (entity != null) {
             activityTypes.add(entity);
             combo.addItem(entity.getName());
+            entity = it.next();
         }
         if (activityTypes.isEmpty()) {
             combo.addItem("Sin registros");

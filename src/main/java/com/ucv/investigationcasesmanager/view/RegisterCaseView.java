@@ -150,10 +150,11 @@ public class RegisterCaseView extends BaseView {
     private JComboBox<String> loadEntityCombo(EntityType type, List<SystemEntity> target) {
         JComboBox<String> combo = new JComboBox<>();
         EntityIterator<SystemEntity> it = entityController.getIterator(type);
-        while (it.hasNext()) {
-            SystemEntity entity = it.next();
+        SystemEntity entity = it.first();
+        while (entity != null) {
             target.add(entity);
             combo.addItem(entity.getName());
+            entity = it.next();
         }
         if (target.isEmpty()) {
             combo.addItem("Sin registros");

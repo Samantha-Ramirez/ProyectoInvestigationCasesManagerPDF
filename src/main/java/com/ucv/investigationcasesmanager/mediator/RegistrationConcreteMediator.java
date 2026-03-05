@@ -39,6 +39,9 @@ public class RegistrationConcreteMediator extends RegistrationMediator {
                             : Integer.parseInt(durationText.trim());
             c.setDurationDays(duration);
         } catch (NumberFormatException e) {
+            // Por qué: se notifica al colega del caso antes de retornar false para completar
+            // el ciclo de comunicación bidireccional del patrón Mediator del profesor.
+            caseColleague.notify("Error: duración inválida.");
             return false;
         }
 
@@ -58,6 +61,10 @@ public class RegistrationConcreteMediator extends RegistrationMediator {
             c.setMonth(cal.get(Calendar.MONTH) + 1);
         }
 
+        // Por qué: se notifica a ambos colegas del resultado de la validación, completando
+        // el ciclo de comunicación bidireccional descrito en el patrón del profesor.
+        caseColleague.notify("Caso preparado correctamente.");
+        userColleague.notify("Registro autorizado para el usuario: " + userActor.getUser().getFirstName());
         return true;
     }
 }
