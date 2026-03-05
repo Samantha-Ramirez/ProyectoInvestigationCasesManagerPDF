@@ -9,40 +9,31 @@ Es un sistema que permite registrar y controlar información de casos de investi
 ## 💻 Tecnologías Utilizadas
 
 El proyecto utiliza el siguiente stack tecnológico:
-*   **Lenguaje:** Java 21
+*   **Lenguaje:** Java 17
 *   **Framework:** Java Swing + FlatLaf
 *   **Base de Datos:** SQLite
 
 ---
 
-## 🚀 Cómo iniciar el proyecto
+## 🚀 Guía de Ejecución Rápida
 
-Siga estos pasos para configurar, compilar y ejecutar la aplicación en su entorno local.
+Este sistema ha sido empaquetado como un ejecutable portable. No requiere configuración de servidores de base de datos ni instalación de dependencias adicionales.
 
 ### 1. Requisitos Previos
-* **Java JDK 17** o superior.
-* **Maven 3.6+** (Gestor de dependencias).
-* **SQLite** (Motor de base de datos embebido).
+* **Java Runtime Environment (JRE) 17** o superior.
 
-### 2. Configuración de la Base de Datos
-El proyecto incluye un archivo `InvestigationCasesManager.db` pre-configurado.
-* Asegúrese de que el archivo tenga permisos de lectura/escritura.
-* Usuarios de prueba disponibles:
-    * **Administrador:** Cédula `31307714`
-    * **Investigador:** Cédula `30243278`
+### 2. Estructura de Entrega
+Para que el sistema funcione correctamente, asegúrese de que el archivo de base de datos se encuentre dentro de la carpeta `db/` en la misma ruta que el ejecutable:
 
-### 3. Compilación e Instalación
-Desde la raíz del proyecto, ejecute el siguiente comando para descargar las dependencias (JDBC SQLite, etc.):
+* `InvestigationCasesManager.jar` (Archivo ejecutable)
+* `db/`
+  * `InvestigationCasesManager.db` (Archivo de base de datos)
 
-```bash
-mvn clean install
-```
-
-### 4. Ejecución
-Para iniciar el sistema, ejecute la clase principal:
-```bash
-mvn exec:java -Dexec.mainClass="com.ucv.investigationcasesmanager.Main"
-```
+### 3. Instrucciones de Inicio
+1. Abra una terminal (CMD, PowerShell o Terminal de macOS/Linux) en la carpeta del proyecto.
+2. Ejecute el siguiente comando:
+   ```bash
+   java -jar InvestigationCasesManager.jar
 
 ---
 
@@ -58,7 +49,6 @@ Proyecto realizado para la asignatura "Patrones de Diseño y Frameworks" (Semest
 
 *   **Prototipo de interfaz:** ![Prototipo de interfaz](./docs/Prototipo%20de%20interfaz.pdf)
 *   **Requisitos funcionales, Requisitos no funcionales, Diagrama de casos de uso, Diagramas de secuencia, Soporte de la metodología, Diagrama de clases:** ![Documento inicial de respaldo](./docs/Documento%20inicial%20de%20respaldo.pdf)
-*   **Base de Datos:** SQLite
 
 ---
 
