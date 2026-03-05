@@ -39,7 +39,7 @@ public class StolenEquipmentFormView extends BaseView {
         txtSerial = new JTextField(existing != null ? existing.getSerial() : "");
         txtType = new JTextField(existing != null && existing.getEquipmentType() != null
                 ? existing.getEquipmentType()
-                : "Tipo de equipo");
+                : "");
         txtBrand = new JTextField(
                 existing != null && existing.getBrand() != null ? existing.getBrand() : "");
         txtModel = new JTextField(
