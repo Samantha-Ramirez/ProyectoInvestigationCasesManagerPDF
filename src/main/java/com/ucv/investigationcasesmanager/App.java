@@ -12,7 +12,7 @@ public class App {
         java.io.File dbFile = new java.io.File("db/InvestigationCasesManager.db");
         if (!dbFile.exists()) {
             System.err.println(
-                    "Erro: No se encontró la base de datos en: " + dbFile.getAbsolutePath());
+                    "Error: No se encontró la base de datos en: " + dbFile.getAbsolutePath());
         }
         ThemeConfig.setup();
         SwingUtilities.invokeLater(() -> new LoginView().setVisible(true));

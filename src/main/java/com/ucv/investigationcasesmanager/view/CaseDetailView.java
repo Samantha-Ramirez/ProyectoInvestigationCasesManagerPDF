@@ -38,6 +38,7 @@ public class CaseDetailView extends BaseView {
         centerPanel.add(createFollowUpSection(), BorderLayout.CENTER);
 
         contentPanel.add(centerPanel, BorderLayout.CENTER);
+        contentPanel.add(createActionButtonsPanel(), BorderLayout.SOUTH);
     }
 
     private void goBack() {
