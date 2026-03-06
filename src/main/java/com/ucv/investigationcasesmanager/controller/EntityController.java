@@ -92,7 +92,7 @@ public class EntityController {
                 : "Error al actualizar el investigador.";
     }
 
-    // Divide un nombre completo, si no hay espacio, lastName queda vacío
+    // Dividir un nombre completo, si no hay espacio, lastName queda vacío
     private String[] splitFullName(String fullName) {
         int sep = fullName.indexOf(' ');
         if (sep < 0) {

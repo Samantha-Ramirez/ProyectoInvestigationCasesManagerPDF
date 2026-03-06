@@ -33,7 +33,7 @@ public class CaseReopenController {
      * Obtener detalle completo de un caso por su ID
      */
     public Case getCaseById(int caseId) {
-        return caseDAO.findById(caseId); // Necesitarías agregar este método en CaseDAO
+        return caseDAO.findById(caseId);
     }
 
     /**
@@ -54,13 +54,10 @@ public class CaseReopenController {
             return "Solo se pueden reabrir casos cerrados";
         }
 
-        // 1. Actualizar estatus a "Reabierto"
         boolean statusUpdated = caseDAO.updateStatus(caseId, "Reabierto");
 
-        // 2. Actualizar campo soporte
         boolean supportUpdated = caseDAO.updateSupport(caseId, newSupport);
 
-        // 3. Registrar un seguimiento automático
         CaseFollowUp followUp = new CaseFollowUp();
         followUp.setCaseId(caseId);
         followUp.setInvestigatorId(admin.getId());
@@ -76,7 +73,7 @@ public class CaseReopenController {
         boolean followUpSaved = followUpDAO.save(followUp);
 
         if (statusUpdated && supportUpdated && followUpSaved) {
-            return null; // éxito
+            return null;
         } else {
             return "Error al reabrir el caso";
         }

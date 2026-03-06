@@ -26,8 +26,6 @@ public class DeniedFilesController {
         this.stolenEquipmentDAO = ServiceLocator.get(StolenEquipmentDAO.class);
     }
 
-    // ── Personal Amonestado ───────────────────────────────────────────────────
-
     public List<DeniedPerson> getAllDeniedPersons() {
         return deniedPersonDAO.findAll();
     }
@@ -84,8 +82,6 @@ public class DeniedFilesController {
 
         return ok[0] ? null : "Error al eliminar el registro.";
     }
-
-    // ── Equipos Robados ───────────────────────────────────────────────────────
 
     public List<StolenEquipment> getAllStolenEquipment() {
         return stolenEquipmentDAO.findAll();
