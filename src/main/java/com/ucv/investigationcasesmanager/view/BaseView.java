@@ -88,8 +88,10 @@ public abstract class BaseView extends JFrame {
         if (currentUser != null && !"Investigador".equalsIgnoreCase(currentUser.getRole())) {
             addMenuButton(SideMenuIcon.tag(), "Auditoría", e -> navigate(this, new AuditView()));
         }
-        addMenuButton(SideMenuIcon.plusCircle(), "Entidades",
-                e -> showEntitiesPopup((JButton) e.getSource()));
+        if (currentUser != null && !"Investigador".equalsIgnoreCase(currentUser.getRole())) {
+            addMenuButton(SideMenuIcon.plusCircle(), "Entidades",
+                    e -> showEntitiesPopup((JButton) e.getSource()));
+        }
         addMenuButton(SideMenuIcon.trash(), "Archivos Negados",
                 e -> showDeniedFilesPopup((JButton) e.getSource()));
         sideMenu.add(Box.createVerticalGlue());
