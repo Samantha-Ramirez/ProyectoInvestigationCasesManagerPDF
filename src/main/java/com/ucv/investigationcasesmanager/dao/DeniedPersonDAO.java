@@ -5,7 +5,7 @@ import com.ucv.investigationcasesmanager.model.DeniedPerson;
 import java.util.List;
 
 /**
- * PDyF: DAO para el registro de personal amonestado o desincorporado.
+ * PDyF: DAO - registra personal amonestado o desincorporado.
  */
 public class DeniedPersonDAO extends BaseDAO<DeniedPerson> {
 
@@ -26,7 +26,8 @@ public class DeniedPersonDAO extends BaseDAO<DeniedPerson> {
 
     // Obtener un registro por su id
     public DeniedPerson findById(int id) {
-        String sql = "SELECT id, ci, first_name, last_name, company FROM denied_person WHERE id = ?";
+        String sql =
+                "SELECT id, ci, first_name, last_name, company FROM denied_person WHERE id = ?";
         return queryOne(sql, rs -> {
             DeniedPerson p = new DeniedPerson();
             p.setId(rs.getInt("id"));

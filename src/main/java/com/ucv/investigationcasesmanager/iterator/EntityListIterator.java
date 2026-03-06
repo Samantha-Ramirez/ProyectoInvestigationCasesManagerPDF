@@ -3,8 +3,8 @@ package com.ucv.investigationcasesmanager.iterator;
 import java.util.List;
 
 /**
- * PDyF: Iterator concreto que recorre una lista de entidades del sistema. Permite a las vistas
- * poblar combos sin conocer la estructura interna de la colección (Array, List, etc.).
+ * PDyF: Iterator - iterador concreto que recorre una lista de entidades del sistema. Permite a las
+ * vistas poblar combos sin conocer la estructura interna de la colección (Array, List, etc.).
  */
 public class EntityListIterator<T> extends EntityIterator<T> {
     private final List<T> items;
