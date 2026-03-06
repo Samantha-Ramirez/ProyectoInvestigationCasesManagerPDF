@@ -5,8 +5,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /*
- * PDyF: DAO que maneja las operaciones de acceso a datos relacionadas con los seguimientos de
- * casos, incluyendo registro, consulta y actualización de estatus.
+ * PDyF: DAO - maneja las operaciones de acceso a datos relacionadas con los seguimientos de casos,
+ * incluyendo registro, consulta y actualización de estatus.
  */
 public class CaseFollowUpDAO extends BaseDAO<CaseFollowUp> {
 

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * Vista de lista para mostrar los registros de una entidad con acciones de editar. PDyF: Iterator –
+ * Vista de lista para mostrar los registros de una entidad con acciones de editar. PDyF: Iterator -
  * usa EntityIterator para poblar la tabla sin exponer la colección interna.
  */
 public class EntityListView extends BaseView {
@@ -59,7 +59,7 @@ public class EntityListView extends BaseView {
         loadData();
     }
 
-    // PDyF: Iterator – recorre la colección a través del iterador sin acceder directamente a la
+    // PDyF: Iterator - recorre la colección a través del iterador sin acceder directamente a la
     // lista
     private void loadData() {
         entities.clear();

@@ -4,7 +4,7 @@ import com.ucv.investigationcasesmanager.model.User;
 import java.util.List;
 
 /*
- * PDyF: DAO para operaciones de acceso a datos de usuarios del sistema.
+ * PDyF: DAO - registra operaciones de acceso a datos de usuarios del sistema.
  */
 public class UserDAO extends BaseDAO<User> {
 

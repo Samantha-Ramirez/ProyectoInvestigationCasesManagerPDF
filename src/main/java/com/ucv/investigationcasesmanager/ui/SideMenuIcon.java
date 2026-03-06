@@ -5,9 +5,7 @@ import java.awt.*;
 import java.awt.geom.*;
 
 /**
- * PDyF: Fábrica de íconos vectoriales para el menú lateral, dibujados con Java2D. Cada ícono es una
- * clase interna que implementa Icon sin dependencias externas ni fuentes especiales, garantizando
- * visualización correcta en cualquier JVM.
+ * Crea íconos para la aplicación.
  */
 public final class SideMenuIcon {
 

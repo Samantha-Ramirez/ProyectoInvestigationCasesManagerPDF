@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 /**
- * PDyF: Patrón Decorator - decorador concreto que agrega un borde con relleno (padding) al panel.
+ * PDyF: Decorator - decorador concreto que agrega un borde con relleno (padding) al panel.
  */
 public class PanelBorderDecorator extends PanelDecorator {
     private final int top;

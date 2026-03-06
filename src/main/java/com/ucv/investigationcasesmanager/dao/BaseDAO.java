@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * PDyF: DAO genérico que maneja cualquier tipo de entidad mediante herencia. Las clases hijas solo
- * deben proporcionar el SQL y el mapeador de filas.
+ * PDyF: DAO - maneja cualquier tipo de entidad mediante herencia. Las clases hijas solo deben
+ * proporcionar el SQL y el mapeador de filas.
  */
 public abstract class BaseDAO<T> {
 

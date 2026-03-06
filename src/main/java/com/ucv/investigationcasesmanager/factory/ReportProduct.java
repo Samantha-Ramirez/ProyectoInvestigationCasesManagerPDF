@@ -4,7 +4,7 @@ import com.ucv.investigationcasesmanager.dao.ReportDAO;
 import java.util.List;
 
 /**
- * PDyF: Patrón Factory Method - resuelve qué tipo de reporte generar según el tipo solicitado.
+ * PDyF: Factory Method - resuelve qué tipo de reporte generar según el tipo solicitado.
  */
 
 // Producto abstracto

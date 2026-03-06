@@ -2,7 +2,7 @@ package com.ucv.investigationcasesmanager.controller;
 
 import com.ucv.investigationcasesmanager.dao.AuditLogDAO;
 import com.ucv.investigationcasesmanager.dao.ReportDAO;
-import com.ucv.investigationcasesmanager.factory.ReportClient;
+import com.ucv.investigationcasesmanager.factory.ReportViewFactory;
 import com.ucv.investigationcasesmanager.factory.ReportProduct;
 import com.ucv.investigationcasesmanager.model.Session;
 import com.ucv.investigationcasesmanager.service.ServiceLocator;
@@ -10,7 +10,7 @@ import com.ucv.investigationcasesmanager.service.ServiceLocator;
 import java.util.List;
 
 /*
- * Controlador para las operaciones de generación de reportes estadísticos. PDyF: Decorator – cada
+ * Controlador para las operaciones de generación de reportes estadísticos. PDyF: Decorator - cada
  * vez que se genera un reporte, registra la traza de auditoría mediante AuditLogDAO.
  */
 public class ReportController {
@@ -23,7 +23,7 @@ public class ReportController {
     }
 
     public ReportProduct resolveReport(String type) {
-        return ReportClient.createReport(type);
+        return ReportViewFactory.createReport(type);
     }
 
     public List<Object[]> generateRows(ReportProduct report) {

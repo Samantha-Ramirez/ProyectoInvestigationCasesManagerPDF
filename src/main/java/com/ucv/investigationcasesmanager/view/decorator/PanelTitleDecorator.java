@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 
 /**
- * PDyF: Patrón Decorator - decorador concreto que agrega un borde con título al panel.
+ * PDyF: Decorator - decorador concreto que agrega un borde con título al panel.
  */
 public class PanelTitleDecorator extends PanelDecorator {
     private final String title;

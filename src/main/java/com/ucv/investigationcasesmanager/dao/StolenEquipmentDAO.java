@@ -5,7 +5,7 @@ import com.ucv.investigationcasesmanager.model.StolenEquipment;
 import java.util.List;
 
 /**
- * PDyF: DAO para el registro de seriales de equipos reportados robados.
+ * PDyF: DAO - registra seriales de equipos reportados robados.
  */
 public class StolenEquipmentDAO extends BaseDAO<StolenEquipment> {
 

@@ -93,7 +93,7 @@ public class RegisterFollowUpView extends BaseView {
         return card;
     }
 
-    // PDyF: Iterator – puebla el combo de actividades usando EntityIterator para recorrer
+    // PDyF: Iterator - puebla el combo de actividades usando EntityIterator para recorrer
     // las entidades sin exponer cómo están almacenadas internamente.
     private JComboBox<String> loadActivityCombo() {
         JComboBox<String> combo = new JComboBox<>();

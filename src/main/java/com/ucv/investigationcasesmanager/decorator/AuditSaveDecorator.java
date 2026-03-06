@@ -4,7 +4,7 @@ import com.ucv.investigationcasesmanager.dao.AuditLogDAO;
 import com.ucv.investigationcasesmanager.service.ServiceLocator;
 
 /**
- * PDyF: Decorator – ConcreteDecorator que añade el registro automático de auditoría tras ejecutar
+ * PDyF: Decorator - decorador concreto que añade el registro automático de auditoría tras ejecutar
  * la operación de guardado subyacente.
  */
 public class AuditSaveDecorator extends SaveDecorator {
@@ -24,7 +24,7 @@ public class AuditSaveDecorator extends SaveDecorator {
         registrarAuditoria();
     }
 
-    // Comportamiento extra añadido por el decorador: registra la traza de auditoría
+    // Decorador permite registrar la traza de auditoría (comportamiento extra)
     private void registrarAuditoria() {
         auditLogDAO.save(username, actionDescription);
     }

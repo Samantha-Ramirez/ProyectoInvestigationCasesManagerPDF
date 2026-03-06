@@ -37,7 +37,7 @@ public class EntityController {
     }
 
     /**
-     * PDyF: Iterator – crea un agregador concreto con la colección de entidades y retorna su
+     * PDyF: Iterator - crea un agregador concreto con la colección de entidades y retorna su
      * iterador, desacoplando la colección del mecanismo de recorrido.
      */
     public EntityIterator<SystemEntity> getIterator(EntityType type) {
@@ -69,7 +69,7 @@ public class EntityController {
                 : "Error al actualizar el registro.";
     }
 
-    // Eliminar un registro; los investigadores no se eliminan desde este módulo
+    // Eliminar un registro
     public String delete(EntityType type, int id) {
         if (type == EntityType.INVESTIGATOR) {
             return "Los investigadores no pueden eliminarse desde este módulo.";
@@ -92,7 +92,7 @@ public class EntityController {
                 : "Error al actualizar el investigador.";
     }
 
-    // Divide un nombre completo en [firstName, lastName]; si no hay espacio, lastName queda vacío
+    // Divide un nombre completo, si no hay espacio, lastName queda vacío
     private String[] splitFullName(String fullName) {
         int sep = fullName.indexOf(' ');
         if (sep < 0) {

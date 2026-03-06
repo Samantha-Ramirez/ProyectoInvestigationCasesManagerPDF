@@ -7,7 +7,7 @@ import com.ucv.investigationcasesmanager.service.ServiceLocator;
 import java.util.List;
 
 /*
- * Controlador para Consultar Trazas de Auditoría. Centraliza la lectura de los registros de
+ * Controlador para consultar trazas de auditoría. Centraliza la lectura de los registros de
  * auditoría del sistema.
  */
 public class AuditController {

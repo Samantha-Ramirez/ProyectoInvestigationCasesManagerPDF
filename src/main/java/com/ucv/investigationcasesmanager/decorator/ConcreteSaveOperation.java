@@ -1,7 +1,7 @@
 package com.ucv.investigationcasesmanager.decorator;
 
 /**
- * PDyF: Decorator – ConcreteComponent que ejecuta la operación de guardado real delegando en un
+ * PDyF: Decorator - componente concreto que ejecuta la operación de guardado real delegando en un
  * Runnable recibido en el constructor.
  */
 public class ConcreteSaveOperation extends SaveOperation {

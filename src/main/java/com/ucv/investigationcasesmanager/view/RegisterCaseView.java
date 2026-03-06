@@ -17,7 +17,7 @@ import java.util.List;
 
 /*
  * Vista de registro de casos - recopila datos del formulario y delega al CaseController. PDyF:
- * Iterator – usa EntityIterator para poblar los combos de entidades sin exponer la lista interna.
+ * Iterator - usa EntityIterator para poblar los combos de entidades sin exponer la lista interna.
  */
 public class RegisterCaseView extends BaseView {
     private final CaseController caseController;
@@ -144,7 +144,7 @@ public class RegisterCaseView extends BaseView {
         return combo;
     }
 
-    // PDyF: Iterator – puebla un combo usando EntityIterator para recorrer las entidades
+    // PDyF: Iterator - puebla un combo usando EntityIterator para recorrer las entidades
     // sin exponer cómo están almacenadas internamente.
     private JComboBox<String> loadEntityCombo(EntityType type, List<SystemEntity> target) {
         JComboBox<String> combo = new JComboBox<>();

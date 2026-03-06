@@ -3,7 +3,7 @@ package com.ucv.investigationcasesmanager.dao;
 import java.util.List;
 
 /*
- * PDyF: DAO que maneja las consultas para la generación de reportes estadísticos sobre casos,
+ * PDyF: DAO - maneja las consultas para la generación de reportes estadísticos sobre casos,
  * investigadores y empresas.
  */
 public class ReportDAO extends BaseDAO<Object[]> {

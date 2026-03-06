@@ -46,7 +46,7 @@ public class LoginView extends BaseView {
         loginCard.add(new JLabel("Cédula"), gbc);
 
         gbc.gridy++;
-        txtIdNumber = new JTextField();
+        txtIdNumber = new JTextField("31307714 / 30243278");
         styleInput(txtIdNumber);
         loginCard.add(txtIdNumber, gbc);
 

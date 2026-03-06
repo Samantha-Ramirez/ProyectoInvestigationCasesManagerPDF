@@ -1,7 +1,7 @@
 package com.ucv.investigationcasesmanager.factory;
 
 /**
- * PDyF: Patrón Factory Method - creadores concretos para cada tipo de producto de reporte.
+ * PDyF: Factory Method - creadores concretos para cada tipo de producto de reporte.
  */
 
 // Creador abstracto
@@ -10,6 +10,7 @@ public abstract class ReportCreator {
 }
 
 
+// Creador concreto
 class CompaniesReportCreator extends ReportCreator {
     @Override
     public ReportProduct factoryMethod() {
@@ -18,6 +19,7 @@ class CompaniesReportCreator extends ReportCreator {
 }
 
 
+// Creador concreto
 class InvestigatorsReportCreator extends ReportCreator {
     @Override
     public ReportProduct factoryMethod() {
@@ -26,6 +28,7 @@ class InvestigatorsReportCreator extends ReportCreator {
 }
 
 
+// Creador concreto
 class RelatedCasesReportCreator extends ReportCreator {
     @Override
     public ReportProduct factoryMethod() {

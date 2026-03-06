@@ -3,7 +3,7 @@ package com.ucv.investigationcasesmanager.factory;
 import com.ucv.investigationcasesmanager.view.BaseView;
 
 /**
- * PDyF: Patrón Factory Method - decide qué vista de inicio mostrar según el rol del usuario.
+ * PDyF: Factory Method - decide qué vista de inicio mostrar según el rol del usuario.
  */
 
 // Producto abstracto
