@@ -22,23 +22,15 @@ public class CaseReopenController {
         this.followUpDAO = new CaseFollowUpDAO();
     }
 
-    /**
-     * Obtener casos cerrados para mostrar al administrador
-     */
     public List<Case> getClosedCases() {
         return caseDAO.findClosedCases();
     }
 
-    /**
-     * Obtener detalle completo de un caso por su ID
-     */
     public Case getCaseById(int caseId) {
         return caseDAO.findById(caseId);
     }
 
-    /**
-     * Reabrir un caso: actualizar estatus y soporte, y registrar seguimiento automático
-     */
+
     public String reopenCase(int caseId, String newSupport, User admin) {
         // Validar que sea administrador
         if (!"Administrador".equals(admin.getRole())) {

@@ -70,8 +70,6 @@ public class CaseAssignmentController {
 
         String activityMsg = "Caso reasignado";
         if (oldInvestigatorId > 0) {
-            // Obtener nombre del investigador anterior (simplificado)
-            String oldInvestigatorName = "Investigador " + oldInvestigatorId;
             activityMsg = "Caso reasignado de investigador " + oldInvestigatorId + " a "
                     + newInvestigator.getFirstName() + " " + newInvestigator.getLastName();
         } else {

@@ -40,11 +40,7 @@ public class CaseFollowUpController {
         return userDAO.findInvestigators();
     }
 
-    /**
-     * Validar construir y guardar un seguimiento, luego actualizar el estatus del caso.
-     *
-     * @return null si el registro fue exitoso, o un mensaje de error en caso de fallo
-     */
+    // Validar construir y guardar un seguimiento, luego actualizar el estatus del caso
     public String registerFollowUp(FollowUpFormData data) {
         if (data.activities == null || data.activities.trim().isEmpty()) {
             return "Debe describir las actividades realizadas.";
