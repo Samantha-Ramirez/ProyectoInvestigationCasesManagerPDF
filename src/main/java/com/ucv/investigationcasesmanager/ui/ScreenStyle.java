@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * Utilidad de estilos UI: centraliza la creación de botones y el estilizado de componentes.
+ * Centraliza la creación de botones y el estilizado de componentes.
  */
 public class ScreenStyle {
     private static final Color PRIMARY = new Color(125, 21, 175);

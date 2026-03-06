@@ -12,7 +12,7 @@ import com.ucv.investigationcasesmanager.service.ServiceLocator;
 import java.util.List;
 
 /*
- * Controlador para Marcar Archivos como Negados. Gestiona el CRUD de personal
+ * Controlador para marcar archivos como negados. Gestiona el CRUD de personal
  * amonestado-desincorporado y seriales de equipos robados. PDyF: Decorator - envuelve cada
  * operación de guardado con AuditSaveDecorator para registrar automáticamente la traza de
  * auditoría.
