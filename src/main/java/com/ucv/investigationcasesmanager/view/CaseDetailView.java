@@ -159,9 +159,53 @@ public class CaseDetailView extends BaseView {
         }
     }
 
+    private JPanel createActionButtonsPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+        panel.setOpaque(false);
+
+        if ("Administrador".equals(currentUser.getRole())
+                && "Cerrado".equals(currentCase.getStatus())) {
+            JButton btnReopen = createPrimaryButton("Reabrir Caso", e -> openReopenView());
+            btnReopen.setBackground(Color.WHITE); // ← FONDO BLANCO
+            btnReopen.setForeground(new Color(125, 21, 175));
+            btnReopen.setFont(new Font("Arial", Font.BOLD, 12));
+            panel.add(btnReopen);
+        }
+        if ("Administrador".equals(currentUser.getRole())) {
+            JButton btnAssign = createPrimaryButton("Asignar Investigador", e -> openAssignView());
+            btnAssign.setBackground(Color.WHITE);
+            btnAssign.setForeground(new Color(125, 21, 175));
+            btnAssign.setFont(new Font("Arial", Font.BOLD, 12));
+            panel.add(btnAssign);
+        }
+
+        return panel;
+    }
+
     private void openReopenView() {
         new ReopenCaseView(currentCase).setVisible(true);
         dispose();
+    }
+
+    private void openAssignView() {
+        // Verificar que el caso no sea null
+        if (currentCase == null) {
+            JOptionPane.showMessageDialog(this, "Error: Caso no válido", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if ("Cerrado".equals(currentCase.getStatus())) {
+            JOptionPane.showMessageDialog(this,
+                    "No se puede reasignar un investigador a un caso cerrado.\n"
+                            + "Debe reabrir el caso primero.",
+                    "Caso Cerrado", JOptionPane.WARNING_MESSAGE);
+            return; // No abre la vista
+        }
+
+        // Abrir la vista de asignación
+        AssignInvestigatorView assignView = new AssignInvestigatorView(currentCase);
+        assignView.setVisible(true);
+        dispose(); // Cerrar la vista actual
     }
 
 }
