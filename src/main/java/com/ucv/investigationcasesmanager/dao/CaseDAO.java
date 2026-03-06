@@ -140,4 +140,9 @@ public class CaseDAO extends BaseDAO<Case> {
         c.setIncident(rs.getString("incident"));
         return c;
     }
+
+    public boolean updateInvestigator(int caseId, int investigatorId) {
+    String sql = "UPDATE investigation_case SET investigator_id = ? WHERE id = ?";
+    return execute(sql, investigatorId, caseId) > 0;
+}
 }
