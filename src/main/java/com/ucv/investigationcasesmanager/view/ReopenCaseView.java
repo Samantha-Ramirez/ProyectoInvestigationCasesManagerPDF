@@ -2,7 +2,6 @@ package com.ucv.investigationcasesmanager.view;
 
 import com.ucv.investigationcasesmanager.controller.CaseReopenController;
 import com.ucv.investigationcasesmanager.model.Case;
-// import com.ucv.investigationcasesmanager.model.User;
 import com.ucv.investigationcasesmanager.view.decorator.PanelBorderDecorator;
 import com.ucv.investigationcasesmanager.view.decorator.PanelComponent;
 import com.ucv.investigationcasesmanager.view.decorator.PanelConcreteComponent;
@@ -33,38 +32,72 @@ public class ReopenCaseView extends BaseView {
     protected void initComponents() {
         setupTitle("Reabrir Caso Cerrado", null, null);
 
-        // getContentPane().setBackground(Color.WHITE);
         contentPanel.setBackground(Color.WHITE);
-        // Panel principal usando Decorator
-        PanelComponent mainPanel = new PanelConcreteComponent(new JPanel(new BorderLayout(10, 10)));
-        mainPanel = new PanelBorderDecorator(mainPanel, 15, 15, 15, 15);
-        mainPanel = new PanelTitleDecorator(mainPanel, "Seleccione un caso para reabrir");
+        contentPanel.setOpaque(true);
 
+        // ===== IMPLEMENTACIÓN DE DECORADORES =====
+        
+        // 1. Crear el componente base
+        JPanel baseJPanel = new JPanel(new BorderLayout(10, 10));
+        baseJPanel.setBackground(Color.WHITE);
+        baseJPanel.setOpaque(true);
+        PanelComponent baseComponent = new PanelConcreteComponent(baseJPanel);
+
+        // 2. Crear decorador de borde
+        PanelBorderDecorator borderDecorator = new PanelBorderDecorator(15, 15, 15, 15);
+        borderDecorator.setComponent(baseComponent);
+
+        // 3. Crear decorador de título
+        PanelTitleDecorator titleDecorator = new PanelTitleDecorator("Seleccione un caso para reabrir");
+        titleDecorator.setComponent(borderDecorator);
+
+        // 4. Construir panel decorado
+        JPanel decoratedPanel = titleDecorator.build();
+        decoratedPanel.setBackground(Color.WHITE);
+        decoratedPanel.setOpaque(true);
+
+        // 5. Crear contenido interno
         JPanel content = new JPanel(new BorderLayout(10, 10));
-        content.setOpaque(false);
+        content.setBackground(Color.WHITE);
+        content.setOpaque(true);
 
         // Panel superior: selector de casos
         content.add(createCaseSelectorPanel(), BorderLayout.NORTH);
 
-        // Panel central: detalles del caso (solo visible cuando hay selección)
+        // Panel central: detalles del caso
         detailPanel = createDetailPanel();
         detailPanel.setVisible(false);
         content.add(detailPanel, BorderLayout.CENTER);
 
-        mainPanel.build().add(content, BorderLayout.CENTER);
-        contentPanel.add(mainPanel.build(), BorderLayout.CENTER);
+        // 6. Agregar contenido al panel decorado
+        decoratedPanel.add(content, BorderLayout.CENTER);
+        
+        // 7. Agregar todo al contentPanel
+        contentPanel.add(decoratedPanel, BorderLayout.CENTER);
 
-        // Panel inferior con botones
-        contentPanel.add(
-                createBottomPanel(createPrimaryButton("Reabrir Caso", e -> handleReopen()),
-                        createPrimaryButton("Cancelar", e -> navigate(this, new BoardView()))),
-                BorderLayout.SOUTH);
+        // ===== PANEL INFERIOR CON BOTONES =====
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
+        bottomPanel.setOpaque(false);
+
+        // Botón Reabrir Caso - MÁS LARGO
+        JButton btnReopen = createPrimaryButton("Reabrir Caso", e -> handleReopen());
+        btnReopen.setPreferredSize(new Dimension(180, 40));
+        btnReopen.setMinimumSize(new Dimension(180, 40));
+        btnReopen.setFont(new Font("Arial", Font.BOLD, 13));
+
+        // Botón Cancelar
+        JButton btnCancel = createPrimaryButton("Cancelar", e -> navigate(this, new BoardView()));
+        btnCancel.setPreferredSize(new Dimension(120, 40));
+
+        bottomPanel.add(btnReopen);
+        bottomPanel.add(btnCancel);
+
+        contentPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private JPanel createCaseSelectorPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        panel.setBackground(Color.WHITE); // ← FONDO BLANCO
-
+        panel.setBackground(Color.WHITE);
         panel.setOpaque(true);
 
         panel.add(new JLabel("Caso cerrado:"));
@@ -79,7 +112,7 @@ public class ReopenCaseView extends BaseView {
 
     private JPanel createDetailPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE); // ← FONDO BLANCO
+        panel.setBackground(Color.WHITE);
         panel.setOpaque(true);
         panel.setBorder(BorderFactory.createTitledBorder("Detalles del caso"));
 
@@ -89,47 +122,48 @@ public class ReopenCaseView extends BaseView {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        // Información de solo lectura
+        // Expediente
         panel.add(new JLabel("Expediente:"), gbc);
         gbc.gridx = 1;
         JLabel lblCaseNumber = new JLabel();
         panel.add(lblCaseNumber, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        // Fecha inicio
+        gbc.gridx = 0; gbc.gridy = 1;
         panel.add(new JLabel("Fecha inicio:"), gbc);
         gbc.gridx = 1;
         JLabel lblStartDate = new JLabel();
         panel.add(lblStartDate, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
+        // Móvil afectado
+        gbc.gridx = 0; gbc.gridy = 2;
         panel.add(new JLabel("Móvil afectado:"), gbc);
         gbc.gridx = 1;
         JLabel lblMobile = new JLabel();
         panel.add(lblMobile, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
+        // Objetivo/Agraviado
+        gbc.gridx = 0; gbc.gridy = 3;
         panel.add(new JLabel("Objetivo/Agraviado:"), gbc);
         gbc.gridx = 1;
         JLabel lblVictim = new JLabel();
         panel.add(lblVictim, gbc);
 
         // Campo editable: Soporte
-        gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridx = 0; gbc.gridy = 4;
         panel.add(new JLabel("Soporte (editable):"), gbc);
         gbc.gridx = 1;
         txtSupport = new JTextArea(3, 30);
         txtSupport.setLineWrap(true);
         txtSupport.setWrapStyleWord(true);
         styleInput(txtSupport);
+        
         JScrollPane scrollSupport = new JScrollPane(txtSupport);
         scrollSupport.setPreferredSize(new Dimension(300, 60));
+        scrollSupport.getViewport().setBackground(Color.WHITE);
         panel.add(scrollSupport, gbc);
 
-        // Guardar referencias para actualizar
+        // Guardar referencias
         panel.putClientProperty("lblCaseNumber", lblCaseNumber);
         panel.putClientProperty("lblStartDate", lblStartDate);
         panel.putClientProperty("lblMobile", lblMobile);
@@ -141,7 +175,8 @@ public class ReopenCaseView extends BaseView {
     private void loadClosedCases() {
         closedCases = reopenController.getClosedCases();
         cmbClosedCases.removeAllItems();
-        if (closedCases.isEmpty()) {
+        
+        if (closedCases == null || closedCases.isEmpty()) {
             cmbClosedCases.addItem("No hay casos cerrados");
             cmbClosedCases.setEnabled(false);
         } else {
@@ -154,7 +189,7 @@ public class ReopenCaseView extends BaseView {
 
     private void onCaseSelected() {
         int index = cmbClosedCases.getSelectedIndex();
-        if (index >= 0 && index < closedCases.size()) {
+        if (index >= 0 && closedCases != null && index < closedCases.size()) {
             selectedCase = closedCases.get(index);
             updateDetailPanel();
             detailPanel.setVisible(true);
@@ -162,44 +197,55 @@ public class ReopenCaseView extends BaseView {
     }
 
     private void updateDetailPanel() {
-        if (selectedCase == null)
-            return;
+        if (selectedCase == null) return;
 
         JLabel lblCaseNumber = (JLabel) detailPanel.getClientProperty("lblCaseNumber");
         JLabel lblStartDate = (JLabel) detailPanel.getClientProperty("lblStartDate");
         JLabel lblMobile = (JLabel) detailPanel.getClientProperty("lblMobile");
         JLabel lblVictim = (JLabel) detailPanel.getClientProperty("lblVictim");
 
-        lblCaseNumber.setText(selectedCase.getCaseNumber());
-        lblStartDate.setText(selectedCase.getStartDate());
-        lblMobile.setText(selectedCase.getMobileAffected());
-        lblVictim.setText(selectedCase.getObjectiveVictim());
+        if (lblCaseNumber != null) 
+            lblCaseNumber.setText(selectedCase.getCaseNumber());
+        if (lblStartDate != null) 
+            lblStartDate.setText(selectedCase.getStartDate() != null ? selectedCase.getStartDate() : "N/A");
+        if (lblMobile != null) 
+            lblMobile.setText(selectedCase.getMobileAffected() != null ? selectedCase.getMobileAffected() : "N/A");
+        if (lblVictim != null) 
+            lblVictim.setText(selectedCase.getObjectiveVictim() != null ? selectedCase.getObjectiveVictim() : "N/A");
 
-        txtSupport.setText(selectedCase.getSupport());
+        txtSupport.setText(selectedCase.getSupport() != null ? selectedCase.getSupport() : "");
     }
 
     private void handleReopen() {
         if (selectedCase == null) {
-            JOptionPane.showMessageDialog(this, "Seleccione un caso para reabrir", "Error",
+            JOptionPane.showMessageDialog(this, 
+                    "Seleccione un caso para reabrir", 
+                    "Error", 
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         String support = txtSupport.getText().trim();
         if (support.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo Soporte no puede estar vacío",
-                    "Campo requerido", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                    "El campo Soporte no puede estar vacío", 
+                    "Campo requerido", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String error = reopenController.reopenCase(selectedCase.getId(), support, currentUser);
         if (error == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Caso reabierto exitosamente.\nEstatus actualizado a: Reabierto", "Éxito",
+            JOptionPane.showMessageDialog(this, 
+                    "Caso reabierto exitosamente.\nEstatus actualizado a: Reabierto", 
+                    "Éxito", 
                     JOptionPane.INFORMATION_MESSAGE);
             navigate(this, new BoardView());
         } else {
-            JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                    error, 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }
