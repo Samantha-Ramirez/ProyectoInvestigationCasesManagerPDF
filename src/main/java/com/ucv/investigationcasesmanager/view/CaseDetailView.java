@@ -38,6 +38,7 @@ public class CaseDetailView extends BaseView {
         centerPanel.add(createFollowUpSection(), BorderLayout.CENTER);
 
         contentPanel.add(centerPanel, BorderLayout.CENTER);
+        contentPanel.add(createActionButtonsPanel(), BorderLayout.SOUTH);
     }
 
     private void goBack() {
@@ -149,4 +150,29 @@ public class CaseDetailView extends BaseView {
             followUpTableModel.addRow(new Object[] {activities, f.getStatus(), fecha});
         }
     }
+
+    // ===== NUEVO: Panel de botones de acción =====
+    private JPanel createActionButtonsPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+        panel.setOpaque(false);
+
+        // Botón Reabrir Caso - solo para administradores y cuando el caso está cerrado
+        if ("Administrador".equals(currentUser.getRole())
+                && "Cerrado".equals(currentCase.getStatus())) {
+            JButton btnReopen = createPrimaryButton("Reabrir Caso", e -> openReopenView());
+            btnReopen.setBackground(Color.WHITE); // ← FONDO BLANCO
+            btnReopen.setForeground(new Color(125, 21, 175)); // Texto morado (opcional)
+            btnReopen.setFont(new Font("Arial", Font.BOLD, 12));
+            panel.add(btnReopen);
+        }
+
+        return panel;
+    }
+
+    // ===== NUEVO: Abrir vista de reapertura =====
+    private void openReopenView() {
+        new ReopenCaseView().setVisible(true);
+        dispose();
+    }
+
 }
