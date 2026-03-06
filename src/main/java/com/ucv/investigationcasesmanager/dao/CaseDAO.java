@@ -100,7 +100,7 @@ public class CaseDAO extends BaseDAO<Case> {
         c.setDetectionOrigin(rs.getString("detection_origin"));
         c.setFraudDiagnosis(rs.getString("fraud_diagnosis"));
         c.setConclusions(rs.getString("conclusions_recommendations"));
-   //   c.setRecommendations(rs.getString("recommendations"));
+        // c.setRecommendations(rs.getString("recommendations"));
         c.setObservations(rs.getString("observations"));
         c.setSupport(rs.getString("support"));
         return c;
@@ -142,7 +142,7 @@ public class CaseDAO extends BaseDAO<Case> {
     }
 
     public boolean updateInvestigator(int caseId, int investigatorId) {
-    String sql = "UPDATE investigation_case SET investigator_id = ? WHERE id = ?";
-    return execute(sql, investigatorId, caseId) > 0;
-}
+        String sql = "UPDATE investigation_case SET investigator_id = ? WHERE id = ?";
+        return execute(sql, investigatorId, caseId) > 0;
+    }
 }

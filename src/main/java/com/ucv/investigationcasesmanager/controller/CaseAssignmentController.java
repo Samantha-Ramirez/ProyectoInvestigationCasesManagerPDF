@@ -24,23 +24,14 @@ public class CaseAssignmentController {
         this.followUpDAO = new CaseFollowUpDAO();
     }
 
-    /**
-     * Obtener lista de investigadores disponibles
-     */
     public List<User> getAvailableInvestigators() {
         return userDAO.findInvestigators();
     }
 
-    /**
-     * Obtener detalle completo de un caso por su ID
-     */
     public Case getCaseById(int caseId) {
         return caseDAO.findById(caseId);
     }
 
-    /**
-     * Reasignar un caso a un nuevo investigador
-     */
     public String reassignCase(int caseId, int newInvestigatorId, User admin) {
         // Validar que sea administrador
         if (!"Administrador".equals(admin.getRole())) {
@@ -55,7 +46,7 @@ public class CaseAssignmentController {
 
         // Obtener el investigador anterior (si existe)
         int oldInvestigatorId = caseObj.getInvestigatorId();
-        
+
         // Obtener datos del nuevo investigador
         User newInvestigator = null;
         List<User> investigators = userDAO.findInvestigators();
@@ -65,34 +56,33 @@ public class CaseAssignmentController {
                 break;
             }
         }
-        
+
         if (newInvestigator == null) {
             return "Investigador no encontrado";
         }
 
-        // 1. Actualizar el caso con el nuevo investigador
         boolean caseUpdated = caseDAO.updateInvestigator(caseId, newInvestigatorId);
 
-        // 2. Registrar un seguimiento automático de la reasignación
         CaseFollowUp followUp = new CaseFollowUp();
         followUp.setCaseId(caseId);
         followUp.setInvestigatorId(admin.getId());
         followUp.setRegistrationDate(LocalDateTime.now());
-        
+
         String activityMsg = "Caso reasignado";
         if (oldInvestigatorId > 0) {
             // Obtener nombre del investigador anterior (simplificado)
             String oldInvestigatorName = "Investigador " + oldInvestigatorId;
-            activityMsg = "Caso reasignado de investigador " + oldInvestigatorId + 
-                         " a " + newInvestigator.getFirstName() + " " + newInvestigator.getLastName();
+            activityMsg = "Caso reasignado de investigador " + oldInvestigatorId + " a "
+                    + newInvestigator.getFirstName() + " " + newInvestigator.getLastName();
         } else {
-            activityMsg = "Caso asignado a " + newInvestigator.getFirstName() + " " + newInvestigator.getLastName();
+            activityMsg = "Caso asignado a " + newInvestigator.getFirstName() + " "
+                    + newInvestigator.getLastName();
         }
-        
+
         followUp.setActivitiesPerformed(activityMsg);
         followUp.setInvolvedPersons("");
         followUp.setExposedAmount(0.0);
-        followUp.setStatus(caseObj.getStatus()); // Mantener el mismo estatus
+        followUp.setStatus(caseObj.getStatus());
         followUp.setObservations("Reasignación realizada por administrador");
         followUp.setRecommendations("");
         followUp.setConclusions("");
@@ -100,7 +90,7 @@ public class CaseAssignmentController {
         boolean followUpSaved = followUpDAO.save(followUp);
 
         if (caseUpdated && followUpSaved) {
-            return null; // éxito
+            return null;
         } else {
             return "Error al reasignar el caso";
         }

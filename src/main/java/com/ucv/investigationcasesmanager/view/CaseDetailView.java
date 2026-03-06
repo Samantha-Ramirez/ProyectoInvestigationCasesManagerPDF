@@ -167,16 +167,10 @@ public class CaseDetailView extends BaseView {
         if ("Administrador".equals(currentUser.getRole())
                 && "Cerrado".equals(currentCase.getStatus())) {
             JButton btnReopen = createPrimaryButton("Reabrir Caso", e -> openReopenView());
-            btnReopen.setBackground(Color.WHITE); // ← FONDO BLANCO
-            btnReopen.setForeground(new Color(125, 21, 175));
-            btnReopen.setFont(new Font("Arial", Font.BOLD, 12));
             panel.add(btnReopen);
         }
         if ("Administrador".equals(currentUser.getRole())) {
             JButton btnAssign = createPrimaryButton("Asignar Investigador", e -> openAssignView());
-            btnAssign.setBackground(Color.WHITE);
-            btnAssign.setForeground(new Color(125, 21, 175));
-            btnAssign.setFont(new Font("Arial", Font.BOLD, 12));
             panel.add(btnAssign);
         }
 
