@@ -31,7 +31,7 @@ public class AssignInvestigatorView extends BaseView {
 
     @Override
     protected void initComponents() {
-        setupTitle("Asignar / Reasignar Investigador", "Volver", 
+        setupTitle("Asignar / Reasignar Investigador", "Volver",
                 e -> navigate(this, new CaseDetailView(currentCase, currentUser)));
 
         contentPanel.setBackground(Color.WHITE);
@@ -46,7 +46,8 @@ public class AssignInvestigatorView extends BaseView {
         PanelBorderDecorator borderDecorator = new PanelBorderDecorator(15, 15, 15, 15);
         borderDecorator.setComponent(baseComponent);
 
-        PanelTitleDecorator titleDecorator = new PanelTitleDecorator("Seleccione el nuevo investigador");
+        PanelTitleDecorator titleDecorator =
+                new PanelTitleDecorator("Seleccione el nuevo investigador");
         titleDecorator.setComponent(borderDecorator);
 
         JPanel decoratedPanel = titleDecorator.build();
@@ -73,15 +74,8 @@ public class AssignInvestigatorView extends BaseView {
         bottomPanel.setOpaque(false);
 
         JButton btnAssign = createPrimaryButton("Asignar Investigador", e -> handleAssign());
-        btnAssign.setPreferredSize(new Dimension(200, 40));
-        btnAssign.setFont(new Font("Arial", Font.BOLD, 13));
-
-        JButton btnCancel = createPrimaryButton("Cancelar", e -> 
-                navigate(this, new CaseDetailView(currentCase, currentUser)));
-        btnCancel.setPreferredSize(new Dimension(120, 40));
 
         bottomPanel.add(btnAssign);
-        bottomPanel.add(btnCancel);
 
         contentPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
@@ -119,7 +113,8 @@ public class AssignInvestigatorView extends BaseView {
         panel.add(lblCaseNumber, gbc);
 
         // Estatus actual
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         panel.add(new JLabel("Estatus:"), gbc);
         gbc.gridx = 1;
         JLabel lblStatus = new JLabel(currentCase.getStatus());
@@ -129,7 +124,8 @@ public class AssignInvestigatorView extends BaseView {
         panel.add(lblStatus, gbc);
 
         // Investigador actual
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         panel.add(new JLabel("Investigador actual:"), gbc);
         gbc.gridx = 1;
         JLabel lblCurrentInvestigator = new JLabel(String.valueOf(currentCase.getInvestigatorId()));
@@ -141,14 +137,14 @@ public class AssignInvestigatorView extends BaseView {
     private void loadInvestigators() {
         investigators = assignmentController.getAvailableInvestigators();
         cmbInvestigators.removeAllItems();
-        
+
         if (investigators == null || investigators.isEmpty()) {
             cmbInvestigators.addItem("No hay investigadores disponibles");
             cmbInvestigators.setEnabled(false);
         } else {
             for (User inv : investigators) {
-                String display = inv.getFirstName() + " " + inv.getLastName() + 
-                                (inv.getId() == currentCase.getInvestigatorId() ? " (actual)" : "");
+                String display = inv.getFirstName() + " " + inv.getLastName()
+                        + (inv.getId() == currentCase.getInvestigatorId() ? " (actual)" : "");
                 cmbInvestigators.addItem(display);
             }
             cmbInvestigators.setEnabled(true);
@@ -157,46 +153,39 @@ public class AssignInvestigatorView extends BaseView {
 
     private void handleAssign() {
         if (investigators == null || investigators.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                    "No hay investigadores disponibles para asignar", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No hay investigadores disponibles para asignar",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         int selectedIndex = cmbInvestigators.getSelectedIndex();
         if (selectedIndex < 0) {
-            JOptionPane.showMessageDialog(this, 
-                    "Seleccione un investigador", 
-                    "Error", 
+            JOptionPane.showMessageDialog(this, "Seleccione un investigador", "Error",
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         User selectedInvestigator = investigators.get(selectedIndex);
-        
+
         // Si es el mismo investigador, preguntar si realmente quiere reasignar
         if (selectedInvestigator.getId() == currentCase.getInvestigatorId()) {
             int confirm = JOptionPane.showConfirmDialog(this,
                     "El caso ya está asignado a este investigador. ¿Desea reasignarlo de todas formas?",
-                    "Confirmar reasignación",
-                    JOptionPane.YES_NO_OPTION);
+                    "Confirmar reasignación", JOptionPane.YES_NO_OPTION);
             if (confirm != JOptionPane.YES_OPTION) {
                 return;
             }
         }
 
-        String error = assignmentController.reassignCase(
-                currentCase.getId(), 
-                selectedInvestigator.getId(), 
-                currentUser);
-                
+        String error = assignmentController.reassignCase(currentCase.getId(),
+                selectedInvestigator.getId(), currentUser);
+
         if (error == null) {
             JOptionPane.showMessageDialog(this,
-                    "Caso reasignado exitosamente.\nNuevo investigador: " + 
-                    selectedInvestigator.getFirstName() + " " + selectedInvestigator.getLastName(),
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    "Caso reasignado exitosamente.\nNuevo investigador: "
+                            + selectedInvestigator.getFirstName() + " "
+                            + selectedInvestigator.getLastName(),
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
             navigate(this, new CaseDetailView(currentCase, currentUser));
         } else {
             JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
