@@ -38,7 +38,6 @@ public class CaseDetailView extends BaseView {
         centerPanel.add(createFollowUpSection(), BorderLayout.CENTER);
 
         contentPanel.add(centerPanel, BorderLayout.CENTER);
-        contentPanel.add(createActionButtonsPanel(), BorderLayout.SOUTH);
     }
 
     private void goBack() {
@@ -89,23 +88,37 @@ public class CaseDetailView extends BaseView {
 
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
+
         JLabel lblTitle = new JLabel("Historial de seguimientos");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 15));
         header.add(lblTitle, BorderLayout.WEST);
 
+        // Panel de botones arriba (a la derecha), uno al lado del otro
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        actions.setOpaque(false);
+
+        // Registrar (solo investigador)
         if ("Investigador".equals(currentUser.getRole())) {
             JButton btnNew = createHeaderButton("Registrar", e -> openNewFollowUp());
-            header.add(btnNew, BorderLayout.EAST);
+            actions.add(btnNew);
         }
 
+        // Reabrir caso (admin o investigador, pero solo si está cerrado)
         if (("Administrador".equals(currentUser.getRole())
                 || "Investigador".equals(currentUser.getRole()))
                 && "Cerrado".equals(currentCase.getStatus())) {
 
             JButton btnReopen = createPrimaryButton("Reabrir Caso", e -> openReopenView());
-
-            header.add(btnReopen, BorderLayout.EAST);
+            actions.add(btnReopen);
         }
+
+        // Asignar investigador (solo admin)
+        if ("Administrador".equals(currentUser.getRole())) {
+            JButton btnAssign = createPrimaryButton("Asignar Investigador", e -> openAssignView());
+            actions.add(btnAssign);
+        }
+
+        header.add(actions, BorderLayout.EAST);
 
         card.add(header, BorderLayout.NORTH);
         card.add(createFollowUpTable(), BorderLayout.CENTER);
@@ -158,23 +171,6 @@ public class CaseDetailView extends BaseView {
                     f.getActivitiesPerformed() != null ? f.getActivitiesPerformed() : "";
             followUpTableModel.addRow(new Object[] {activities, f.getStatus(), fecha});
         }
-    }
-
-    private JPanel createActionButtonsPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
-        panel.setOpaque(false);
-
-        if ("Administrador".equals(currentUser.getRole())
-                && "Cerrado".equals(currentCase.getStatus())) {
-            JButton btnReopen = createPrimaryButton("Reabrir Caso", e -> openReopenView());
-            panel.add(btnReopen);
-        }
-        if ("Administrador".equals(currentUser.getRole())) {
-            JButton btnAssign = createPrimaryButton("Asignar Investigador", e -> openAssignView());
-            panel.add(btnAssign);
-        }
-
-        return panel;
     }
 
     private void openReopenView() {
