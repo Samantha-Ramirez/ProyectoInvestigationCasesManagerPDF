@@ -10,6 +10,7 @@ public abstract class StartupCreator {
 }
 
 
+// Creador concreto
 class InboxStartupCreator extends StartupCreator {
     @Override
     public StartupProduct factoryMethod() {
@@ -18,6 +19,7 @@ class InboxStartupCreator extends StartupCreator {
 }
 
 
+// Creador concreto
 class BoardStartupCreator extends StartupCreator {
     @Override
     public StartupProduct factoryMethod() {
