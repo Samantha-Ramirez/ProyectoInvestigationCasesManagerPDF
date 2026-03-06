@@ -31,6 +31,11 @@ public class RegisterFollowUpView extends BaseView {
     private JComboBox<String> cbInvestigator;
     private List<User> investigators;
 
+
+    private JTextArea txtObservations;
+    private JTextArea txtConclusions;
+    private JTextArea txtRecommendations;
+
     public RegisterFollowUpView(Case caseObj, User investigator) {
         super("Cargando...", true, false);
         this.currentCase = caseObj;
@@ -76,6 +81,10 @@ public class RegisterFollowUpView extends BaseView {
         txtInvolvedPersons = new JTextField();
         txtAmount = new JTextField("0.00");
 
+        txtObservations = createTextArea(3, 30, 70);
+        txtConclusions = createTextArea(3, 30, 70);
+        txtRecommendations = createTextArea(3, 30, 70);
+
         styleInput(cbActivities);
         styleInput(cbStatus);
         styleInput(cbInvestigator);
@@ -87,7 +96,12 @@ public class RegisterFollowUpView extends BaseView {
         row = addField(form, row, "Personas Involucradas", txtInvolvedPersons);
         row = addField(form, row, "Monto Expuesto", txtAmount);
         row = addField(form, row, "Status", cbStatus);
+        row = addField(form, row, "Observaciones", wrapInScroll(txtObservations));
+        row = addField(form, row, "Conclusiones", wrapInScroll(txtConclusions));
+        row = addField(form, row, "Recomendaciones", wrapInScroll(txtRecommendations));
         addField(form, row, "Investigador", cbInvestigator);
+
+
 
         card.add(wrapInScroll(form), BorderLayout.CENTER);
         return card;
@@ -157,6 +171,37 @@ public class RegisterFollowUpView extends BaseView {
         data.investigatorId = (selectedIdx >= 0 && selectedIdx < investigators.size())
                 ? investigators.get(selectedIdx).getId()
                 : currentUser.getId();
+
+        if ("Cerrado".equals(data.status)) {
+            data.observations = txtObservations.getText().trim();
+            data.conclusions = txtConclusions.getText().trim();
+            data.recommendations = txtRecommendations.getText().trim();
+
+            StringBuilder missingFields = new StringBuilder();
+
+            if (data.observations.isEmpty()) {
+                missingFields.append("- Observaciones\n");
+            }
+            if (data.conclusions.isEmpty()) {
+                missingFields.append("- Conclusiones\n");
+            }
+            if (data.recommendations.isEmpty()) {
+                missingFields.append("- Recomendaciones\n");
+            }
+
+            if (missingFields.length() > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Para cerrar un caso debe completar los siguientes campos:\n"
+                                + missingFields.toString(),
+                        "Campos obligatorios", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        } else {
+            // Si no es cerrado, estos campos pueden ir vacíos
+            data.observations = txtObservations.getText().trim();
+            data.conclusions = txtConclusions.getText().trim();
+            data.recommendations = txtRecommendations.getText().trim();
+        }
 
         String error = followUpController.registerFollowUp(data);
         if (error != null) {
