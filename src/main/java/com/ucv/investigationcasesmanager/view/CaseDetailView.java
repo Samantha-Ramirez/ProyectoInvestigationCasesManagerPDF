@@ -104,8 +104,7 @@ public class CaseDetailView extends BaseView {
         }
 
         // Reabrir caso (admin o investigador, pero solo si está cerrado)
-        if (("Administrador".equals(currentUser.getRole())
-                || "Investigador".equals(currentUser.getRole()))
+        if ("Administrador".equals(currentUser.getRole())
                 && "Cerrado".equals(currentCase.getStatus())) {
 
             JButton btnReopen = createPrimaryButton("Reabrir Caso", e -> openReopenView());
