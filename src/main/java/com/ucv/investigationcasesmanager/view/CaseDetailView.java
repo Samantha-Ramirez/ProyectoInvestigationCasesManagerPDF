@@ -157,12 +157,12 @@ public class CaseDetailView extends BaseView {
         panel.setOpaque(false);
 
         // Botón Reabrir Caso - solo para administradores y cuando el caso está cerrado
-        if ("Administrador".equals(currentUser.getRole())
+        if (("Administrador".equals(currentUser.getRole())
+                || "Investigador".equals(currentUser.getRole()))
                 && "Cerrado".equals(currentCase.getStatus())) {
+
             JButton btnReopen = createPrimaryButton("Reabrir Caso", e -> openReopenView());
-            btnReopen.setBackground(Color.WHITE); // ← FONDO BLANCO
-            btnReopen.setForeground(new Color(125, 21, 175)); // Texto morado (opcional)
-            btnReopen.setFont(new Font("Arial", Font.BOLD, 12));
+
             panel.add(btnReopen);
         }
 
