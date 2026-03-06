@@ -1,4 +1,4 @@
-package com.ucv.investigationcasesmanager.ui.factory;
+package com.ucv.investigationcasesmanager.ui;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
@@ -6,15 +6,14 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * PDyF: Fábrica concreta que implementa el estilo visual del sistema.
+ * Utilidad de estilos UI: centraliza la creación de botones y el estilizado de componentes.
  */
-public class ScreenConcreteFactory extends ScreenAbstractFactory {
+public class ScreenStyle {
     private static final Color PRIMARY = new Color(125, 21, 175);
     private static final Color LIGHT_BG = new Color(248, 248, 251);
     private static final Color INPUT_BG = new Color(237, 237, 237);
     private static final Color BORDER = new Color(217, 217, 217);
 
-    @Override
     public JButton createHeaderButton(String text, ActionListener action) {
         JButton btn = createRoundedButton(text, new Color(236, 231, 240), PRIMARY, 100, 30);
         btn.setFont(new Font("Arial", Font.BOLD, 12));
@@ -22,7 +21,6 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
         return btn;
     }
 
-    @Override
     public JButton createPrimaryButton(String text, ActionListener action) {
         JButton btn = createRoundedButton(text, new Color(235, 235, 235), PRIMARY, 100, 30);
         btn.setFont(new Font("Arial", Font.BOLD, 12));
@@ -30,12 +28,10 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
         return btn;
     }
 
-    @Override
     public JButton createMenuButton(String text, ActionListener action) {
         return buildMenuButton(null, text, action);
     }
 
-    @Override
     public JButton createMenuButton(Icon icon, String text, ActionListener action) {
         return buildMenuButton(icon, text, action);
     }
@@ -57,7 +53,6 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
         return btn;
     }
 
-    @Override
     public void styleInput(JComponent component) {
         component.setBackground(INPUT_BG);
         component.setBorder(
@@ -66,7 +61,6 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
         component.setFont(new Font("Arial", Font.PLAIN, 12));
     }
 
-    @Override
     public void styleTable(JTable table) {
         table.setFont(new Font("Arial", Font.PLAIN, 12));
         table.setForeground(new Color(56, 56, 56));
@@ -81,7 +75,6 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
         header.setBorder(BorderFactory.createLineBorder(BORDER));
     }
 
-    @Override
     public JLabel createStatusBadge(String status) {
         JLabel badge = new JLabel(status, SwingConstants.CENTER);
         badge.setOpaque(true);
@@ -92,7 +85,6 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
         return badge;
     }
 
-    @Override
     public Color getPrimaryColor() {
         return PRIMARY;
     }

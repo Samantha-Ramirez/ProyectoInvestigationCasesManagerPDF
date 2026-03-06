@@ -24,7 +24,7 @@ public class AuditSaveDecorator extends SaveDecorator {
         registrarAuditoria();
     }
 
-    // Comportamiento extra añadido por el decorador: registra la traza de auditoría
+    // Decorador permite registrar la traza de auditoría (comportamiento extra)
     private void registrarAuditoria() {
         auditLogDAO.save(username, actionDescription);
     }

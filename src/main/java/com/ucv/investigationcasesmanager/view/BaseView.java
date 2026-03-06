@@ -5,8 +5,7 @@ import com.ucv.investigationcasesmanager.model.EntityType;
 import com.ucv.investigationcasesmanager.model.Session;
 import com.ucv.investigationcasesmanager.model.User;
 import com.ucv.investigationcasesmanager.ui.SideMenuIcon;
-import com.ucv.investigationcasesmanager.ui.factory.ScreenAbstractFactory;
-import com.ucv.investigationcasesmanager.ui.factory.ScreenConcreteFactory;
+import com.ucv.investigationcasesmanager.ui.ScreenStyle;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -26,7 +25,7 @@ public abstract class BaseView extends JFrame {
     protected JTable table;
     protected JPanel formPanel;
     protected JScrollPane formScroll;
-    protected final ScreenAbstractFactory uiFactory;
+    protected final ScreenStyle uiFactory;
     private int currentRow = 0;
 
     public BaseView(String title, Boolean showMenu) {
@@ -35,7 +34,7 @@ public abstract class BaseView extends JFrame {
 
     public BaseView(String title, Boolean showMenu, boolean initialize) {
         this.currentUser = Session.getUser();
-        this.uiFactory = new ScreenConcreteFactory();
+        this.uiFactory = new ScreenStyle();
 
         setTitle(title);
         setSize(1100, 700);
