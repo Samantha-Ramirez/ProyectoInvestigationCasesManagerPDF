@@ -10,8 +10,7 @@ import java.awt.Color;
 public class PanelTitleDecorator extends PanelDecorator {
     private final String title;
 
-    public PanelTitleDecorator(PanelComponent component, String title) {
-        super(component);
+    public PanelTitleDecorator(String title) {
         this.title = title;
     }
 

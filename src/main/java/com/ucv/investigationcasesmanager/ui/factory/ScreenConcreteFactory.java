@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * PDyF: Fábrica concreta que implementa el estilo visual definido en los wireframes del sistema.
+ * PDyF: Fábrica concreta que implementa el estilo visual del sistema.
  */
 public class ScreenConcreteFactory extends ScreenAbstractFactory {
     private static final Color PRIMARY = new Color(125, 21, 175);
@@ -24,7 +24,7 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
 
     @Override
     public JButton createPrimaryButton(String text, ActionListener action) {
-        JButton btn = createRoundedButton(text, new Color(235, 235, 235), PRIMARY, 170, 34);
+        JButton btn = createRoundedButton(text, new Color(235, 235, 235), PRIMARY, 100, 30);
         btn.setFont(new Font("Arial", Font.BOLD, 12));
         btn.addActionListener(action);
         return btn;
@@ -32,13 +32,24 @@ public class ScreenConcreteFactory extends ScreenAbstractFactory {
 
     @Override
     public JButton createMenuButton(String text, ActionListener action) {
-        JButton btn = new JButton(text);
+        return buildMenuButton(null, text, action);
+    }
+
+    @Override
+    public JButton createMenuButton(Icon icon, String text, ActionListener action) {
+        return buildMenuButton(icon, text, action);
+    }
+
+    private JButton buildMenuButton(Icon icon, String text, ActionListener action) {
+        JButton btn = new JButton(text, icon);
         btn.setAlignmentX(Component.LEFT_ALIGNMENT);
         btn.setBorderPainted(false);
         btn.setContentAreaFilled(false);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btn.setHorizontalAlignment(SwingConstants.LEFT);
+        btn.setHorizontalTextPosition(SwingConstants.RIGHT);
+        btn.setIconTextGap(8);
         btn.setFont(new Font("Arial", Font.PLAIN, 13));
         btn.setMaximumSize(new Dimension(170, 36));
         btn.setForeground(new Color(67, 67, 67));

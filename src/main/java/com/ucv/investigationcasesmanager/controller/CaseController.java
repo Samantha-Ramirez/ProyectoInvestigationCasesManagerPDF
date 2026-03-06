@@ -2,9 +2,12 @@ package com.ucv.investigationcasesmanager.controller;
 
 import com.ucv.investigationcasesmanager.dao.CaseDAO;
 import com.ucv.investigationcasesmanager.dao.UserDAO;
+import com.ucv.investigationcasesmanager.decorator.AuditSaveDecorator;
+import com.ucv.investigationcasesmanager.decorator.ConcreteSaveOperation;
 import com.ucv.investigationcasesmanager.dto.CaseFormData;
 import com.ucv.investigationcasesmanager.mediator.RegistrationMediatorClient;
 import com.ucv.investigationcasesmanager.model.Case;
+import com.ucv.investigationcasesmanager.model.Session;
 import com.ucv.investigationcasesmanager.model.User;
 import com.ucv.investigationcasesmanager.service.ServiceLocator;
 
@@ -36,7 +39,8 @@ public class CaseController {
     }
 
     /**
-     * Construye un objeto Case a partir del formulario, lo valida mediante el mediador y lo guarda.
+     * Construir un objeto Case a partir del formulario, lo valida mediante el mediador y lo guarda.
+     * PDyF: Decorator – envuelve el guardado con AuditSaveDecorator para registrar la traza.
      */
     public String registerCase(CaseFormData data, User currentUser) {
         if (data.investigatorId <= 0) {
@@ -52,20 +56,36 @@ public class CaseController {
         c.setSupportArea(data.supportArea);
         c.setDetectionOrigin(data.detectionOrigin);
         c.setFraudDiagnosis(data.fraudDiagnosis);
-        c.setConclusionsRecommendations(data.conclusionsRecommendations);
+        c.setConclusions(data.conclusions);
+        c.setRecommendations(data.recommendations);
         c.setObservations(data.observations);
         c.setSupport(data.support);
         c.setCaseTypeId(data.caseTypeId);
         c.setIrregularityTypeId(data.irregularityTypeId);
         c.setIrregularitySubtypeId(data.irregularitySubtypeId);
-        c.setActionPerformedId(data.actionPerformedId);
         c.setInvestigatorId(data.investigatorId);
+
+        if (data.startDate != null && !data.startDate.isBlank()) {
+            c.setStartDate(data.startDate);
+        }
+        c.setDays(data.daysElapsed);
+        if (data.month > 0) {
+            c.setMonth(data.month);
+        }
 
         if (!RegistrationMediatorClient.validateAndPrepare(c, currentUser, data.duration)) {
             return "Datos inválidos. Verifique el campo de duración.";
         }
 
-        if (!caseDAO.save(c)) {
+        final boolean[] saved = {false};
+        String username = currentUsername();
+        ConcreteSaveOperation base = new ConcreteSaveOperation(() -> saved[0] = caseDAO.save(c));
+        AuditSaveDecorator decorated =
+                new AuditSaveDecorator(username, "Registro de caso: " + c.getCaseNumber());
+        decorated.setComponent(base);
+        decorated.guardar();
+
+        if (!saved[0]) {
             return "Error al guardar el caso en la base de datos.";
         }
 
@@ -74,5 +94,11 @@ public class CaseController {
 
     public List<User> getInvestigators() {
         return userDAO.findInvestigators();
+    }
+
+    private String currentUsername() {
+        return Session.getUser() != null
+                ? Session.getUser().getFirstName() + " " + Session.getUser().getLastName()
+                : "Sistema";
     }
 }

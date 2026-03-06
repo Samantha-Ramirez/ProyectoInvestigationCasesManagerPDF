@@ -7,7 +7,7 @@
 * **Variables y Funciones:** Utilizar `camelCase`.
     * *Ejemplo:* `userName`, `getUserData()`, `isInputValid`.
 * **Archivos y Módulos:** Utilizar `PascalCase`.
-    * *Ejemplo:* `ViewsUsuarios.java`, `AuthService.java`.
+    * *Ejemplo:* `AuthService.java`.
 
 ---
 

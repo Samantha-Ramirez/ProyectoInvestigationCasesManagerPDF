@@ -39,6 +39,7 @@ public class RegistrationConcreteMediator extends RegistrationMediator {
                             : Integer.parseInt(durationText.trim());
             c.setDurationDays(duration);
         } catch (NumberFormatException e) {
+            caseColleague.notify("Error: duración inválida.");
             return false;
         }
 
@@ -49,9 +50,16 @@ public class RegistrationConcreteMediator extends RegistrationMediator {
         }
 
         Calendar cal = Calendar.getInstance();
-        c.setStartDate(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
-        c.setMonth(cal.get(Calendar.MONTH) + 1);
+        if (c.getStartDate() == null || c.getStartDate().isBlank()) {
+            c.setStartDate(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+        }
+        if (c.getMonth() == 0) {
+            c.setMonth(cal.get(Calendar.MONTH) + 1);
+        }
 
+        caseColleague.notify("Caso preparado correctamente.");
+        userColleague.notify(
+                "Registro autorizado para el usuario: " + userActor.getUser().getFirstName());
         return true;
     }
 }

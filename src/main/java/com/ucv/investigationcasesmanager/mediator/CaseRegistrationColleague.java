@@ -16,8 +16,12 @@ public class CaseRegistrationColleague extends RegistrationColleague {
         this.durationText = durationText;
     }
 
-    public boolean requestValidationAndPreparation() {
-        return mediator.send("VALIDATE_AND_PREPARE", this);
+    public boolean send(String message) {
+        return mediator.send(message, this);
+    }
+
+    public void notify(String message) {
+        System.out.println("CaseRegistrationColleague notificado: " + message);
     }
 
     public Case getCase() {

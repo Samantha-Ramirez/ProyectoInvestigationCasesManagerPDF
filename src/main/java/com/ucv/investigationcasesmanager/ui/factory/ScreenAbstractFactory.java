@@ -15,6 +15,8 @@ public abstract class ScreenAbstractFactory {
 
     public abstract JButton createMenuButton(String text, ActionListener action);
 
+    public abstract JButton createMenuButton(Icon icon, String text, ActionListener action);
+
     public abstract void styleInput(JComponent component);
 
     public abstract void styleTable(JTable table);

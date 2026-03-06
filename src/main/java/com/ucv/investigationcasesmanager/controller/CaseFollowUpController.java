@@ -2,9 +2,11 @@ package com.ucv.investigationcasesmanager.controller;
 
 import com.ucv.investigationcasesmanager.dao.CaseDAO;
 import com.ucv.investigationcasesmanager.dao.CaseFollowUpDAO;
+import com.ucv.investigationcasesmanager.dao.UserDAO;
 import com.ucv.investigationcasesmanager.dto.FollowUpFormData;
 import com.ucv.investigationcasesmanager.model.Case;
 import com.ucv.investigationcasesmanager.model.CaseFollowUp;
+import com.ucv.investigationcasesmanager.model.User;
 import com.ucv.investigationcasesmanager.service.ServiceLocator;
 
 import java.time.LocalDateTime;
@@ -17,10 +19,12 @@ import java.util.List;
 public class CaseFollowUpController {
     private final CaseFollowUpDAO followUpDAO;
     private final CaseDAO caseDAO;
+    private final UserDAO userDAO;
 
     public CaseFollowUpController() {
         this.followUpDAO = ServiceLocator.get(CaseFollowUpDAO.class);
         this.caseDAO = ServiceLocator.get(CaseDAO.class);
+        this.userDAO = ServiceLocator.get(UserDAO.class);
     }
 
     public List<CaseFollowUp> getFollowUps(int caseId) {
@@ -32,9 +36,13 @@ public class CaseFollowUpController {
         return c != null ? c.getId() : -1;
     }
 
+    public List<User> getInvestigators() {
+        return userDAO.findInvestigators();
+    }
+
     /**
-     * Valida, construye y guarda un seguimiento, luego actualiza el estatus del caso.
-     * 
+     * Validar construir y guardar un seguimiento, luego actualizar el estatus del caso.
+     *
      * @return null si el registro fue exitoso, o un mensaje de error en caso de fallo
      */
     public String registerFollowUp(FollowUpFormData data) {
@@ -52,18 +60,6 @@ public class CaseFollowUpController {
                 }
             } catch (NumberFormatException e) {
                 return "El monto debe ser un número válido.";
-            }
-        }
-
-        if ("Cerrado".equals(data.status)) {
-            if (data.observations == null || data.observations.trim().isEmpty()) {
-                return "Debe describir las observaciones.";
-            }
-            if (data.recommendations == null || data.recommendations.trim().isEmpty()) {
-                return "Debe describir las recomendaciones.";
-            }
-            if (data.conclusions == null || data.conclusions.trim().isEmpty()) {
-                return "Debe describir las conclusiones.";
             }
         }
 
