@@ -7,8 +7,6 @@ import java.util.List;
 
 /*
  * Vista de trazabilidad y auditoría. Muestra la lista de trazas: usuario, acción y fecha/hora.
- * PDyF: el AuditSaveDecorator registra automáticamente cada operación de guardado en el sistema;
- * esta vista solo consulta y presenta dichos registros.
  */
 public class AuditView extends BaseView {
     private final AuditController auditController;

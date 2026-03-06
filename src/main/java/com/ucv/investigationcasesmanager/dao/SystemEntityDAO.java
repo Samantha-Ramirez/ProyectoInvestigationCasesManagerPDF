@@ -5,8 +5,7 @@ import com.ucv.investigationcasesmanager.model.SystemEntity;
 import java.util.List;
 
 /**
- * PDyF: DAO genérico para los catálogos del sistema. Reutiliza BaseDAO con SQL dinámico basado en
- * el nombre de tabla, permitiendo gestionar todos los catálogos con una sola clase DAO.
+ * PDyF: DAO - registra entidades del sistema.
  */
 public class SystemEntityDAO extends BaseDAO<SystemEntity> {
 

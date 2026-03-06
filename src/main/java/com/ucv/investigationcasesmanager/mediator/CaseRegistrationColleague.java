@@ -3,7 +3,7 @@ package com.ucv.investigationcasesmanager.mediator;
 import com.ucv.investigationcasesmanager.model.Case;
 
 /**
- * PDyF: Patrón Mediator - colega concreto que porta los datos del caso a registrar.
+ * PDyF: Mediator - colega concreto que porta los datos del caso a registrar.
  */
 public class CaseRegistrationColleague extends RegistrationColleague {
     private final Case caseObj;

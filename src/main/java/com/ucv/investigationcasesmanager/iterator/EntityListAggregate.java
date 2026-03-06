@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * PDyF: Patrón Iterator - agregador concreto que contiene la colección de entidades y crea el
- * iterador apropiado.
+ * PDyF: Iterator - agregador concreto que contiene la colección de entidades y crea el iterador
+ * apropiado.
  */
 public class EntityListAggregate<T> extends EntityAggregate<T> {
     private final List<T> items;

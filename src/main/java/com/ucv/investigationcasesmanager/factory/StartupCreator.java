@@ -1,7 +1,7 @@
 package com.ucv.investigationcasesmanager.factory;
 
 /**
- * PDyF: Patrón Factory Method - creadores concretos para cada vista de inicio según el rol.
+ * PDyF: Factory Method - creadores concretos para cada vista de inicio según el rol.
  */
 
 // Creador abstracto

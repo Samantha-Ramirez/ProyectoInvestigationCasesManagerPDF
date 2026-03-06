@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /*
- * PDyF: Singleton que gestiona la conexión a la base de datos SQLite. Se reutiliza la misma
- * instancia mientras la conexión esté activa.
+ * PDyF: Singleton - gestiona la conexión a la base de datos SQLite. Se reutiliza la misma instancia
+ * mientras la conexión esté activa.
  */
 public class DatabaseConnection {
     private static Connection instance = null;

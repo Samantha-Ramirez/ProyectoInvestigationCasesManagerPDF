@@ -4,7 +4,7 @@ import com.ucv.investigationcasesmanager.model.Case;
 import java.util.List;
 
 /*
- * PDyF: DAO que maneja las operaciones de acceso a datos para la entidad Case, incluyendo consultas
+ * PDyF: DAO - maneja las operaciones de acceso a datos para la entidad Case, incluyendo consultas
  * para investigadores, administradores y registro de nuevos casos.
  */
 public class CaseDAO extends BaseDAO<Case> {

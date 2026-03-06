@@ -1,7 +1,7 @@
 package com.ucv.investigationcasesmanager.decorator;
 
 /**
- * PDyF: Decorator – Decorador abstracto que envuelve un SaveOperation.
+ * PDyF: Decorator - decorador abstracto que envuelve un SaveOperation.
  */
 public abstract class SaveDecorator extends SaveOperation {
     protected SaveOperation component;

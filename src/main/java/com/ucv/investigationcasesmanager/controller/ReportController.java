@@ -10,7 +10,7 @@ import com.ucv.investigationcasesmanager.service.ServiceLocator;
 import java.util.List;
 
 /*
- * Controlador para las operaciones de generación de reportes estadísticos. PDyF: Decorator – cada
+ * Controlador para las operaciones de generación de reportes estadísticos. PDyF: Decorator - cada
  * vez que se genera un reporte, registra la traza de auditoría mediante AuditLogDAO.
  */
 public class ReportController {

@@ -5,8 +5,7 @@ import com.ucv.investigationcasesmanager.model.AuditLog;
 import java.util.List;
 
 /**
- * PDyF: DAO para las trazas de auditoría del sistema. Registra quién, cuándo y qué acción fue
- * realizada.
+ * PDyF: DAO - registra quién, cuándo y qué acción fue realizada.
  */
 public class AuditLogDAO extends BaseDAO<AuditLog> {
 

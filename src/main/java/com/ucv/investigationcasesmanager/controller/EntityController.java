@@ -37,7 +37,7 @@ public class EntityController {
     }
 
     /**
-     * PDyF: Iterator – crea un agregador concreto con la colección de entidades y retorna su
+     * PDyF: Iterator - crea un agregador concreto con la colección de entidades y retorna su
      * iterador, desacoplando la colección del mecanismo de recorrido.
      */
     public EntityIterator<SystemEntity> getIterator(EntityType type) {

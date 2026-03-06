@@ -6,8 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- * PDyF: Patrón Mediator - mediador concreto que centraliza la validación y preparación del caso
- * antes de su registro, coordinando la comunicación entre los colegas de caso y usuario.
+ * PDyF: Mediator - mediador concreto que centraliza la validación y preparación del caso antes de
+ * su registro, coordinando la comunicación entre los colegas de caso y usuario.
  */
 public class RegistrationConcreteMediator extends RegistrationMediator {
     private CaseRegistrationColleague caseColleague;
